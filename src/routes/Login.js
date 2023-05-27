@@ -1,9 +1,11 @@
 //reference to https://github.com/purfectliterature/simplist/tree/main
 
+import * as firebase from "firebase/app";
 import React, { Component, useState, useRef, Alert } from 'react';
-import { NavigationContainer } from '@react-navigation/native'
-import { createStackNavigator } from '@react-navigation/stack'
 import { useNavigation } from '@react-navigation/native';
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+
+import * as Authentication from "../../api/auth";
 
 import {
   StyleSheet,
@@ -15,25 +17,20 @@ import {
   TouchableOpacity
 } from 'react-native';
 
-//import * as Authentication from "../../api/auth";
-
-//import * as firebase from "firebase/app";
-
-
 export default () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const navigation = useNavigation();
 
-  /** 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const handleLogin = () => {
     Authentication.logIn(
       { email, password },
-      (user) => this.props.navigation.push('Register'),
-      (error) => Alert.alert(error.message || "Something went wrong, try again later")
-    )
+      (user) => navigation.navigate('Register'),
+      (error) => console.log("Something went wrong, try again later")
+    );
   }
-  */
+
 
   return (
     <View style={styles.container}>
@@ -56,7 +53,8 @@ export default () => {
         />
         <TouchableOpacity
           activeOpacity={0.75}
-          style={styles.loginButton}>
+          style={styles.loginButton}
+          onPress={() => handleLogin()}>
           <Text style={styles.loginText}>Log In</Text>
         </TouchableOpacity>
         <TouchableOpacity
