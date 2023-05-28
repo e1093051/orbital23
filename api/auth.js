@@ -1,6 +1,8 @@
 // reference to: https://github.com/purfectliterature/simplist/tree/main
 
 import { auth } from './fireConfig'
+import { firebase } from "./fireConfig";
+
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, sendEmailVerification } from 'firebase/auth';
 
 
@@ -17,13 +19,10 @@ export const signUp = async ( {name, email, password}, onSuccess, onError) => {
   try {
     const { user } = await createUserWithEmailAndPassword(auth, email, password);
     if (user) {
-      //console.log("We're here")
       await updateProfile(auth.currentUser, {name});
-      //console.log("We're here")
-      await sendEmailVerification(auth.currentUser);
-      return onSuccess(user);
     }
   } catch (error) {
     return onError(error);
   }
 }
+
