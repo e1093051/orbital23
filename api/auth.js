@@ -20,6 +20,7 @@ export const signUp = async ( {name, email, password}, onSuccess, onError) => {
     const { user } = await createUserWithEmailAndPassword(auth, email, password);
     if (user) {
       await updateProfile(auth.currentUser, {name});
+      return onSuccess(user);
     }
   } catch (error) {
     return onError(error);
