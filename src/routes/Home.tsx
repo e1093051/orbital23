@@ -10,7 +10,7 @@ import {
   TouchableOpacity
 } from 'react-native';
 
-function Register(): JSX.Element {
+function Home(): JSX.Element {
   return (
     <View style = {styles.container}>
       <Image 
@@ -30,4 +30,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Register;
+export default Home;
