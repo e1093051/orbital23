@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Alert } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 import * as Authentication from "../../api/auth";
@@ -25,7 +26,7 @@ export default () => {
     Authentication.signUp(
       { name, email, password },
       (user) => navigation.navigate('Login'),
-      (error) => console.log(error.message || "Something went wrong, try again later")
+      (error) => Alert.alert('error',(error.message || 'Something went wrong, try again later'))
     );
   }
 
