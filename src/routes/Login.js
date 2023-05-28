@@ -3,7 +3,7 @@
 import * as firebase from "firebase/app";
 import React, { Component, useState, useRef, Alert } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import auth from '../../api/fireConfig'
 
 import * as Authentication from "../../api/auth";
 
@@ -26,8 +26,8 @@ export default () => {
   const handleLogin = () => {
     Authentication.logIn(
       { email, password },
-      (user) => navigation.navigate('Register'),
-      (error) => console.log("Something went wrong, try again later")
+      (user) => navigation.navigate('Home'),
+      (error) => console.log(error.message || "Something went wrong, try again later")
     );
   }
 

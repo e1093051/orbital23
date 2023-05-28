@@ -1,8 +1,9 @@
+import React from 'react';
 import { initializeApp } from 'firebase/app';
-import { getAuth } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword} from "firebase/auth";
+import { FirebaseError } from 'firebase/app';
 
 // Optionally import the services that you want to use
-// import {...} from "firebase/auth";
 // import {...} from "firebase/database";
 // import {...} from "firebase/firestore";
 // import {...} from "firebase/functions";
