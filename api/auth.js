@@ -3,7 +3,7 @@
 import { auth, firebase } from './fireConfig'
 import { Alert } from 'react-native';
 
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, sendEmailVerification} from 'firebase/auth';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, sendEmailVerification, signOut } from 'firebase/auth';
 
 
 export const logIn = async ( {email, password}, onSuccess, onError) => {
@@ -13,6 +13,7 @@ export const logIn = async ( {email, password}, onSuccess, onError) => {
       return onSuccess(user);
     }
     Alert.alert("email is not verified");
+    return signOut(auth, auth.currentUser);
   } catch(error) {
     return onError(error);
   }
