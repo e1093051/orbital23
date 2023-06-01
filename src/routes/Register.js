@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component, useState, useRef, Alert } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
 import {
@@ -12,22 +12,32 @@ import {
   Dimensions
 } from 'react-native';
 
-function Register(): JSX.Element {
+export default () => {
+  const [name, setName] = useState("");
+
   const navigation = useNavigation();
+
+  const handleNext = () => {
+    navigation.navigate('Register2', { name })
+  }
+
   return (
     <View style = {styles.bigContainer}>
       <View style = {styles.container}>
-      <Text style = {styles.mainText}>What's your NUS email?</Text>
-      <Text style = {styles.usual}>Enter your NUS webmail (ends with @u.nus.edu) to receive the verification code. 
-        We will not show this to other users.</Text>
+      <Text style = {styles.mainText}>What's your name?</Text>
+      <Text style = {styles.usual}>Enter the name you use in real life.  This will be shown as your name other users.
+      You can always change it later. </Text>
       <TextInput
-          style={{ height: 40, width: Dimensions.get('window').width - 20, borderWidth: 1, margin: 10}}
-          placeholder = " NUS email (@u.nus.edu)"
+          style={{ height: 40, width: Dimensions.get('window').width - 20, borderWidth: 1, margin: 10, marginTop: -3}}
+          //placeholder = " Name"
+          value={name}
+          onChangeText={setName}
       />
       <TouchableOpacity
           activeOpacity={0.75}
-          style={styles.signUpButton}>
-          <Text style={styles.signUpText}>Sign up</Text>        
+          style={styles.signUpButton}
+          onPress={() => handleNext()}>
+          <Text style={styles.signUpText}>Next</Text>        
       </TouchableOpacity>
       </View>
       <TouchableOpacity
@@ -61,8 +71,8 @@ const styles = StyleSheet.create({
   usual: {
     color: 'black',
     fontSize: 14,
-    margin: 3,
-    left: 7
+    margin: 10,
+    marginTop: -5
   },
   small: {
     color: 'gray',
@@ -102,5 +112,3 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
-
-export default Register;

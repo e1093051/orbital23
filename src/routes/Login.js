@@ -1,9 +1,10 @@
 //reference to https://github.com/purfectliterature/simplist/tree/main
 
 import * as firebase from "firebase/app";
-import React, { Component, useState, useRef, Alert } from 'react';
+import React, { Component, useState, useRef } from 'react';
+import { Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import auth from '../../api/fireConfig'
 
 import * as Authentication from "../../api/auth";
 
@@ -26,8 +27,8 @@ export default () => {
   const handleLogin = () => {
     Authentication.logIn(
       { email, password },
-      (user) => navigation.navigate('Register'),
-      (error) => console.log("Something went wrong, try again later")
+      (user) => navigation.navigate('Home'),
+      (error) => Alert.alert('error',(error.message || 'Something went wrong, try again later'))
     );
   }
 
