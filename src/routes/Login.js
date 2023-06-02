@@ -37,17 +37,17 @@ export default () => {
     <View style={styles.container}>
       <View style={styles.content}>
         <Image
-          style={{ height: 150, width: 150, margin: 20 }}
+          style={{ height: 160, width: 160, margin: 20 }}
           source={require('./Logo.png')}
         />
         <TextInput
-          style={{ height: 40, width: 220, borderWidth: 1, margin: 10 }}
+          style={{ height: 40, width: 300, borderWidth: 1, margin: 20 }}
           placeholder = " NUS email (@u.nus.edu)"
           value={email}
           onChangeText={setEmail}
         />
         <TextInput
-          style={{ height: 40, width: 220, borderWidth: 1, margin: 10 }}
+          style={{ height: 40, width: 300, borderWidth: 1, margin: 20 }}
           placeholder = " Password"
           value={password}
           onChangeText={setPassword}
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     height: 40,
-    width: 200,
+    width: 180,
     backgroundColor: '#2de0ff',
     borderRadius: 5,
     justifyContent: 'center',

@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, Component } from 'react';
 import { Alert } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-
+import { StatusBar } from 'expo-status-bar';
+import { ActivityIndicator } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 
 import * as ImagePicker from 'expo-image-picker';
@@ -15,17 +16,34 @@ import {
   Button,
   TextInput,
   TouchableOpacity,
-  Dimensions,
+  Dimensions
 } from 'react-native';
 
 export default () => {
+
   const navigation = useNavigation();
 
   const [image, setImage] = useState(null);
 
   const [gender, setGender] = useState("");
   const [major, setMajor] = useState("");
-  const [course, setCourse] = useState("");
+  const [module, setModule] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('https://api.nusmods.com/v2/2022-2023/moduleList.json')
+      .then((response) => response.json())
+      .then((responseJson) => {
+
+        const moduleData = responseJson.map((module) => ({ label: module.moduleCode }));
+        setModule(moduleData);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
