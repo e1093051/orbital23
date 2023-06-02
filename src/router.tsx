@@ -8,6 +8,7 @@ import Register from './routes/Register'
 import Register2 from './routes/Register2';
 import Register3 from './routes/Register3';
 import Home from './routes/Home';
+import Form from './routes/Form';
 
 const Stack = createStackNavigator();
 const StackNavigator = () => (
@@ -21,6 +22,8 @@ const StackNavigator = () => (
     options={{headerShown: true, headerTitle: ' ', headerBackTitle: ' ', headerTintColor: '#2de0ff'}}/>
     <Stack.Screen name='Home' component={Home} 
     options={{headerShown: true, headerTitle: ' ', headerBackTitle: ' ', headerTintColor: '#2de0ff'}}/>
+    <Stack.Screen name='Form' component={Form} 
+    options={{headerShown: true, headerTitle: 'Personal Profile', headerBackTitle: ' ', headerTintColor: '#2de0ff'}}/>
   </Stack.Navigator>
 );
 
