@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, Component } from 'react';
 import { Alert } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-
+import { StatusBar } from 'expo-status-bar';
+import { ActivityIndicator } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
-
 
 import {
   StyleSheet,
@@ -13,15 +13,32 @@ import {
   Button,
   TextInput,
   TouchableOpacity,
-  Dimensions,
+  Dimensions
 } from 'react-native';
 
 export default () => {
+
   const navigation = useNavigation();
 
   const [gender, setGender] = useState("");
   const [major, setMajor] = useState("");
-  const [course, setCourse] = useState("");
+  const [module, setModule] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('https://api.nusmods.com/v2/2022-2023/moduleList.json')
+      .then((response) => response.json())
+      .then((responseJson) => {
+
+        const moduleData = responseJson.map((module) => ({ label: module.moduleCode }));
+        setModule(moduleData);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
 
   const genderData = [
     { label: 'Female'},
@@ -34,7 +51,6 @@ export default () => {
       { label: 'Nursing' },
       { label: 'Medicine' },
       { label: 'Architecture' },
-      { label: 'Computer Engineering' },
       { label: 'Industrial Design' },
       { label: 'Landscape Architecture' },
       { label: 'Engineering' },
@@ -86,7 +102,6 @@ export default () => {
       { label: 'Quantitative Finance' },
       { label: 'Statistics' },
   ]
-    
 
   return (
     <View style={styles.container}>
@@ -118,6 +133,20 @@ export default () => {
         data={majorData}
         onChange={item => setMajor(item.label)}
         value={major}
+        placeholder= " "
+      />
+
+      <Text style={styles.usual}>Module</Text>
+      <Dropdown
+         style={styles.dropdown}
+         placeholderStyle={styles.placeholderStyle}
+         selectedTextStyle={styles.selectedTextStyle}
+         inputSearchStyle={styles.inputSearchStyle}
+         maxHeight={300}
+         labelField="label"
+        data={module}
+        onChange={item => setModule(item.label)}
+        value={module}
         placeholder= " "
       />
     </View>
