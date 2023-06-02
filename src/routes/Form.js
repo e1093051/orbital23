@@ -41,7 +41,6 @@ export default () => {
       { label: 'Biomedical Engineering' },
       { label: 'Chemical Engineering' },
       { label: 'Civil Engineering' },
-      { label: 'Computer Engineering' },
       { label: 'Electrical Engineering' },
       { label: 'Engineering Science' },
       { label: 'Environmental Engineering' },
@@ -99,7 +98,6 @@ export default () => {
          inputSearchStyle={styles.inputSearchStyle}
          maxHeight={300}
          labelField="label"
-         valueField="value"
         data={genderData}
         onChange={item => setGender(item.label)}
         value={gender}
@@ -117,10 +115,9 @@ export default () => {
          inputSearchStyle={styles.inputSearchStyle}
          maxHeight={300}
          labelField="label"
-         valueField="value"
         data={majorData}
-        onChange={item => setGender(item.label)}
-        value={gender}
+        onChange={item => setMajor(item.label)}
+        value={major}
         placeholder= " "
       />
     </View>
