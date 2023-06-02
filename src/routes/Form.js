@@ -27,25 +27,27 @@ export default () => {
 
   const [gender, setGender] = useState("");
   const [major, setMajor] = useState("");
-  const [module, setModule] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [module, setModule] = useState("");
+  const [moduleData, setModuleData] = useState([]);
+
+
+
+  const getData = () => {
+    fetch('https://api.nusmods.com/v2/2022-2023/moduleList.json')
+    .then((response) => response.json())
+    .then((json) => {
+      const data = json.map((module) => ({label: module.moduleCode + " " + module.title, value: module.moduleCode}));
+      setModuleData(data);
+    })
+  }
+
 
   useEffect(() => {
-    fetch('https://api.nusmods.com/v2/2022-2023/moduleList.json')
-      .then((response) => response.json())
-      .then((responseJson) => {
-
-        const moduleData = responseJson.map((module) => ({ label: module.moduleCode }));
-        setModule(moduleData);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
+    getData();
+  }, [])
 
 
-  const pickImage = async () => {
+  const pickImage = async() => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -160,6 +162,20 @@ export default () => {
           data={majorData}
           onChange={item => setMajor(item.label)}
           value={major}
+          placeholder=" "
+          valueField="value"
+        />
+        <Text style={styles.usual}>Course</Text>
+        <Dropdown
+          style={styles.dropdown}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          inputSearchStyle={styles.inputSearchStyle}
+          maxHeight={300}
+          labelField="label"
+          data={moduleData}
+          onChange={item => setModule(item.value)}
+          value={module}
           placeholder=" "
           valueField="value"
         />
