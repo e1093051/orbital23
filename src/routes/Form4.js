@@ -26,10 +26,6 @@ export default () => {
 
   const navigation = useNavigation();
 
-  const [image, setImage] = useState(null);
-
-  const [gender, setGender] = useState("");
-  const [major, setMajor] = useState("");
   const [module, setModule] = useState([]);
   const [moduleData, setModuleData] = useState([]);
 
@@ -58,129 +54,12 @@ export default () => {
   }, [])
 
 
-  const pickImage = async() => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      setImage(result.assets[0].uri);
-    }
-  };
-
-  const genderData = [
-    { label: 'Female', value: 'Female' },
-    { label: 'Male', value: 'Male' },
-    { label: 'Others', value: 'Others' },
-  ];
-
-
-  const majorData = [
-    { label: 'Pharmacy', value: 'Pharmacy' },
-    { label: 'Nursing', value: 'Nursing' },
-    { label: 'Medicine', value: 'Medicine' },
-    { label: 'Architecture', value: 'Architecture' },
-    { label: 'Computer Engineering', value: 'Computer Engineering' },
-    { label: 'Industrial Design', value: 'Industrial Design' },
-    { label: 'Landscape Architecture', value: 'Landscape Architecture' },
-    { label: 'Engineering', value: 'Engineering' },
-    { label: 'Biomedical Engineering', value: 'Biomedical Engineering' },
-    { label: 'Chemical Engineering', value: 'Chemical Engineering' },
-    { label: 'Civil Engineering', value: 'Civil Engineering' },
-    { label: 'Electrical Engineering', value: 'Electrical Engineering' },
-    { label: 'Engineering Science', value: 'Engineering Science' },
-    { label: 'Environmental Engineering', value: 'Environmental Engineering' },
-    { label: 'Industrial & Systems Engineering', value: 'Industrial & Systems Engineering' },
-    { label: 'Infrastructure & Project Management', value: 'Infrastructure & Project Management' },
-    { label: 'Material Science & Engineering', value: 'Material Science & Engineering' },
-    { label: 'Mechanical Engineering', value: 'Mechanical Engineering' },
-    { label: 'Dentistry', value: 'Dentistry' },
-    { label: 'Business Analytics', value: 'Business Analytics' },
-    { label: 'Computer Science', value: 'Computer Science' },
-    { label: 'Information Systems', value: 'Information Systems' },
-    { label: 'Information Security', value: 'Information Security' },
-    { label: 'Business Administration (Accounting)', value: 'Business Administration (Accounting)' },
-    { label: 'Business Administration', value: 'Business Administration' },
-    { label: 'Real Estate', value: 'Real Estate' },
-    { label: 'Anthropology', value: 'Anthropology' },
-    { label: 'Chinese Language', value: 'Chinese Language' },
-    { label: 'Chinese Studies', value: 'Chinese Studies' },
-    { label: 'Communications and New Media', value: 'Communications and New Media' },
-    { label: 'Economics', value: 'Economics' },
-    { label: 'English Language', value: 'English Language' },
-    { label: 'English Literature', value: 'English Literature' },
-    { label: 'Geography', value: 'Geography' },
-    { label: 'Global Studies', value: 'Global Studies' },
-    { label: 'History', value: 'History' },
-    { label: 'Japanese Studies', value: 'Japanese Studies' },
-    { label: 'Malay Studies', value: 'Malay Studies' },
-    { label: 'Philosophy', value: 'Philosophy' },
-    { label: 'Political Science', value: 'Political Science' },
-    { label: 'Psychology', value: 'Psychology' },
-    { label: 'Social Work', value: 'Social Work' },
-    { label: 'Sociology', value: 'Sociology' },
-    { label: 'South Asian Studies', value: 'South Asian Studies' },
-    { label: 'Southeast Asian Studies', value: 'Southeast Asian Studies' },
-    { label: 'Theatre Studies', value: 'Theatre Studies' },
-    { label: 'Chemistry', value: 'Chemistry' },
-    { label: 'Data Science and Analytics', value: 'Data Science and Analytics' },
-    { label: 'Life Sciences', value: 'Life Sciences' },
-    { label: 'Mathematics', value: 'Mathematics' },
-    { label: 'Physics', value: 'Physics' },
-    { label: 'Quantitative Finance', value: 'Quantitative Finance' },
-    { label: 'Statistics', value: 'Statistics' },
-  ];
-
-
-
-
   return (
     <View style={styles.container_1}>
-      <View style={styles.imageContainer}>
-        <Button title="Pick an image from camera roll" onPress={pickImage} color={'black'}/>
-        {image && (
-          
-          <Image source={{ uri: image }} style={styles.image} />
-          )}
-      </View>
       <View style={styles.container}>
-        <Text style={styles.usual}>Gender</Text>
-        <Dropdown
-          style={styles.dropdown}
-          placeholderStyle={styles.placeholderStyle}
-          selectedTextStyle={styles.selectedTextStyle}
-          inputSearchStyle={styles.inputSearchStyle}
-          maxHeight={300}
-          labelField="label"
-          data={genderData}
-          onChange={item => setGender(item.value)}
-          value={gender}
-          placeholder=" "
-          valueField="value"
-        />
-        <Text style={styles.usual}>Bio</Text>
-        <TextInput
-          style={styles.textInput}
-        />
-        <Text style={styles.usual}>Major</Text>
-        <Dropdown
-          search
-          style={styles.dropdown}
-          placeholderStyle={styles.placeholderStyle}
-          selectedTextStyle={styles.selectedTextStyle}
-          inputSearchStyle={styles.inputSearchStyle}
-          maxHeight={300}
-          labelField="label"
-          data={majorData}
-          onChange={item => setMajor(item.value)}
-          value={major}
-          placeholder=" "
-          valueField="value"
-        />
+        <Text style={styles.mainText}>Which courses are you taking?</Text>
         <Text style={styles.usual}>Course</Text>
+        <View style = {{marginLeft: 16}}>
         <MultiSelect
         style={styles.dropdown}
         placeholderStyle={styles.placeholderStyle}
@@ -209,6 +88,16 @@ export default () => {
         )}
       />
       </View>
+      <View>
+        <Text>Hello</Text>
+      </View>
+      </View>
+      <TouchableOpacity
+        activeOpacity={0.75}
+        style={styles.buttonContainer}
+        onPress={() => navigation.navigate('Form4')} >
+        <Text style={styles.registerText}>Nexxt</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -216,26 +105,11 @@ export default () => {
 const styles = StyleSheet.create({
 
   container_1:{
-
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    
+    left: 1
   },
-
-  imageContainer: {
-    
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  image: {
-
-    width: 200,
-    height: 200,
-    borderRadius: 100,
-  },
-
   bigContainer: {
     flex: 1,
     alignItems: 'center',
@@ -248,6 +122,12 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     backgroundColor: '#FFFFFF',
   },
+  mainText: {
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 24.5,
+    margin: 10
+  },
   usual: {
     color: 'gray',
     fontSize: 16,
@@ -259,6 +139,7 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     margin: 16,
+    marginLeft: 0,
     marginTop: -8,
     height: 50,
     borderBottomColor: 'gray',
@@ -318,144 +199,32 @@ const styles = StyleSheet.create({
     marginRight: 5,
     fontSize: 16,
   },
-});
-
-
-/** 
-import React, { useState } from 'react';
-import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
-import { MultiSelect } from 'react-native-element-dropdown';
-import AntDesign from '@expo/vector-icons/AntDesign';
-
-const data = [
-  { label: 'Item 1', value: '1' },
-  { label: 'Item 2', value: '2' },
-  { label: 'Item 3', value: '3' },
-  { label: 'Item 4', value: '4' },
-  { label: 'Item 5', value: '5' },
-  { label: 'Item 6', value: '6' },
-  { label: 'Item 7', value: '7' },
-  { label: 'Item 8', value: '8' },
-];
-
-const MultiSelectComponent = () => {
-  const [selected, setSelected] = useState([]);
-
-  const renderItem = item => {
-    return (
-      <View style={styles.item}>
-        <Text style={styles.selectedTextStyle}>{item.label}</Text>
-        <AntDesign style={styles.icon} color="black" name="Safety" size={20} />
-      </View>
-    );
-  };
-
-  return (
-    <View style={styles.container}>
-      <MultiSelect
-        style={styles.dropdown}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        inputSearchStyle={styles.inputSearchStyle}
-        iconStyle={styles.iconStyle}
-        data={data}
-        labelField="label"
-        valueField="value"
-        placeholder="Select item"
-        value={selected}
-        search
-        searchPlaceholder="Search..."
-
-        onChange={item => {
-          setSelected(item);
-        }}
-        renderLeftIcon={() => (
-          <AntDesign
-            style={styles.icon}
-            color="black"
-            name="Safety"
-            size={20}
-          />
-        )}
-        renderItem={renderItem}
-        renderSelectedItem={(item, unSelect) => (
-          <TouchableOpacity onPress={() => unSelect && unSelect(item)}>
-            <View style={styles.selectedStyle}>
-              <Text style={styles.textSelectedStyle}>{item.label}</Text>
-              <AntDesign color="black" name="delete" size={17} />
-            </View>
-          </TouchableOpacity>
-        )}
-      />
-    </View>
-  );
-};
-
-export default MultiSelectComponent;
-
-const styles = StyleSheet.create({
-  container: { padding: 16 },
-  dropdown: {
-    height: 50,
-    backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 12,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-
-    elevation: 2,
-  },
-  placeholderStyle: {
-    fontSize: 16,
-  },
-  selectedTextStyle: {
-    fontSize: 14,
-  },
-  iconStyle: {
-    width: 20,
-    height: 20,
-  },
-  inputSearchStyle: {
-    height: 40,
-    fontSize: 16,
-  },
-  icon: {
-    marginRight: 5,
-  },
-  item: {
-    padding: 17,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  selectedStyle: {
-    flexDirection: 'row',
+  buttomContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 14,
-    backgroundColor: 'white',
-    shadowColor: '#000',
-    marginTop: 8,
-    marginRight: 12,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-
-    elevation: 2,
   },
-  textSelectedStyle: {
-    marginRight: 5,
-    fontSize: 16,
+  buttonContainer: {
+    height: 40,
+    width: Dimensions.get('window').width - 20,
+    position: 'absolute',
+    bottom: 15,
+    borderRadius: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 10,
+    backgroundColor: '#2de0ff',
   },
+  registerText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  bottomUsual: {
+    color: 'gray',
+    fontSize: 14,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white'
+  }
 });
-*/
+
+
