@@ -127,10 +127,13 @@ export default () => {
 
 
   return (
-    <View style={styles.bigContainer}>
-      <View style={{ alignItems: 'center' }}>
+    <View style={styles.container_1}>
+      <View style={styles.imageContainer}>
         <Button title="Pick an image from camera roll" onPress={pickImage} color={'black'}/>
-        {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+        {image && (
+          
+          <Image source={{ uri: image }} style={styles.image} />
+          )}
       </View>
       <View style={styles.container}>
         <Text style={styles.usual}>Gender</Text>
@@ -165,7 +168,7 @@ export default () => {
           placeholder=" "
           valueField="value"
         />
-        <Text style={styles.usual}>Course</Text>
+        <Text style={styles.usual}>Modules</Text>
         <Dropdown
           style={styles.dropdown}
           placeholderStyle={styles.placeholderStyle}
@@ -185,6 +188,28 @@ export default () => {
 }
 
 const styles = StyleSheet.create({
+
+  container_1:{
+
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    
+  },
+
+  imageContainer: {
+    
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  image: {
+
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+  },
+
   bigContainer: {
     flex: 1,
     alignItems: 'center',
