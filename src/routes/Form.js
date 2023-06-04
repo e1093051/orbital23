@@ -30,8 +30,11 @@ export default () => {
   const navigation = useNavigation();
 
   const handleNext = () => {
-    navigation.navigate('Register2', { name })
+    navigation.navigate('Form2', { name })
   }
+
+  
+  const [hasChangedPicture, setHasChangedPicture] = useState(false);
 
 
   const [image, setImage] = useState(null);
@@ -46,6 +49,7 @@ export default () => {
 
     if (!result.canceled) {
       setImage(result.assets[0].uri);
+      setHasChangedPicture(true);
     }
   };
 
@@ -53,18 +57,27 @@ export default () => {
     <View style={styles.bigContainer}>
       <View style={styles.container}>
         <Text style={styles.mainText}>Add your profile picture</Text>
-        <Text style = {styles.usual}>Share a picture that can represent you the best! </Text>
+        <Text style = {styles.usual}>Share a picture that best represents you! </Text>
         </View>
         <View style={styles.imageContainer}>
-          <Button title="Pick an image from camera roll" onPress={pickImage} color={'black'} />
-          {image && (
-            <Image source={{ uri: image }} style={styles.image} />
-          )}
+          <TouchableOpacity onPress={pickImage} style={[styles.circle, {marginTop: -300}]} activityOpacity={0.8}>
+          <Image
+            source={image ? { uri: image } : require('./Standard_Profile.png')}
+            style={styles.image}
+          />  
+          </TouchableOpacity>
+          <TouchableOpacity onPress={pickImage} style={styles.changeImageContainer}>
+          <Text style={styles.changeImageText}>
+
+          {hasChangedPicture ? "Change profile picture" : "Add profile picture"}
+
+          </Text>
+        </TouchableOpacity>
         </View>
       <TouchableOpacity
         activeOpacity={0.75}
         style={styles.buttonContainer}
-        onPress={() => navigation.navigate('Register')} >
+        onPress={() => navigation.navigate('Form2')} >
         <Text style={styles.registerText}>Next</Text>
       </TouchableOpacity>
     </View>
@@ -111,7 +124,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  buttomContainer: {
+  buttonContainer: {
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -131,12 +144,49 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   imageContainer: {
+
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
+
+  circle: {
+
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    backgroundColor: '#808080',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+
   image: {
     width: 200,
     height: 200,
     borderRadius: 100,
   },
+
+  placeholder:{
+
+    width: 180,
+    height: 180,
+    borderRadius: 90,
+    backgroundColor: 'white',
+    borderWidth: 1,
+    borderColor: 'gray',
+    
+  },
+
+  changeImageContainer: {
+    marginTop: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  changeImageText: {
+    color: '#2de0ff',
+    fontSize: 16,
+  },
+
 });
