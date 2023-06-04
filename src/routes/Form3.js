@@ -4,8 +4,9 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { ActivityIndicator } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
-import { MultiSelect } from 'react-native-element-dropdown';
-import AntDesign from '@expo/vector-icons/AntDesign';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { CheckBox } from 'react-native-elements'
+
 
 
 import * as ImagePicker from 'expo-image-picker';
@@ -22,62 +23,12 @@ import {
   Dimensions
 } from 'react-native';
 
+
+
+
+
+
 export default () => {
-
-  const navigation = useNavigation();
-
-  const [image, setImage] = useState(null);
-
-  const [gender, setGender] = useState("");
-  const [major, setMajor] = useState("");
-  const [module, setModule] = useState([]);
-  const [moduleData, setModuleData] = useState([]);
-
-  const renderItem = item => {
-    return (
-      <View style={styles.item}>
-        <Text style={styles.selectedTextStyle}>{item.label}</Text>
-      </View>
-    );
-  };
-
-
-
-  const getData = () => {
-    fetch('https://api.nusmods.com/v2/2022-2023/moduleList.json')
-    .then((response) => response.json())
-    .then((json) => {
-      const data = json.map((module) => ({label: module.moduleCode + " " + module.title, value: module.moduleCode}));
-      setModuleData(data);
-    })
-  }
-
-
-  useEffect(() => {
-    getData();
-  }, [])
-
-
-  const pickImage = async() => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      setImage(result.assets[0].uri);
-    }
-  };
-
-  const genderData = [
-    { label: 'Female', value: 'Female' },
-    { label: 'Male', value: 'Male' },
-    { label: 'Others', value: 'Others' },
-  ];
-
-
   const majorData = [
     { label: 'Pharmacy', value: 'Pharmacy' },
     { label: 'Nursing', value: 'Nursing' },
@@ -135,39 +86,23 @@ export default () => {
   ];
 
 
+  const [major, setMajor] = useState("");
 
+  const [gender, setGender] = useState("");
+  const [name, setName] = useState("");
+
+  const navigation = useNavigation();
+
+  const handleNext = () => {
+    navigation.navigate('Register2', { name })
+  }
 
   return (
     <View style={styles.container_1}>
-      <View style={styles.imageContainer}>
-        <Button title="Pick an image from camera roll" onPress={pickImage} color={'black'}/>
-        {image && (
-          
-          <Image source={{ uri: image }} style={styles.image} />
-          )}
-      </View>
       <View style={styles.container}>
-        <Text style={styles.usual}>Gender</Text>
-        <Dropdown
-          style={styles.dropdown}
-          placeholderStyle={styles.placeholderStyle}
-          selectedTextStyle={styles.selectedTextStyle}
-          inputSearchStyle={styles.inputSearchStyle}
-          maxHeight={300}
-          labelField="label"
-          data={genderData}
-          onChange={item => setGender(item.value)}
-          value={gender}
-          placeholder=" "
-          valueField="value"
-        />
-        <Text style={styles.usual}>Bio</Text>
-        <TextInput
-          style={styles.textInput}
-        />
+        <Text style={styles.mainText}>What's your major?</Text>
         <Text style={styles.usual}>Major</Text>
         <Dropdown
-          search
           style={styles.dropdown}
           placeholderStyle={styles.placeholderStyle}
           selectedTextStyle={styles.selectedTextStyle}
@@ -176,66 +111,29 @@ export default () => {
           labelField="label"
           data={majorData}
           onChange={item => setMajor(item.value)}
-          value={major}
+          value={gender}
           placeholder=" "
           valueField="value"
         />
-        <Text style={styles.usual}>Course</Text>
-        <MultiSelect
-        style={styles.dropdown}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        inputSearchStyle={styles.inputSearchStyle}
-        iconStyle={styles.iconStyle}
-        data={moduleData}
-        labelField="label"
-        valueField="value"
-        placeholder=" "
-        value={module}
-        search
-        searchPlaceholder="Search..."
-        onChange={item => {
-          setModule(item);
-        }}
-        selectedStyle = {{margin: 16}}
-        renderItem={renderItem}
-        renderSelectedItem={(item, unSelect) => (
-          <TouchableOpacity onPress={() => unSelect && unSelect(item)}>
-            <View style={styles.selectedStyle}>
-              <Text style={styles.textSelectedStyle}>{item.label}</Text>
-              <AntDesign color="black" name="delete" size={16} />
-            </View>
-          </TouchableOpacity>
-        )}
-      />
       </View>
+      <TouchableOpacity
+        activeOpacity={0.75}
+        style={styles.buttonContainer}
+        onPress={() => navigation.navigate('Form4')} >
+        <Text style={styles.registerText}>Next</Text>
+      </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
 
-  container_1:{
-
+  container_1: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    
+    color: 'white'
   },
-
-  imageContainer: {
-    
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  image: {
-
-    width: 200,
-    height: 200,
-    borderRadius: 100,
-  },
-
   bigContainer: {
     flex: 1,
     alignItems: 'center',
@@ -247,6 +145,12 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     backgroundColor: '#FFFFFF',
+  },
+  mainText: {
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 26,
+    margin: 10
   },
   usual: {
     color: 'gray',
@@ -265,7 +169,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     width: Dimensions.get('window').width - 32,
   },
-
   placeholderStyle: {
     fontSize: 16,
   },
@@ -285,177 +188,30 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width - 32,
     fontSize: 16,
   },
-  icon: {
-    marginRight: 5,
-  },
-  item: {
-    padding: 17,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  selectedStyle: {
-    flexDirection: 'row',
+  buttomContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 14,
-    backgroundColor: 'white',
-    shadowColor: '#000',
-    marginTop: 8,
-    marginRight: 12,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-
-    elevation: 2,
   },
-  textSelectedStyle: {
-    marginRight: 5,
-    fontSize: 16,
-  },
-});
-
-
-/** 
-import React, { useState } from 'react';
-import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
-import { MultiSelect } from 'react-native-element-dropdown';
-import AntDesign from '@expo/vector-icons/AntDesign';
-
-const data = [
-  { label: 'Item 1', value: '1' },
-  { label: 'Item 2', value: '2' },
-  { label: 'Item 3', value: '3' },
-  { label: 'Item 4', value: '4' },
-  { label: 'Item 5', value: '5' },
-  { label: 'Item 6', value: '6' },
-  { label: 'Item 7', value: '7' },
-  { label: 'Item 8', value: '8' },
-];
-
-const MultiSelectComponent = () => {
-  const [selected, setSelected] = useState([]);
-
-  const renderItem = item => {
-    return (
-      <View style={styles.item}>
-        <Text style={styles.selectedTextStyle}>{item.label}</Text>
-        <AntDesign style={styles.icon} color="black" name="Safety" size={20} />
-      </View>
-    );
-  };
-
-  return (
-    <View style={styles.container}>
-      <MultiSelect
-        style={styles.dropdown}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        inputSearchStyle={styles.inputSearchStyle}
-        iconStyle={styles.iconStyle}
-        data={data}
-        labelField="label"
-        valueField="value"
-        placeholder="Select item"
-        value={selected}
-        search
-        searchPlaceholder="Search..."
-
-        onChange={item => {
-          setSelected(item);
-        }}
-        renderLeftIcon={() => (
-          <AntDesign
-            style={styles.icon}
-            color="black"
-            name="Safety"
-            size={20}
-          />
-        )}
-        renderItem={renderItem}
-        renderSelectedItem={(item, unSelect) => (
-          <TouchableOpacity onPress={() => unSelect && unSelect(item)}>
-            <View style={styles.selectedStyle}>
-              <Text style={styles.textSelectedStyle}>{item.label}</Text>
-              <AntDesign color="black" name="delete" size={17} />
-            </View>
-          </TouchableOpacity>
-        )}
-      />
-    </View>
-  );
-};
-
-export default MultiSelectComponent;
-
-const styles = StyleSheet.create({
-  container: { padding: 16 },
-  dropdown: {
-    height: 50,
-    backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 12,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-
-    elevation: 2,
-  },
-  placeholderStyle: {
-    fontSize: 16,
-  },
-  selectedTextStyle: {
-    fontSize: 14,
-  },
-  iconStyle: {
-    width: 20,
-    height: 20,
-  },
-  inputSearchStyle: {
+  buttonContainer: {
     height: 40,
-    fontSize: 16,
-  },
-  icon: {
-    marginRight: 5,
-  },
-  item: {
-    padding: 17,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  selectedStyle: {
-    flexDirection: 'row',
+    width: Dimensions.get('window').width - 20,
+    position: 'absolute',
+    bottom: 15,
+    borderRadius: 2,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 14,
-    backgroundColor: 'white',
-    shadowColor: '#000',
-    marginTop: 8,
-    marginRight: 12,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-
-    elevation: 2,
+    margin: 10,
+    backgroundColor: '#2de0ff',
   },
-  textSelectedStyle: {
-    marginRight: 5,
-    fontSize: 16,
+  registerText: {
+    color: 'white',
+    fontWeight: 'bold',
   },
+  bottomUsual: {
+    color: 'gray',
+    fontSize: 14,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white'
+  }
 });
-*/

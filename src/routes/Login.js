@@ -27,7 +27,7 @@ export default () => {
   const handleLogin = () => {
     Authentication.logIn(
       { email, password },
-      (user) => navigation.navigate('Form'),
+      (user) => navigation.navigate('Home'),
       (error) => Alert.alert('error',(error.message || 'Something went wrong, try again later'))
     );
   }
@@ -37,17 +37,17 @@ export default () => {
     <View style={styles.container}>
       <View style={styles.content}>
         <Image
-          style={{ height: 160, width: 160, margin: 20 }}
+          style={{ height: 150, width: 150, margin: 20 }}
           source={require('./Logo.png')}
         />
         <TextInput
-          style={{ height: 40, width: 300, borderWidth: 1, margin: 20 }}
+          style={{ height: 40, width: 220, borderWidth: 1, margin: 10 }}
           placeholder = " NUS email (@u.nus.edu)"
           value={email}
           onChangeText={setEmail}
         />
         <TextInput
-          style={{ height: 40, width: 300, borderWidth: 1, margin: 20 }}
+          style={{ height: 40, width: 220, borderWidth: 1, margin: 10 }}
           placeholder = " Password"
           value={password}
           onChangeText={setPassword}
@@ -68,7 +68,7 @@ export default () => {
         <TouchableOpacity
           activeOpacity={0.75}
           style={styles.buttonContainer}
-          onPress={() => navigation.navigate('Register')} >
+          onPress={() => navigation.navigate('Form')} >
           <Text style={styles.registerText}>Sign Up</Text>
         </TouchableOpacity>
       </View>
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     height: 40,
-    width: 180,
+    width: 200,
     backgroundColor: '#2de0ff',
     borderRadius: 5,
     justifyContent: 'center',
