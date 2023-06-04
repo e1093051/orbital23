@@ -1,25 +1,18 @@
 import React, { useState, useEffect, Component } from 'react';
 import { Alert } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { StatusBar } from 'expo-status-bar';
-import { ActivityIndicator } from 'react-native';
-import { Dropdown } from 'react-native-element-dropdown';
 import { MultiSelect } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
-
-
-import * as ImagePicker from 'expo-image-picker';
+import { CheckBox } from '@rneui/themed';
 
 
 import {
   StyleSheet,
   Text,
   View,
-  Image,
-  Button,
-  TextInput,
   TouchableOpacity,
-  Dimensions
+  Dimensions,
+  ScrollView
 } from 'react-native';
 
 export default () => {
@@ -28,6 +21,8 @@ export default () => {
 
   const [module, setModule] = useState([]);
   const [moduleData, setModuleData] = useState([]);
+
+  const [checked, setChecked] = React.useState(true);
 
   const renderItem = item => {
     return (
@@ -41,11 +36,11 @@ export default () => {
 
   const getData = () => {
     fetch('https://api.nusmods.com/v2/2022-2023/moduleList.json')
-    .then((response) => response.json())
-    .then((json) => {
-      const data = json.map((module) => ({label: module.moduleCode + " " + module.title, value: module.moduleCode}));
-      setModuleData(data);
-    })
+      .then((response) => response.json())
+      .then((json) => {
+        const data = json.map((module) => ({ label: module.moduleCode + " " + module.title, value: module.moduleCode }));
+        setModuleData(data);
+      })
   }
 
 
@@ -58,53 +53,65 @@ export default () => {
     <View style={styles.container_1}>
       <View style={styles.container}>
         <Text style={styles.mainText}>Which courses are you taking?</Text>
-        <Text style={styles.usual}>Course</Text>
-        <View style = {{marginLeft: 16}}>
-        <MultiSelect
-        style={styles.dropdown}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        inputSearchStyle={styles.inputSearchStyle}
-        iconStyle={styles.iconStyle}
-        data={moduleData}
-        labelField="label"
-        valueField="value"
-        placeholder=" "
-        value={module}
-        search
-        searchPlaceholder="Search..."
-        onChange={item => {
-          setModule(item);
-        }}
-        selectedStyle = {{margin: 16}}
-        renderItem={renderItem}
-        renderSelectedItem={(item, unSelect) => (
-          <TouchableOpacity onPress={() => unSelect && unSelect(item)}>
-            <View style={styles.selectedStyle}>
-              <Text style={styles.textSelectedStyle}>{item.label}</Text>
-              <AntDesign color="black" name="delete" size={16} />
-            </View>
-          </TouchableOpacity>
-        )}
-      />
+        <ScrollView style = {{marginBottom: 115}}
+          contentInset={{bottom: 10}}>
+          <Text style={styles.usual}>Course</Text>
+          <View style={{ marginLeft: 16 }}>
+            <MultiSelect
+              style={styles.dropdown}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              iconStyle={styles.iconStyle}
+              data={moduleData}
+              labelField="label"
+              valueField="value"
+              placeholder=" "
+              value={module}
+              search
+              searchPlaceholder="Search..."
+              onChange={item => {
+                setModule(item);
+              }}
+              selectedStyle={{ margin: 16 }}
+              renderItem={renderItem}
+              renderSelectedItem={(item, unSelect) => (
+                <TouchableOpacity onPress={() => unSelect && unSelect(item)}>
+                  <View style={styles.selectedStyle}>
+                    <Text style={styles.textSelectedStyle}>{item.label}</Text>
+                    <AntDesign color="black" name="delete" size={16} />
+                  </View>
+                </TouchableOpacity>
+              )}
+            />
+          </View>
+        </ScrollView>
       </View>
-      <View>
-        <Text>Hello</Text>
-      </View>
+      <View style={styles.checkBoxContainer}>
+        <CheckBox
+          center
+          title="Show my courses to others"
+          checked={checked}
+          onPress={() => setChecked(!checked)}
+          iconType="material-community"
+          checkedIcon="checkbox-outline"
+          uncheckedIcon={'checkbox-blank-outline'}
+          titleProps={styles.checkbox}
+        />
       </View>
       <TouchableOpacity
         activeOpacity={0.75}
         style={styles.buttonContainer}
-        onPress={() => navigation.navigate('Form4')} >
-        <Text style={styles.registerText}>Nexxt</Text>
+        onPress={() => navigation.navigate('Form5')} >
+        <Text style={styles.registerText}>Next</Text>
       </TouchableOpacity>
-    </View>
+      </View>
   );
 }
 
 const styles = StyleSheet.create({
 
-  container_1:{
+  container_1: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
@@ -194,6 +201,12 @@ const styles = StyleSheet.create({
     shadowRadius: 1.41,
 
     elevation: 2,
+  },
+  checkBoxContainer: {
+    position: 'absolute',
+    bottom: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   textSelectedStyle: {
     marginRight: 5,

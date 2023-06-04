@@ -1,15 +1,9 @@
-import React, { useState, useEffect, Component } from 'react';
-import { Alert } from 'react-native';
+import React, { useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { StatusBar } from 'expo-status-bar';
-import { ActivityIndicator } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { CheckBox } from 'react-native-elements'
+import { CheckBox } from '@rneui/themed';
 
 
-
-import * as ImagePicker from 'expo-image-picker';
 
 
 import {
@@ -85,17 +79,9 @@ export default () => {
     { label: 'Statistics', value: 'Statistics' },
   ];
 
-
   const [major, setMajor] = useState("");
-
-  const [gender, setGender] = useState("");
-  const [name, setName] = useState("");
-
+  const [checked, setChecked] = React.useState(true);
   const navigation = useNavigation();
-
-  const handleNext = () => {
-    navigation.navigate('Register2', { name })
-  }
 
   return (
     <View style={styles.container_1}>
@@ -111,17 +97,29 @@ export default () => {
           labelField="label"
           data={majorData}
           onChange={item => setMajor(item.value)}
-          value={gender}
+          value={major}
           placeholder=" "
           valueField="value"
         />
-      </View>
-      <TouchableOpacity
-        activeOpacity={0.75}
-        style={styles.buttonContainer}
-        onPress={() => navigation.navigate('Form4')} >
-        <Text style={styles.registerText}>Next</Text>
-      </TouchableOpacity>
+        </View>
+        <View style = {styles.checkBoxContainer}>
+          <CheckBox
+            center
+            title="Show my major to others"
+            checked={checked}
+            onPress={() => setChecked(!checked)}
+            iconType="material-community"
+            checkedIcon="checkbox-outline"
+            uncheckedIcon={'checkbox-blank-outline'}
+            titleProps={styles.checkbox}
+          />
+          </View>
+          <TouchableOpacity
+            activeOpacity={0.75}
+            style={styles.buttonContainer}
+            onPress={() => navigation.navigate('Form4')} >
+            <Text style={styles.next}>Next</Text>
+          </TouchableOpacity>
     </View>
   );
 }
@@ -133,11 +131,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     color: 'white'
-  },
-  bigContainer: {
-    flex: 1,
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
   },
   container: {
     flex: 1,
@@ -179,16 +172,9 @@ const styles = StyleSheet.create({
     height: 40,
     fontSize: 16,
   },
-  textInput: {
-    margin: 16,
-    marginTop: -8,
-    height: 50,
-    borderBottomColor: 'gray',
-    borderBottomWidth: 0.5,
-    width: Dimensions.get('window').width - 32,
-    fontSize: 16,
-  },
-  buttomContainer: {
+  checkBoxContainer: {
+    position: 'absolute',
+    bottom: 60,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -203,15 +189,8 @@ const styles = StyleSheet.create({
     margin: 10,
     backgroundColor: '#2de0ff',
   },
-  registerText: {
+  next: {
     color: 'white',
     fontWeight: 'bold',
   },
-  bottomUsual: {
-    color: 'gray',
-    fontSize: 14,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'white'
-  }
 });
