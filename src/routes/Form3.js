@@ -4,8 +4,6 @@ import { Dropdown } from 'react-native-element-dropdown';
 import { CheckBox } from '@rneui/themed';
 
 
-
-
 import {
   StyleSheet,
   Text,
@@ -16,10 +14,6 @@ import {
   TouchableOpacity,
   Dimensions
 } from 'react-native';
-
-
-
-
 
 
 export default () => {
@@ -83,12 +77,16 @@ export default () => {
   const [checked, setChecked] = React.useState(true);
   const navigation = useNavigation();
 
+
+
   return (
     <View style={styles.container_1}>
       <View style={styles.container}>
         <Text style={styles.mainText}>What's your major?</Text>
         <Text style={styles.usual}>Major</Text>
         <Dropdown
+
+          search
           style={styles.dropdown}
           placeholderStyle={styles.placeholderStyle}
           selectedTextStyle={styles.selectedTextStyle}
@@ -193,4 +191,5 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
   },
+
 });
