@@ -68,7 +68,7 @@ export default () => {
         <TouchableOpacity
           activeOpacity={0.75}
           style={styles.buttonContainer}
-          onPress={() => navigation.navigate('Form')} >
+          onPress={() => navigation.navigate('Register')} >
           <Text style={styles.registerText}>Sign Up</Text>
         </TouchableOpacity>
       </View>
