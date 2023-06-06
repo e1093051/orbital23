@@ -9,13 +9,13 @@ import Register2 from './routes/Register2';
 import Register3 from './routes/Register3';
 import Home from './routes/Home';
 import Form from './routes/Form';
+import Form1 from './routes/Form1';
 import Form2 from './routes/Form2';
 import Form3 from './routes/Form3';
 import Form4 from './routes/Form4';
 import Form5 from './routes/Form5';
 import Form6 from './routes/Form6';
 import Form7 from './routes/Form7';
-import Form8 from './routes/Form8';
 import Photo from './services/Photo'
 
 const Stack = createStackNavigator();
@@ -32,6 +32,8 @@ const StackNavigator = () => (
     options={{headerShown: true, headerTitle: ' ', headerBackTitle: ' ', headerTintColor: '#2de0ff'}}/>
     <Stack.Screen name='Form' component={Form} 
     options={{headerShown: true, headerTitle: 'Personal Profile', headerBackTitle: ' ', headerTintColor: '#2de0ff'}}/>
+    <Stack.Screen name='Form1' component={Form1} 
+    options={{headerShown: true, headerTitle: 'Personal Profile', headerBackTitle: ' ', headerTintColor: '#2de0ff'}}/>
     <Stack.Screen name='Form2' component={Form2} 
     options={{headerShown: true, headerTitle: 'Personal Profile', headerBackTitle: ' ', headerTintColor: '#2de0ff'}}/>
     <Stack.Screen name='Form3' component={Form3} 
@@ -44,9 +46,7 @@ const StackNavigator = () => (
     options={{headerShown: true, headerTitle: 'Personal Profile', headerBackTitle: ' ', headerTintColor: '#2de0ff'}}/>
     <Stack.Screen name='Form7' component={Form7} 
     options={{headerShown: true, headerTitle: 'Personal Profile', headerBackTitle: ' ', headerTintColor: '#2de0ff'}}/>
-    <Stack.Screen name='Form8' component={Form8} 
-    options={{headerShown: true, headerTitle: 'Personal Profile', headerBackTitle: ' ', headerTintColor: '#2de0ff'}}/>
-     <Stack.Screen name='Photo' component={Photo} 
+    <Stack.Screen name='Photo' component={Photo} 
     options={{headerShown: true, headerTitle: 'Personal Profile', headerBackTitle: ' ', headerTintColor: '#2de0ff'}}/>
   </Stack.Navigator>
 );
