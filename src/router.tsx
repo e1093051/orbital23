@@ -7,6 +7,7 @@ import Login from './routes/Login';
 import Register from './routes/Register'
 import Register2 from './routes/Register2';
 import Register3 from './routes/Register3';
+import forgetPassword from './routes/forgetPassword';
 import Home from './routes/Home';
 import Form from './routes/Form';
 import Form1 from './routes/Form1';
@@ -22,6 +23,8 @@ const Stack = createStackNavigator();
 const StackNavigator = () => (
   <Stack.Navigator initialRouteName='Login' screenOptions={{headerShown: false,}}>
     <Stack.Screen name='Login' component={Login} />
+    <Stack.Screen name='forgetPassword' component={forgetPassword} 
+    options={{headerShown: true, headerTitle: ' ', headerBackTitle: ' ', headerTintColor: '#2de0ff'}}/>
     <Stack.Screen name='Register' component={Register} 
     options={{headerShown: true, headerTitle: ' ', headerBackTitle: ' ', headerTintColor: '#2de0ff'}}/>
     <Stack.Screen name='Register2' component={Register2} 
