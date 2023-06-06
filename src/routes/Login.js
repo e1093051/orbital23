@@ -24,13 +24,16 @@ export default () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+
   const handleLogin = () => {
     Authentication.logIn(
       { email, password },
+      (user) => navigation.navigate('Form'),
       (user) => navigation.navigate('Home'),
       (error) => Alert.alert('error',(error.message || 'Something went wrong, try again later'))
     );
   }
+
 
 
   return (
@@ -68,7 +71,7 @@ export default () => {
         <TouchableOpacity
           activeOpacity={0.75}
           style={styles.buttonContainer}
-          onPress={() => navigation.navigate('Form')} >
+          onPress={() => navigation.navigate('Register')} >
           <Text style={styles.registerText}>Sign Up</Text>
         </TouchableOpacity>
       </View>
