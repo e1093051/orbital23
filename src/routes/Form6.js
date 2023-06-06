@@ -4,6 +4,8 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { MultiSelect } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { CheckBox } from '@rneui/themed';
+import { ScrollView } from 'react-native';
+
 
 import {
   StyleSheet,
