@@ -245,7 +245,7 @@ export default () => {
         <View style = {styles.checkBoxContainer}>
           <CheckBox
             center
-            title="Show my major to others"
+            title="Show my country/region to others"
             checked={checked}
             onPress={() => setChecked(!checked)}
             iconType="material-community"
@@ -257,7 +257,7 @@ export default () => {
           <TouchableOpacity
             activeOpacity={0.75}
             style={styles.buttonContainer}
-            onPress={() => navigation.navigate('Form4')} >
+            onPress={() => navigation.navigate('Form6')} >
             <Text style={styles.next}>Next</Text>
           </TouchableOpacity>
     </View>
