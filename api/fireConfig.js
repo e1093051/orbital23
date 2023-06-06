@@ -2,6 +2,7 @@ import React from 'react';
 import { initializeApp } from 'firebase/app';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword} from "firebase/auth";
 import { FirebaseError } from 'firebase/app';
+import { getFirestore } from "firebase/firestore";
 
 // Optionally import the services that you want to use
 // import {...} from "firebase/database";
@@ -26,3 +27,5 @@ export const app = initializeApp(firebaseConfig);
 
 // Initialize Firebase Authentication and get a reference to the service
 export const auth = getAuth(app);
+
+export const db = getFirestore(app);
