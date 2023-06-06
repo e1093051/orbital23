@@ -4,23 +4,32 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { MultiSelect } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { CheckBox } from '@rneui/themed';
-import { ScrollView } from 'react-native';
 
 
 import {
   StyleSheet,
   Text,
   View,
-  Image,
-  Button,
-  TextInput,
   TouchableOpacity,
-  Dimensions
+  Dimensions,
+  ScrollView
 } from 'react-native';
 
-
-
 export default () => {
+
+  const navigation = useNavigation();
+
+  const [hobby, setHobby] = useState([]);
+
+  const [checked, setChecked] = React.useState(true);
+
+  const renderItem = item => {
+    return (
+      <View style={styles.item}>
+        <Text style={styles.selectedTextStyle}>{item.label}</Text>
+      </View>
+    );
+  };
 
   const hobbyData = [
     
@@ -76,24 +85,11 @@ export default () => {
     { label: 'Volunteer work', value: 'Volunteer work' }
 ];
 
-  const [hobby, setHobby] = useState("");
-  const [checked, setChecked] = React.useState(true);
-  const navigation = useNavigation();
 
-  const MultiSelectComponent = () => {
-  const [selected, setSelected] = useState([]);
-  };
 
-   const renderItem = item => {
-    return (
-      <View style={styles.item}>
-        <Text style={styles.selectedTextStyle}>{item.label}</Text>
-      </View>
-    );
-  };
 
   return (
-     <View style={styles.container_1}>
+    <View style={styles.container_1}>
       <View style={styles.container}>
         <Text style={styles.mainText}>What are your hobbies?</Text>
         <ScrollView style = {{marginBottom: 115}}
@@ -150,8 +146,7 @@ export default () => {
       </TouchableOpacity>
       </View>
   );
-    
-};
+}
 
 const styles = StyleSheet.create({
 
@@ -159,7 +154,12 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    color: 'white'
+    left: 1
+  },
+  bigContainer: {
+    flex: 1,
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
   },
   container: {
     flex: 1,
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
   mainText: {
     color: 'black',
     fontWeight: 'bold',
-    fontSize: 26,
+    fontSize: 24.5,
     margin: 10
   },
   usual: {
@@ -185,12 +185,14 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     margin: 16,
+    marginLeft: 0,
     marginTop: -8,
     height: 50,
     borderBottomColor: 'gray',
     borderBottomWidth: 0.5,
     width: Dimensions.get('window').width - 32,
   },
+
   placeholderStyle: {
     fontSize: 16,
   },
@@ -201,9 +203,55 @@ const styles = StyleSheet.create({
     height: 40,
     fontSize: 16,
   },
+  textInput: {
+    margin: 16,
+    marginTop: -8,
+    height: 50,
+    borderBottomColor: 'gray',
+    borderBottomWidth: 0.5,
+    width: Dimensions.get('window').width - 32,
+    fontSize: 16,
+  },
+  icon: {
+    marginRight: 5,
+  },
+  item: {
+    padding: 17,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  selectedStyle: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 14,
+    backgroundColor: 'white',
+    shadowColor: '#000',
+    marginTop: 8,
+    marginRight: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+
+    elevation: 2,
+  },
   checkBoxContainer: {
     position: 'absolute',
     bottom: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textSelectedStyle: {
+    marginRight: 5,
+    fontSize: 16,
+  },
+  buttomContainer: {
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -218,9 +266,17 @@ const styles = StyleSheet.create({
     margin: 10,
     backgroundColor: '#2de0ff',
   },
-  next: {
+  registerText: {
     color: 'white',
     fontWeight: 'bold',
   },
-
+  bottomUsual: {
+    color: 'gray',
+    fontSize: 14,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white'
+  }
 });
+
+
