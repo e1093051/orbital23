@@ -23,10 +23,6 @@ import {
 } from 'react-native';
 
 
-
-
-
-
   export default () => {
     const genderData = [
       { label: 'Female', value: 'Female' },
