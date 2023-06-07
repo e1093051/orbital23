@@ -6,7 +6,7 @@ import { auth, firebase, storage } from './fireConfig'
 import { Alert } from 'react-native';
 
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, sendEmailVerification, signOut, sendPasswordResetEmail } from 'firebase/auth';
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
+import { ref, uploadBytes, getDownloadURL, uploadBytesResumable } from "firebase/storage"
 
 
 export const logIn = async ( {email, password}, firstTimeUser, onSuccess, onError) => {
@@ -55,7 +55,7 @@ export const setProfilePicture = async ( {image}, onSuccess, onError ) => {
     .then((response)=> response.blob()));
     const user = ref (storage, `NUS/users/${auth.currentUser.uid}`);
     const reference = ref(user, 'profile.jpg');
-    await uploadBytes(reference, blob);
+    await uploadBytesResumable(reference, blob);
     const url = await getDownloadURL(reference);
     await updateProfile(auth.currentUser, {photoURL:url});
     console.log(auth.currentUser.displayName);
