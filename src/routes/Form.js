@@ -10,6 +10,8 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 
 import * as ImagePicker from 'expo-image-picker';
 
+import * as Authentication from "../../api/auth";
+
 
 import {
   StyleSheet,
@@ -23,21 +25,29 @@ import {
 } from 'react-native';
 
 
-
 export default () => {
-  const [name, setName] = useState("");
 
   const navigation = useNavigation();
 
-  const handleNext = () => {
-    navigation.navigate('Form2', { name })
-  }
-
-  
   const [hasChangedPicture, setHasChangedPicture] = useState(false);
 
-
   const [image, setImage] = useState(null);
+
+  const setProfilePicture = () => {
+    if (hasChangedPicture) {
+      Authentication.setProfilePicture(
+        { image },
+        () => navigation.navigate('Form1'),
+        (error) => Alert.alert('error', (error.message || 'Something went wrong, try again later'))
+      )
+    }
+    else {
+      Authentication.setDefaultProfilePicture(
+        () => navigation.navigate('Form1'),
+        (error) => Alert.alert('error', (error.message || 'Something went wrong, try again later'))
+      )
+    }
+  }
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -57,27 +67,27 @@ export default () => {
     <View style={styles.bigContainer}>
       <View style={styles.container}>
         <Text style={styles.mainText}>Add your profile picture</Text>
-        <Text style = {styles.usual}>Share a picture that best represents you! </Text>
-        </View>
-        <View style={styles.imageContainer}>
-          <TouchableOpacity onPress={pickImage} style={[styles.circle, {marginTop: -300}]} activityOpacity={0.8}>
+        <Text style={styles.usual}>Share a picture that best represents you! </Text>
+      </View>
+      <View style={styles.imageContainer}>
+        <TouchableOpacity onPress={pickImage} style={[styles.circle, { marginTop: -300 }]} activityOpacity={0.8}>
           <Image
             source={image ? { uri: image } : require('./Standard_Profile.png')}
             style={styles.image}
-          />  
-          </TouchableOpacity>
-          <TouchableOpacity onPress={pickImage} style={styles.changeImageContainer}>
+          />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={pickImage} style={styles.changeImageContainer}>
           <Text style={styles.changeImageText}>
 
-          {hasChangedPicture ? "Change profile picture" : "Add profile picture"}
+            {hasChangedPicture ? "Change profile picture" : "Add profile picture"}
 
           </Text>
         </TouchableOpacity>
-        </View>
+      </View>
       <TouchableOpacity
         activeOpacity={0.75}
         style={styles.buttonContainer}
-        onPress={() => navigation.navigate('Form1')} >
+        onPress={() => setProfilePicture()}>
         <Text style={styles.registerText}>Next</Text>
       </TouchableOpacity>
     </View>
@@ -167,7 +177,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
   },
 
-  placeholder:{
+  placeholder: {
 
     width: 180,
     height: 180,
@@ -175,7 +185,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderWidth: 1,
     borderColor: 'gray',
-    
+
   },
 
   changeImageContainer: {

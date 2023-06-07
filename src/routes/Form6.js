@@ -5,6 +5,8 @@ import { MultiSelect } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { CheckBox } from '@rneui/themed';
 
+import * as setProfile from "../../api/setProfile";
+
 
 import {
   StyleSheet,
@@ -85,6 +87,14 @@ export default () => {
     { label: 'Volunteer work', value: 'Volunteer work' }
 ];
 
+const handleSetHobby = () => {
+  setProfile.setHobby(
+    { hobby, showHobby: checked },
+    () => navigation.navigate('Form7'),
+    (error) => Alert.alert('error', (error.message || 'Something went wrong, try again later'))
+  )
+}
+
 
 
 
@@ -141,7 +151,7 @@ export default () => {
       <TouchableOpacity
         activeOpacity={0.75}
         style={styles.buttonContainer}
-        onPress={() => navigation.navigate('Form7')} >
+        onPress={() => handleSetHobby()} >
         <Text style={styles.registerText}>Next</Text>
       </TouchableOpacity>
       </View>

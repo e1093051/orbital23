@@ -1,18 +1,15 @@
 import React, { useState } from 'react';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { CheckBox } from '@rneui/themed';
 
-
+import * as setProfile from "../../api/setProfile";
 
 
 import {
   StyleSheet,
   Text,
   View,
-  Image,
-  Button,
-  TextInput,
   TouchableOpacity,
   Dimensions
 } from 'react-native';
@@ -20,7 +17,7 @@ import {
 
 export default () => {
 
-  const countryData = [
+  const countryAndRegionData = [
   { label: 'Afghanistan', value: 'Afghanistan' },
   { label: 'Albania', value: 'Albania' },
   { label: 'Algeria', value: 'Algeria' },
@@ -218,9 +215,17 @@ export default () => {
   { label: 'Zimbabwe', value: 'Zimbabwe' },
 ];
 
-  const [country, setCountry] = useState("");
+  const [countryAndRegion, setCountryAndRegion] = useState("");
   const [checked, setChecked] = React.useState(true);
   const navigation = useNavigation();
+
+  const handleSetCountryAndRegion = () => {
+    setProfile.setCountryAndRegion(
+      { countryAndRegion, showCountryAndRegion: checked },
+      () => navigation.navigate('Form6'),
+      (error) => Alert.alert('error', (error.message || 'Something went wrong, try again later'))
+    )
+  }
 
   return (
     <View style={styles.container_1}>
@@ -235,9 +240,9 @@ export default () => {
           inputSearchStyle={styles.inputSearchStyle}
           maxHeight={300}
           labelField="label"
-          data={countryData}
-          onChange={item => setCountry(item.value)}
-          value={country}
+          data={countryAndRegionData}
+          onChange={item => setCountryAndRegion(item.value)}
+          value={countryAndRegion}
           placeholder=" "
           valueField="value"
         />
@@ -257,7 +262,7 @@ export default () => {
           <TouchableOpacity
             activeOpacity={0.75}
             style={styles.buttonContainer}
-            onPress={() => navigation.navigate('Form6')} >
+            onPress={() => handleSetCountryAndRegion()} >
             <Text style={styles.next}>Next</Text>
           </TouchableOpacity>
     </View>

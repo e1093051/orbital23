@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Component } from 'react';
 import { Alert } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { MultiSelect } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { CheckBox } from '@rneui/themed';
@@ -14,6 +14,8 @@ import {
   Dimensions,
   ScrollView
 } from 'react-native';
+
+import * as setProfile from "../../api/setProfile";
 
 export default () => {
 
@@ -31,6 +33,14 @@ export default () => {
       </View>
     );
   };
+
+  const handleSetCourse = () => {
+    setProfile.setCourse(
+      { course: module, showCourse: checked },
+      () => navigation.navigate('Form5'),
+      (error) => Alert.alert('error', (error.message || 'Something went wrong, try again later'))
+    )
+  }
 
 
 
@@ -102,7 +112,7 @@ export default () => {
       <TouchableOpacity
         activeOpacity={0.75}
         style={styles.buttonContainer}
-        onPress={() => navigation.navigate('Form5')} >
+        onPress={() => handleSetCourse()} >
         <Text style={styles.registerText}>Next</Text>
       </TouchableOpacity>
       </View>

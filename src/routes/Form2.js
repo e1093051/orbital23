@@ -1,23 +1,16 @@
 import React, { useState, useEffect, Component } from 'react';
 import { Alert } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { StatusBar } from 'expo-status-bar';
-import { ActivityIndicator } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Dropdown } from 'react-native-element-dropdown';
-import { MultiSelect } from 'react-native-element-dropdown';
-import AntDesign from '@expo/vector-icons/AntDesign';
 
 
-import * as ImagePicker from 'expo-image-picker';
+import * as setProfile from "../../api/setProfile";
 
 
 import {
   StyleSheet,
   Text,
   View,
-  Image,
-  Button,
-  TextInput,
   TouchableOpacity,
   Dimensions
 } from 'react-native';
@@ -25,20 +18,24 @@ import {
 
   export default () => {
     const genderData = [
-      { label: 'Female', value: 'Female' },
-      { label: 'Male', value: 'Male' },
-      { label: 'Others', value: 'Others' },
+      { label: 'Female', value: 1 },
+      { label: 'Male', value: 2 },
+      { label: 'Others', value: 3 },
     ];
 
     const [gender, setGender] = useState("");
-    const [name, setName] = useState("");
   
     const navigation = useNavigation();
-  
-    const handleNext = () => {
-      navigation.navigate('Register2', { name })
+
+    const handleSetGender = () => {
+      setProfile.setGender(
+        {gender},
+        () => navigation.navigate('Form3'),
+        (error) => Alert.alert('error',(error.message || 'Something went wrong, try again later'))
+      )
     }
   
+
     return (
       <View style={styles.container_1}>
       <View style={styles.container}>
@@ -61,7 +58,7 @@ import {
       <TouchableOpacity
         activeOpacity={0.75}
         style={styles.buttonContainer}
-        onPress={() => navigation.navigate('Form3')} >
+        onPress={() => handleSetGender()} >
         <Text style={styles.registerText}>Next</Text>
       </TouchableOpacity>
     </View>

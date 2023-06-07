@@ -10,29 +10,36 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
-  Button,
-  TextInput,
   TouchableOpacity,
   Dimensions
 } from 'react-native';
+
+import * as setProfile from "../../api/setProfile";
 
 
 export default () => {
 
   const yearData = [
 
-  { label: 'Year 1', value: 'Year 1' },
-  { label: 'Year 2', value: 'Year 2' },
-  { label: 'Year 3', value: 'Year 3' },
-  { label: 'Year 4', value: 'Year 4' },
-  { label: 'Year 5', value: 'Year 5' },
-  { label: 'Year 6', value: 'Year 6' },
+  { label: 'Year 1', value: 1 },
+  { label: 'Year 2', value: 2 },
+  { label: 'Year 3', value: 3 },
+  { label: 'Year 4', value: 4 },
+  { label: 'Year 5', value: 5 },
+  { label: 'Year 6', value: 6 },
 ];
 
   const [year, setYear] = useState("");
   const [checked, setChecked] = React.useState(true);
   const navigation = useNavigation();
+
+  const handleSetYear = () => {
+    setProfile.setYear(
+      { year, showYear: checked },
+      () => navigation.navigate('Home'),
+      (error) => Alert.alert('error', (error.message || 'Something went wrong, try again later'))
+    )
+  }
 
   return (
     <View style={styles.container_1}>
@@ -69,7 +76,7 @@ export default () => {
           <TouchableOpacity
             activeOpacity={0.75}
             style={styles.buttonContainer}
-            onPress={() => navigation.navigate('Home')} >
+            onPress={() => handleSetYear()} >
             <Text style={styles.next}>Next</Text>
           </TouchableOpacity>
     </View>

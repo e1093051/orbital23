@@ -1,14 +1,8 @@
 import React, { useState, useEffect, Component } from 'react';
 import { Alert } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { StatusBar } from 'expo-status-bar';
-import { ActivityIndicator } from 'react-native';
-import { Dropdown } from 'react-native-element-dropdown';
-import { MultiSelect } from 'react-native-element-dropdown';
-import AntDesign from '@expo/vector-icons/AntDesign';
 
-
-import * as ImagePicker from 'expo-image-picker';
+import * as setProfile from "../../api/setProfile";
 
 
 import {
@@ -28,9 +22,13 @@ import {
     const [bio, setBio] = useState("");
   
     const navigation = useNavigation();
-  
-    const handleNext = () => {
-      navigation.navigate('Register2', { name })
+
+    const handleSetBio = () => {
+      setProfile.setBio(
+        {bio},
+        () => navigation.navigate('Form2'),
+        (error) => Alert.alert('error',(error.message || 'Something went wrong, try again later'))
+      )
     }
   
     return (
@@ -47,7 +45,7 @@ import {
       <TouchableOpacity
         activeOpacity={0.75}
         style={styles.buttonContainer}
-        onPress={() => navigation.navigate('Form2')} >
+        onPress={() => handleSetBio()} >
         <Text style={styles.registerText}>Next</Text>
       </TouchableOpacity>
     </View>
