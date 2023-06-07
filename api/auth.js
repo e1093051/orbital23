@@ -69,7 +69,7 @@ export const setProfilePicture = async ( {image}, onSuccess, onError ) => {
 export const setDefaultProfilePicture = async ( onSuccess, onError ) => {
   try {
     const url = "https://firebasestorage.googleapis.com/v0/b/nusocialize.appspot.com/o/Standard_Profile.png?alt=media&token=11e9b82d-f80f-4b76-89d1-a68c1ef05dc3";
-    await updateProfile(auth.currentUser, {photoURL:url});
+    //await updateProfile(auth.currentUser, {photoURL:url});
     console.log(auth.currentUser.displayName);
     console.log(auth.currentUser.photoURL);
     return onSuccess();
