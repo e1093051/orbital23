@@ -63,7 +63,8 @@ export default () => {
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.75}
-          style={styles.forgetPasswordButton}>
+          style={styles.forgetPasswordButton}
+          onPress={() => navigation.navigate('forgetPassword')}>
           <View style={styles.line}>
             <Text style={styles.forgetPasswordText}>Forgot Password</Text>
           </View>
