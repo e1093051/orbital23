@@ -21,7 +21,7 @@ import Photo from './services/Photo'
 
 const Stack = createStackNavigator();
 const StackNavigator = () => (
-  <Stack.Navigator initialRouteName='Login' screenOptions={{headerShown: false,}}>
+  <Stack.Navigator initialRouteName='Home' screenOptions={{headerShown: false,}}>
     <Stack.Screen name='Login' component={Login} />
     <Stack.Screen name='forgetPassword' component={forgetPassword} 
     options={{headerShown: true, headerTitle: ' ', headerBackTitle: ' ', headerTintColor: '#2de0ff'}}/>
