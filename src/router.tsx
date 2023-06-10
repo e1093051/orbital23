@@ -1,6 +1,7 @@
 import React, { Component, useState, useRef } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Entrance from './routes/Entrance'
 import Login from './routes/Login';
