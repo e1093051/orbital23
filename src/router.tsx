@@ -8,7 +8,6 @@ import Register from './routes/Register'
 import Register2 from './routes/Register2';
 import Register3 from './routes/Register3';
 import forgetPassword from './routes/forgetPassword';
-import Home from './routes/Home';
 import Form from './routes/Form';
 import Form1 from './routes/Form1';
 import Form2 from './routes/Form2';
@@ -17,11 +16,20 @@ import Form4 from './routes/Form4';
 import Form5 from './routes/Form5';
 import Form6 from './routes/Form6';
 import Form7 from './routes/Form7';
-import Photo from './services/Photo'
+import Photo from './services/Photo';
+
+import Home from './routes/Home';
+import StudyBuddy from './routes/StudyBuddy';
+import Request from './routes/Request';
+import Chat from './routes/Chat';
+import Forum from './routes/Forum';
+import Profile from './routes/Profile';
+
+import navigation from './routes/navigation'
 
 const Stack = createStackNavigator();
 const StackNavigator = () => (
-  <Stack.Navigator initialRouteName='Home' screenOptions={{headerShown: false,}}>
+  <Stack.Navigator initialRouteName='Home' >
     <Stack.Screen name='Login' component={Login} />
     <Stack.Screen name='forgetPassword' component={forgetPassword} 
     options={{headerShown: true, headerTitle: ' ', headerBackTitle: ' ', headerTintColor: '#2de0ff'}}/>
@@ -31,8 +39,8 @@ const StackNavigator = () => (
     options={{headerShown: true, headerTitle: ' ', headerBackTitle: ' ', headerTintColor: '#2de0ff'}}/>
     <Stack.Screen name='Register3' component={Register3} 
     options={{headerShown: true, headerTitle: ' ', headerBackTitle: ' ', headerTintColor: '#2de0ff'}}/>
-    <Stack.Screen name='Home' component={Home} 
-    options={{headerShown: true, headerTitle: ' ', headerBackTitle: ' ', headerTintColor: '#2de0ff'}}/>
+    <Stack.Screen name='Home' component={Home}
+    options={{headerShown: false, headerTitle: ' ', headerBackTitle: ' ', headerTintColor: '#2de0ff'}}/>
     <Stack.Screen name='Form' component={Form} 
     options={{headerShown: true, headerTitle: 'Personal Profile', headerBackTitle: ' ', headerTintColor: '#2de0ff'}}/>
     <Stack.Screen name='Form1' component={Form1} 
@@ -51,6 +59,12 @@ const StackNavigator = () => (
     options={{headerShown: true, headerTitle: 'Personal Profile', headerBackTitle: ' ', headerTintColor: '#2de0ff'}}/>
     <Stack.Screen name='Photo' component={Photo} 
     options={{headerShown: true, headerTitle: 'Personal Profile', headerBackTitle: ' ', headerTintColor: '#2de0ff'}}/>
+    <Stack.Screen name='StudyBuddy' component={StudyBuddy} 
+     options={{headerShown: true, headerTitle: ' ', headerBackTitle: ' ', headerTintColor: '#2de0ff'}}/>
+    <Stack.Screen name='Request' component={Request} />
+    <Stack.Screen name='Chat' component={Chat} />
+    <Stack.Screen name='Forum' component={Forum} />
+    <Stack.Screen name='Profile' component={Profile} />
   </Stack.Navigator>
 );
 
