@@ -30,7 +30,7 @@ import navigation from './routes/navigation'
 
 const Stack = createStackNavigator();
 const StackNavigator = () => (
-  <Stack.Navigator initialRouteName='Home' >
+  <Stack.Navigator initialRouteName='Login' >
     <Stack.Screen name='Login' component={Login} />
     <Stack.Screen name='forgetPassword' component={forgetPassword} 
     options={{headerShown: true, headerTitle: ' ', headerBackTitle: ' ', headerTintColor: '#2de0ff'}}/>

@@ -7,7 +7,7 @@ import { Alert } from 'react-native';
 
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, sendEmailVerification, signOut, sendPasswordResetEmail } from 'firebase/auth';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
-import { addDoc, collection, setDoc, doc, updateDoc } from "firebase/firestore"; 
+import { addDoc, collection, setDoc, doc, updateDoc, getDoc } from "firebase/firestore"; 
 
 
 export const setBio = async ({ bio }, onSuccess, onError) => {
@@ -95,5 +95,15 @@ export const setYear = async ({ year, showYear }, onSuccess, onError) => {
     return onSuccess();
   } catch (error){
     return onError(error);
+  }
+}
+
+export const getProfile = async () => {
+  const docSnap = await getDoc(doc(db, "NUS", "users",`${auth.currentUser.uid}`, "profile"));
+
+  if (docSnap.exists()) {
+    console.log("Document data:", docSnap.data());
+  } else {
+    console.log("No such document!");
   }
 }
