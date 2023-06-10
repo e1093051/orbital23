@@ -97,13 +97,3 @@ export const setYear = async ({ year, showYear }, onSuccess, onError) => {
     return onError(error);
   }
 }
-
-export const getProfile = async () => {
-  const docSnap = await getDoc(doc(db, "NUS", "users",`${auth.currentUser.uid}`, "profile"));
-
-  if (docSnap.exists()) {
-    console.log("Document data:", docSnap.data());
-  } else {
-    console.log("No such document!");
-  }
-}
