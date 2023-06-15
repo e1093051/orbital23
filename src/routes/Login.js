@@ -44,7 +44,7 @@ export default () => {
           source={require('./Logo.png')}
         />
         <TextInput
-          style={{ height: 40, width: 220, borderWidth: 1, margin: 10 }}
+          style={{ height: 40, width: 220, borderWidth: 1, margin: 10 }} d
           placeholder = " NUS email (@u.nus.edu)"
           value={email}
           onChangeText={setEmail}
