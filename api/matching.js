@@ -10,7 +10,7 @@ import React, { Component, useState, useRef } from 'react';
 
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, sendEmailVerification, signOut, sendPasswordResetEmail } from 'firebase/auth';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
-import { addDoc, collection, setDoc, doc, updateDoc, getDoc, query, where, getDocs } from "firebase/firestore";
+import { addDoc, collection, setDoc, doc, updateDoc, getDoc, query, where, getDocs, arrayUnion } from "firebase/firestore";
 
 const getData = (uid) => {
   getDoc(doc(db, "NUS/users", uid, "profile"))
@@ -21,11 +21,17 @@ const getData = (uid) => {
 
 
 async function updateRecommendAndPoint(recommendList, pointList) {
-  await setDoc(doc(db, "NUS", "users","profile",`${auth.currentUser.uid}`), {
+  await setDoc(doc(db, "NUS", "users", "profile", `${auth.currentUser.uid}`), {
     recommend: recommendList,
     point: pointList
   },
-  {merge: true});
+    { merge: true });
+}
+
+async function updateAvoid(uid) {
+  await updateDoc(doc(db, "NUS", "users", "profile", `${auth.currentUser.uid}`), {
+    avoid: arrayUnion(uid),
+  })
 }
 
 async function score(profileData1, profileData2) {
@@ -74,7 +80,7 @@ function generateRecommendList(recommendList, pointList, data, point) {
         recommendList.splice(i + 1, 0, data);
         i = pointList.length;
       }
-    } 
+    }
   }
   updateRecommendAndPoint(recommendList, pointList);
 }
@@ -85,65 +91,52 @@ export async function generateMatchingPool() {
   const recommendList = profileData.recommend;
   const pointList = profileData.point;
   profileRef = collection(db, "NUS", "users", "profile");
-  const toExclude = [auth.currentUser.uid];
-  const q = query(profileRef, where("avoid", "not-in", [toExclude]));
+  const toExclude = profileData.avoid;
+  const q = query(profileRef, where("uid", "not-in", toExclude));
   const querySnapshot = await (getDocs(q));
   if (querySnapshot.size != 0) {
-    const q1 = query(profileRef, where("show", "==", 5), where("avoid", "not-in", [toExclude]));
+    const q1 = query(profileRef, where("show", "==", 5), where("uid", "not-in", toExclude));
     const querySnapshot1 = await (getDocs(q1));
     if (querySnapshot1.size != 0) {
       const index = Math.floor(Math.random() * querySnapshot1.size);
       console.log(querySnapshot1.docs[index].id, querySnapshot1.docs[index].data());
-      const point = await(score(profileData, querySnapshot1.docs[index].data()));
-      generateRecommendList(recommendList, pointList, querySnapshot1.docs[index].data(), point);
+      const point = await (score(profileData, querySnapshot1.docs[index].data()));
+      generateRecommendList(recommendList, pointList, querySnapshot1.docs[index].id, point);
+      await (updateAvoid(querySnapshot1.docs[index].id));
     }
-  }
-}
-    /**
-else {
-  const q2 = query(profileRef, where("show", "==", 4), where("avoid", "not-in", [toExclude]));
-  const querySnapshot2 = await (getDocs(q2));
-  if (querySnapshot2.size != 0) {
-    const index = Math.floor(Math.random() * querySnapshot2.size);
-    console.log(index);
-    let i = 0;
-    querySnapshot2.forEach(async (doc) => {
-      if (i == index) {
-        console.log(doc.id, " => ", doc.data());
+
+
+    else {
+      const q2 = query(profileRef, where("show", "==", 4), where("uid", "not-in", toExclude));
+      const querySnapshot2 = await (getDocs(q2));
+      if (querySnapshot2.size != 0) {
+        const index = Math.floor(Math.random() * querySnapshot2.size);
+        console.log(querySnapshot2.docs[index].id, querySnapshot2.docs[index].data());
+        const point = await (score(profileData, querySnapshot2.docs[index].data()));
+        generateRecommendList(recommendList, pointList, querySnapshot2.docs[index].id, point);
+        await (updateAvoid(querySnapshot2.docs[index].id));
       }
-      i += 1;
-    });
+      else {
+        const q3 = query(profileRef, where("show", "==", 3), where("uid", "not-in", toExclude));
+        const querySnapshot3 = await (getDocs(q3));
+        if (querySnapshot3.size != 0) {
+          const index = Math.floor(Math.random() * querySnapshot3.size);
+          console.log(querySnapshot3.docs[index].id, querySnapshot3.docs[index].data());
+          const point = await (score(profileData, querySnapshot3.docs[index].data()));
+          generateRecommendList(recommendList, pointList, querySnapshot3.docs[index].id, point);
+          await (updateAvoid(querySnapshot3.docs[index].id));
+        }
+        else {
+          const index = Math.floor(Math.random() * querySnapshot.size);
+          console.log(querySnapshot.docs[index].id, querySnapshot.docs[index].data());
+          const point = await (score(profileData, querySnapshot.docs[index].data()));
+          generateRecommendList(recommendList, pointList, querySnapshot.docs[index].id, point);
+          await (updateAvoid(querySnapshot.docs[index].id));
+        }
+      }
+    }
   }
   else {
-    const q3 = query(profileRef, where("show", "==", 3), where("avoid", "not-in", [toExclude]));
-    const querySnapshot3 = await (getDocs(q3));
-    if (querySnapshot3.size != 0) {
-      const index = Math.floor(Math.random() * querySnapshot3.size);
-      console.log(index);
-      let i = 0;
-      querySnapshot3.forEach(async (doc) => {
-        if (i == index) {
-          console.log(doc.id, " => ", doc.data());
-        }
-        i += 1;
-      });
-    }
-    else {
-      const index = Math.floor(Math.random() * querySnapshot.size);
-      console.log(index);
-      let i = 0;
-      querySnapshot.forEach(async (doc) => {
-        if (i == index) {
-          console.log(doc.id, " => ", doc.data());
-        }
-        i += 1;
-      });
-    }
+    console.log("no match");
   }
 }
-}
-else {
-console.log("no match");
-}
-}
-*/

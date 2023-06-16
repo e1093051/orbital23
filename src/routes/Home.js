@@ -54,28 +54,65 @@ export default function Home() {
   const ProfilePage = () => {
 
     const navigation = useNavigation();
-  
+
     const [profileData, setProfileData] = useState(null);
-  
+
     const getData = () => {
       getDoc(doc(db, "NUS/users", auth.currentUser.uid, "profile"))
         .then(docSnap => setProfileData(docSnap.data()));
     }
-  
+
     useEffect(() => {
       getData();
     }, [])
-  
+
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' }}>
-        <TouchableOpacity
-            activeOpacity={0.75}
-            onPress={() => navigation.navigate("Edit")}>
-            <Text>Edit</Text>
-          </TouchableOpacity>
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-start', backgroundColor: 'white', paddingTop: 20 }}>
+        {auth.currentUser && (
+          <Image
+            style={{
+              width: 150,
+              height: 150,
+              borderRadius: 75,
+              marginBottom: 10,
+            }}
+            source={{ uri: auth.currentUser.photoURL }}
+          />
+        )}
+        <View style={{
+          alignItems: 'center',
+          marginTop: 0,
+          justifyContent: 'flex-start',
+        }}>
+          {auth.currentUser && (
+            <Text style={{
+              fontSize: 19,
+              fontWeight: 'bold',
+              marginTop: 10,
+            }}>{auth.currentUser.displayName}</Text>
+          )}
+        </View>
+
         <View style={{ width: Dimensions.get('window').width - 60, borderBottomWidth: 1, flexDirection: "row", borderBottomColor: '#DEDEDE' }}>
           <Text style={{ width: 80, marginBottom: 5, marginTop: 5 }}>Name</Text>
           {auth.currentUser && <Text style={{ color: '#808080', marginBottom: 5, marginTop: 5 }}>{auth.currentUser.displayName}</Text>}
+        </View>
+        <View style={{ width: Dimensions.get('window').width - 60, borderBottomWidth: 1, flexDirection: "row", borderBottomColor: '#DEDEDE' }}>
+
+          <Text style={{ width: 80, marginBottom: 5, marginTop: 5 }}>Bio</Text>
+          {auth.currentUser && profileData && (
+            <Text style={{ color: '#808080', marginBottom: 5, marginTop: 5 }}>
+              {profileData.bio}
+            </Text>
+          )}
+        </View>
+        <View style={{ width: Dimensions.get('window').width - 60, borderBottomWidth: 1, flexDirection: "row", borderBottomColor: '#DEDEDE' }}>
+          <Text style={{ width: 80, marginBottom: 5, marginTop: 5 }}>Gender</Text>
+          {profileData && <Text style={{ color: '#808080', marginBottom: 5, marginTop: 5 }}>{profileData.gender}</Text>}
+        </View>
+        <View style={{ width: Dimensions.get('window').width - 60, borderBottomWidth: 1, flexDirection: "row", borderBottomColor: '#DEDEDE' }}>
+          <Text style={{ width: 80, marginBottom: 5, marginTop: 5 }}>Major</Text>
+          {profileData && <Text style={{ color: '#808080', marginBottom: 5, marginTop: 5 }}>{profileData.major}</Text>}
         </View>
         <View style={{ width: Dimensions.get('window').width - 60, borderBottomWidth: 1, flexDirection: "row", borderBottomColor: '#DEDEDE' }}>
           <Text style={{ width: 80, marginBottom: 5, marginTop: 5 }}>Year</Text>
@@ -85,6 +122,12 @@ export default function Home() {
           <Text style={{ width: 80, justifyContent: 'flex-start', verticalAlign: 'middle' }}>Course</Text>
           {profileData && <Text style={{ width: Dimensions.get('window').width - 180, color: '#808080', marginBottom: 5, marginTop: 5 }}>{profileData.course.join(", ")}</Text>}
         </View>
+        <View style={{ width: Dimensions.get('window').width - 60, flexDirection: "row", borderBottomWidth: 1, alignItems: 'center', justifyContent: 'flex-start', flexWrap: 'wrap', borderBottomColor: '#DEDEDE' }}>
+          <Text style={{ width: 80, justifyContent: 'flex-start', verticalAlign: 'middle' }}>Hobby</Text>
+          {profileData && <Text style={{ width: Dimensions.get('window').width - 180, color: '#808080', marginBottom: 5, marginTop: 5 }}>{profileData.hobby.join(", ")}</Text>}
+        </View>
+
+
       </View>
     );
   }
@@ -103,7 +146,7 @@ export default function Home() {
           headerShown: true,
           headerRight: () => (
             <TouchableOpacity
-              style = {{marginRight: 10}}
+              style={{ marginRight: 10 }}
               activeOpacity={0.75}
               onPress={() => navigation.navigate('Request')}>
               <AntDesign color="black" name="hearto" size={18} />
@@ -150,7 +193,7 @@ export default function Home() {
           headerShown: true,
           headerRight: () => (
             <TouchableOpacity
-              style = {{marginRight: 10}}
+              style={{ marginRight: 10 }}
               activeOpacity={0.75}
               onPress={() => navigation.navigate('Setting')}>
               <AntDesign color="black" name="setting" size={18} />
