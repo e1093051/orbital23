@@ -24,6 +24,7 @@ import {
     const navigation = useNavigation();
 
     const handleSetBio = () => {
+      setProfile.setNameAndPhoto();
       setProfile.setBio(
         {bio},
         () => navigation.navigate('Form2'),

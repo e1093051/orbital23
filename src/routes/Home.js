@@ -21,10 +21,10 @@ import StudyBuddy, { StudyBuddyPage } from './StudyBuddy';
 
 import { createStackNavigator } from '@react-navigation/stack';
 import { db, auth } from '../../api/fireConfig';
-import { addDoc, collection, setDoc, doc, updateDoc, getDoc } from "firebase/firestore";
+import { addDoc, collection, setDoc, doc, updateDoc, getDoc, onSnapshot } from "firebase/firestore";
 
 import Request from './Request';
-import { generateMatchingPool } from '../../api/matching';
+import { generateMatchingPool, initializeMatch, updateRecommendAndPoint, setMatchValue, updateAvoid, match } from '../../api/matching';
 
 
 const BottomTab = createBottomTabNavigator();
@@ -33,7 +33,11 @@ const TopTab = createMaterialTopTabNavigator();
 
 
 export function HomePage() {
+  //initializeMatch();
+  //setMatchValue();
+  //updateAvoid("test3");
   //generateMatchingPool();
+  //match();
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text>Home</Text>
@@ -58,8 +62,9 @@ export default function Home() {
     const [profileData, setProfileData] = useState(null);
 
     const getData = () => {
-      getDoc(doc(db, "NUS/users", auth.currentUser.uid, "profile"))
-        .then(docSnap => setProfileData(docSnap.data()));
+      onSnapshot(doc(db, "NUS/users", auth.currentUser.uid, "profile"), (doc) => {
+        setProfileData(doc.data());})
+      //getDoc(doc(db, "NUS/users", auth.currentUser.uid, "profile")).then(docSnap => setProfileData(docSnap.data()));
     }
 
     useEffect(() => {
@@ -68,7 +73,7 @@ export default function Home() {
 
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-start', backgroundColor: 'white', paddingTop: 20 }}>
-        {auth.currentUser && (
+        {profileData && (
           <Image
             style={{
               width: 150,
@@ -76,7 +81,7 @@ export default function Home() {
               borderRadius: 75,
               marginBottom: 10,
             }}
-            source={{ uri: auth.currentUser.photoURL }}
+            source={{ uri: profileData.photoURL }}
           />
         )}
         <View style={{
@@ -84,18 +89,18 @@ export default function Home() {
           marginTop: 0,
           justifyContent: 'flex-start',
         }}>
-          {auth.currentUser && (
+          {profileData && (
             <Text style={{
               fontSize: 19,
               fontWeight: 'bold',
               marginTop: 10,
-            }}>{auth.currentUser.displayName}</Text>
+            }}>{profileData.name}</Text>
           )}
         </View>
 
         <View style={{ width: Dimensions.get('window').width - 60, borderBottomWidth: 1, flexDirection: "row", borderBottomColor: '#DEDEDE' }}>
           <Text style={{ width: 80, marginBottom: 5, marginTop: 5 }}>Name</Text>
-          {auth.currentUser && <Text style={{ color: '#808080', marginBottom: 5, marginTop: 5 }}>{auth.currentUser.displayName}</Text>}
+          {profileData && <Text style={{ color: '#808080', marginBottom: 5, marginTop: 5 }}>{profileData.name}</Text>}
         </View>
         <View style={{ width: Dimensions.get('window').width - 60, borderBottomWidth: 1, flexDirection: "row", borderBottomColor: '#DEDEDE' }}>
 
