@@ -16,7 +16,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 import Chat from './Chat';
 import Forum from './Forum';
@@ -28,45 +28,72 @@ import { addDoc, collection, setDoc, doc, updateDoc, getDoc } from "firebase/fir
 
 import Request from './Request';
 import { generateMatchingPool } from '../../api/matching';
-import { Alert } from 'react-native';
 
 
 import {
-  updateName
+  setBio,
+  setGender,
+  setMajor,
+  setCourse,
+  setCountryAndRegion,
+  setHobby,
+  setYear,
 } from '../../api/setProfile';
 
-
-
-export default function EditName() {
-  const route = useRoute();
-  const { name } = route.params;
-  const [editName, setEditName] = useState(name);
-  const navigation = useNavigation();
-  const handleUpdateName = () => {
-    updateName({name: editName});
-    navigation.navigate('Edit');
-  }
-
+export default function Home() {
+  const [editBio, setEditBio] = useState("");
 
   const saveProfile = () => {
-    if (editName != "") {
-      handleUpdateName();}
-    else {
-      Alert.alert(('error',('Name cannot be empty')))
+    if (editBio !== "") {
+      navigation.navigate('Edit', { updatedBio: editBio});
+    }
+
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        const profileDoc = doc(db, "NUS", "users",`${auth.currentUser.uid}`, "profile");
+        const docSnapshot = await getDoc(profileDoc);
+
+        if (docSnapshot.exists()) {
+          const data = docSnapshot.data();
+          setEditBio(data.Bio || "");
+        } else {
+          // Handle profile not found
+        }
+      } catch (error) {
+        console.error("Error fetching profile data: ", error);
+      }
+    };
+
+    fetchProfileData();
+  }, []);
+
+  const saveProfile = () => {
+    if (editBio !== "") {
+      setDoc(
+        doc(db, "NUS", "users",`${auth.currentUser.uid}`, "profile"),
+        { Name: editBio },
+        { merge: true }
+      )
+        .then(() => {
+          console.log("Bio updated successfully!");
+        })
+        .catch((error) => {
+          console.error("Error updating name: ", error);
+        });
     }
   };
+}
 
-
-
-  return (
+return (
     <View style={styles.container}>
-      <Text style={styles.title}>Change your name</Text>
+      <Text style={styles.title}>Change your bio</Text>
 
       <TextInput
         style={styles.input}
-        placeholder="Edit Name"
-        value={editName}
-        onChangeText={(text) => setEditName(text)}
+        placeholder="Edit Bio"
+        value={editBio}
+        onChangeText={(text) => setEditBio(text)}
       />
 
       <TouchableOpacity
@@ -74,7 +101,7 @@ export default function EditName() {
         style={styles.saveButton}
         onPress={saveProfile}
       >
-        <Text style={styles.saveText}>Save Name</Text>
+        <Text style={styles.saveText}>Save Bio</Text>
       </TouchableOpacity>
     </View>
   );
@@ -91,6 +118,18 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 20,
+  },
+  mainText: {
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 26,
+    margin: 10
+  },
+  usual: {
+    color: 'black',
+    fontSize: 14,
+    margin: 10,
+    marginTop: -5
   },
   input: {
     width: Dimensions.get('window').width - 20,
@@ -114,21 +153,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
   },
-  resetButton: {
-    height: 40,
-    width: Dimensions.get('window').width - 100,
-    backgroundColor: 'red',
-    borderRadius: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  resetText: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
 });
+
+
+
 
 
 

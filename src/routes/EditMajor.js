@@ -16,7 +16,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 import Chat from './Chat';
 import Forum from './Forum';
@@ -28,45 +28,73 @@ import { addDoc, collection, setDoc, doc, updateDoc, getDoc } from "firebase/fir
 
 import Request from './Request';
 import { generateMatchingPool } from '../../api/matching';
-import { Alert } from 'react-native';
 
 
 import {
-  updateName
+  setBio,
+  setGender,
+  setMajor,
+  setCourse,
+  setCountryAndRegion,
+  setHobby,
+  setYear,
 } from '../../api/setProfile';
 
+import { Dropdown } from 'react-native-element-dropdown';
+import { CheckBox } from '@rneui/themed';
+import { Alert } from 'react-native';
 
 
-export default function EditName() {
-  const route = useRoute();
-  const { name } = route.params;
-  const [editName, setEditName] = useState(name);
+export default function Home() {
+  const [editMajor, setEditMajor] = useState("");
   const navigation = useNavigation();
-  const handleUpdateName = () => {
-    updateName({name: editName});
-    navigation.navigate('Edit');
-  }
-
 
   const saveProfile = () => {
-    if (editName != "") {
-      handleUpdateName();}
-    else {
-      Alert.alert(('error',('Name cannot be empty')))
+    if (editMajor !== "") {
+      setDoc(
+        doc(db, "NUS", "users",`${auth.currentUser.uid}`, "profile"),
+        { Name: editMajor },
+        { merge: true }
+      )
+        .then(() => {
+          console.log("Name updated successfully!");
+          navigation.navigate('Edit', { updatedMajor: editMajor});
+        })
+        .catch((error) => {
+          console.error("Error updating name: ", error);
+        });
     }
   };
 
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        const profileDoc = doc(db, "NUS", "users",`${auth.currentUser.uid}`, "profile");
+        const docSnapshot = await getDoc(profileDoc);
 
+        if (docSnapshot.exists()) {
+          const data = docSnapshot.data();
+          setEditMajor(data.Major || "");
+        } else {
+          // Handle profile not found
+        }
+      } catch (error) {
+        console.error("Error fetching profile data: ", error);
+      }
+    };
+
+    fetchProfileData();
+  }, []);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Change your name</Text>
+      <Text style={styles.title}>Change your major</Text>
 
       <TextInput
         style={styles.input}
         placeholder="Edit Name"
-        value={editName}
-        onChangeText={(text) => setEditName(text)}
+        value={editMajor}
+        onChangeText={(text) => setEditMajor(text)}
       />
 
       <TouchableOpacity
@@ -74,7 +102,7 @@ export default function EditName() {
         style={styles.saveButton}
         onPress={saveProfile}
       >
-        <Text style={styles.saveText}>Save Name</Text>
+        <Text style={styles.saveText}>Save Major</Text>
       </TouchableOpacity>
     </View>
   );
@@ -114,21 +142,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
   },
-  resetButton: {
-    height: 40,
-    width: Dimensions.get('window').width - 100,
-    backgroundColor: 'red',
-    borderRadius: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  resetText: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
 });
+
+
+
 
 
 

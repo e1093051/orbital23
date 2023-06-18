@@ -14,9 +14,10 @@ import * as ImagePicker from 'expo-image-picker';
 
 
 export const updateName = async ({ name }) => {
-  await updateDoc(doc(db, "NUS", "users", "profile", `${auth.currentUser.uid}`), {
+  await setDoc(doc(db, "NUS", "users", "profile", `${auth.currentUser.uid}`), {
     name: name,
-  });
+  },
+    { merge: true });
 }
 
 export const updatePhoto = async () => {

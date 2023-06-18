@@ -36,7 +36,7 @@ export default () => {
   const [name, setName] = useState ("")
 
   const getData = () => {
-    onSnapshot(doc(db, 'NUS/users', auth.currentUser.uid, 'profile'), (doc) => {
+    onSnapshot(doc(db, 'NUS/users','profile', auth.currentUser.uid), (doc) => {
       setProfileData(doc.data());
     });
   };

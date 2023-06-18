@@ -33,8 +33,8 @@ const TopTab = createMaterialTopTabNavigator();
 
 
 export function HomePage() {
-  match();
-  //generateMatchingPool();
+  //match();
+  //generateMatchingPool()
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text>Home</Text>
@@ -59,7 +59,7 @@ export default function Home() {
     const [profileData, setProfileData] = useState(null);
 
     const getData = () => {
-      onSnapshot(doc(db, "NUS/users", auth.currentUser.uid, "profile"), (doc) => {
+      onSnapshot(doc(db, "NUS/users", "profile", auth.currentUser.uid), (doc) => {
         setProfileData(doc.data());})
       //getDoc(doc(db, "NUS/users", auth.currentUser.uid, "profile")).then(docSnap => setProfileData(docSnap.data()));
     }
@@ -94,7 +94,6 @@ export default function Home() {
             }}>{profileData.name}</Text>
           )}
         </View>
-
         <TouchableOpacity
             activeOpacity={0.75}
             onPress={() => navigation.navigate("Edit")}>
