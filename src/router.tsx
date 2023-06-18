@@ -26,6 +26,13 @@ import Setting from './routes/Setting';
 import Chat from './routes/Chat';
 import Forum from './routes/Forum';
 import Edit from './routes/Edit';
+import EditName from './routes/EditName';
+import EditBio from './routes/EditBio';
+import EditCourse from './routes/EditCourse';
+import EditMajor from './routes/EditMajor';
+import EditHobby from './routes/EditHobby';
+import EditYear from './routes/EditYear';
+import EditCountryAndRegion from './routes/EditCountryAndRegion';
 
 const Stack = createStackNavigator();
 const StackNavigator = () => (
@@ -66,6 +73,13 @@ const StackNavigator = () => (
     <Stack.Screen name='Forum' component={Forum} />
     <Stack.Screen name='Setting' component={Setting} />
     <Stack.Screen name='Edit' component={Edit} />
+    <Stack.Screen name="EditName" component={EditName} />
+    <Stack.Screen name="EditBio" component={EditBio} />
+    <Stack.Screen name="EditMajor" component={EditMajor} />
+    <Stack.Screen name="EditCourse" component={EditCourse} />
+    <Stack.Screen name="EditHobby" component={EditHobby} />
+    <Stack.Screen name="EditCountryAndRegion" component={EditCountryAndRegion} />
+    <Stack.Screen name="EditYear" component={EditYear} />
   </Stack.Navigator>
 );
 

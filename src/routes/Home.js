@@ -71,6 +71,7 @@ export default function Home() {
       getData();
     }, [])
 
+
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-start', backgroundColor: 'white', paddingTop: 20 }}>
         {profileData && (
@@ -98,6 +99,17 @@ export default function Home() {
           )}
         </View>
 
+        <View style={styles.spacer} />
+
+        <TouchableOpacity
+            activeOpacity={0.75}
+            style={styles.EditButton}
+            onPress={() => navigation.navigate("Edit")}>
+            <Text style={styles.EditText}>Edit Profile</Text>
+          </TouchableOpacity>
+
+          <View style={styles.spacer} />
+
         <View style={{ width: Dimensions.get('window').width - 60, borderBottomWidth: 1, flexDirection: "row", borderBottomColor: '#DEDEDE' }}>
           <Text style={{ width: 80, marginBottom: 5, marginTop: 5 }}>Name</Text>
           {profileData && <Text style={{ color: '#808080', marginBottom: 5, marginTop: 5 }}>{profileData.name}</Text>}
@@ -119,10 +131,6 @@ export default function Home() {
           <Text style={{ width: 80, marginBottom: 5, marginTop: 5 }}>Major</Text>
           {profileData && <Text style={{ color: '#808080', marginBottom: 5, marginTop: 5 }}>{profileData.major}</Text>}
         </View>
-        <View style={{ width: Dimensions.get('window').width - 60, borderBottomWidth: 1, flexDirection: "row", borderBottomColor: '#DEDEDE' }}>
-          <Text style={{ width: 80, marginBottom: 5, marginTop: 5 }}>Year</Text>
-          {profileData && <Text style={{ color: '#808080', marginBottom: 5, marginTop: 5 }}>{profileData.year}</Text>}
-        </View>
         <View style={{ width: Dimensions.get('window').width - 60, flexDirection: "row", borderBottomWidth: 1, alignItems: 'center', justifyContent: 'flex-start', flexWrap: 'wrap', borderBottomColor: '#DEDEDE' }}>
           <Text style={{ width: 80, justifyContent: 'flex-start', verticalAlign: 'middle' }}>Course</Text>
           {profileData && <Text style={{ width: Dimensions.get('window').width - 180, color: '#808080', marginBottom: 5, marginTop: 5 }}>{profileData.course.join(", ")}</Text>}
@@ -131,7 +139,15 @@ export default function Home() {
           <Text style={{ width: 80, justifyContent: 'flex-start', verticalAlign: 'middle' }}>Hobby</Text>
           {profileData && <Text style={{ width: Dimensions.get('window').width - 180, color: '#808080', marginBottom: 5, marginTop: 5 }}>{profileData.hobby.join(", ")}</Text>}
         </View>
-
+        <View style={{ width: Dimensions.get('window').width - 60, borderBottomWidth: 1, flexDirection: "row", borderBottomColor: '#DEDEDE' }}>
+          <Text style={{ width: 80, marginBottom: 5, marginTop: 5 }}>Country/Region</Text>
+          {profileData && <Text style={{ color: '#808080', marginBottom: 5, marginTop: 5 }}>{profileData.countryAndRegion}</Text>}
+        </View>
+        <View style={{ width: Dimensions.get('window').width - 60, borderBottomWidth: 1, flexDirection: "row", borderBottomColor: '#DEDEDE' }}>
+          <Text style={{ width: 80, marginBottom: 5, marginTop: 5 }}>Year</Text>
+          {profileData && <Text style={{ color: '#808080', marginBottom: 5, marginTop: 5 }}>{profileData.year}</Text>}
+        </View>
+    
 
       </View>
     );
@@ -213,6 +229,25 @@ export default function Home() {
     </BottomTab.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+    spacer: {
+    height: 50,
+  },
+   EditButton: {
+    height: 30,
+    width: 200,
+    backgroundColor: '#2de0ff',
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 0,
+  },
+  EditText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  });
 
 
 
