@@ -26,6 +26,7 @@ import Setting from './routes/Setting';
 import Chat from './routes/Chat';
 import Forum from './routes/Forum';
 import Edit from './routes/Edit';
+import EditName from './routes/EditName';
 
 const Stack = createStackNavigator();
 const StackNavigator = () => (
@@ -66,6 +67,7 @@ const StackNavigator = () => (
     <Stack.Screen name='Forum' component={Forum} />
     <Stack.Screen name='Setting' component={Setting} />
     <Stack.Screen name='Edit' component={Edit} />
+    <Stack.Screen name='EditName' component={EditName} />
   </Stack.Navigator>
 );
 

@@ -30,17 +30,6 @@ export async function initializeMatch() {
   });
 }
 
-export async function setMatchValue() {
-  const profileRef = collection(db, "NUS", "users", "profile");
-  const q = query(profileRef, where("avoid", "array-contains", auth.currentUser.uid));
-  const querySnapshot = await (getDocs(q));
-  //const querySnapshot = await getDocs(collection(db, "NUS", "users", "profile"));
-  querySnapshot.forEach(async (doc) => {
-    await updateDoc(doc.ref, {
-      match: false
-    });
-  });
-}
 
 
 export async function updateRecommendAndPoint(recommendList, pointList) {
@@ -52,7 +41,7 @@ export async function updateRecommendAndPoint(recommendList, pointList) {
 }
 
 export async function updateAvoid(uid) {
-  await updateDoc(doc(db, "NUS", "users", "profile", `${uid}`), {
+  await updateDoc(doc(db, "NUS", "users", "profile", uid), {
     avoid: arrayUnion(auth.currentUser.uid),
   })
 }
@@ -81,6 +70,8 @@ async function score(profileData1, profileData2) {
   return point;
 }
 
+
+
 async function generateRecommendList(recommendList, pointList, data, point) {
   if (recommendList.length == 0) {
     await recommendList.push(data);
@@ -92,17 +83,24 @@ async function generateRecommendList(recommendList, pointList, data, point) {
     if (point > pointList[0]) {
       await pointList.splice(0, 0, point);
       await recommendList.splice(0, 0, data);
+      console.log(recommendList);
+      console.log(pointList);
     }
     else if (point < pointList[pointList.length - 1]) {
       await pointList.push(point);
       await recommendList.push(data);
+      console.log(recommendList);
+      console.log(pointList);
     }
     else {
+      let i;
       for (i = 0; i < pointList.length - 1; i += 1) {
         if (point < pointList[i] && (point > pointList[i + 1] || point == pointList[i + 1])) {
           await pointList.splice(i + 1, 0, point);
           await recommendList.splice(i + 1, 0, data);
           i = pointList.length;
+          console.log(recommendList);
+          console.log(pointList);
         }
       }
     }
@@ -111,64 +109,94 @@ async function generateRecommendList(recommendList, pointList, data, point) {
 }
 
 
+
+
 export async function generateMatchingPool() {
-  await initializeMatch();
-  await setMatchValue();
   const profileData = await getDoc(doc(db, "NUS/users", "profile", auth.currentUser.uid))
     .then(docSnap => docSnap.data());
   const recommendList = profileData.recommend;
   const pointList = profileData.point;
   profileRef = collection(db, "NUS", "users", "profile");
-  const q = query(profileRef, where("match", "==", true));
+
+  const q = query(profileRef, where("show", "!=", 6)); //change to show me on recommendation later
   const querySnapshot = await (getDocs(q));
-  if (querySnapshot.size != 0) {
-    const q1 = query(profileRef, where("show", "==", 5), where("match", "==", true));
+  const filteredUsers = querySnapshot.docs.filter(doc => {
+    const avoidList = doc.data().avoid || [];
+    return !avoidList.includes(auth.currentUser.uid);
+  });
+  if (filteredUsers.length != 0) {
+    const q1 = query(profileRef, where("show", "==", 5));
     const querySnapshot1 = await (getDocs(q1));
+    const filteredUsers1 = querySnapshot1.docs.filter(doc => {
+      const avoidList = doc.data().avoid || [];
+      return !avoidList.includes(auth.currentUser.uid);
+    });
+    if (filteredUsers1.length != 0) {
+      const selectedUser1 = filteredUsers1[Math.floor(Math.random() * filteredUsers1.length)];
+      const selectedUserId1 = selectedUser1.id;
+      console.log(selectedUserId1);
 
-    if (querySnapshot1.size != 0) {
-      const index = Math.floor(Math.random() * querySnapshot1.size);
-      console.log(querySnapshot1.docs[index].id, querySnapshot1.docs[index].data());
-      const point = await (score(profileData, querySnapshot1.docs[index].data()));
-      await generateRecommendList(recommendList, pointList, querySnapshot1.docs[index].id, point);
-      await updateAvoid(querySnapshot1.docs[index].id);
+      const point = await (score(profileData, selectedUser1.data()));
+      await generateRecommendList(recommendList, pointList, selectedUserId1, point);
+      await updateAvoid(selectedUserId1);
     }
-
-
     else {
-      const q2 = query(profileRef, where("show", "==", 4), where("match", "==", true));
+      const q2 = query(profileRef, where("show", "==", 4));
       const querySnapshot2 = await (getDocs(q2));
-      if (querySnapshot2.size != 0) {
-        const index = Math.floor(Math.random() * querySnapshot2.size);
-        console.log(querySnapshot2.docs[index].id);
-        console.log(querySnapshot2.docs[index].id, querySnapshot2.docs[index].data());
-        const point = await (score(profileData, querySnapshot2.docs[index].data()));
-        await generateRecommendList(recommendList, pointList, querySnapshot2.docs[index].id, point);
-        await updateAvoid(querySnapshot2.docs[index].id);
+      const filteredUsers2 = querySnapshot2.docs.filter(doc => {
+        const avoidList = doc.data().avoid || [];
+        return !avoidList.includes(auth.currentUser.uid);
+      });
+      if (filteredUsers2.length != 0) {
+        const selectedUser2 = filteredUsers2[Math.floor(Math.random() * filteredUsers2.length)];
+        const selectedUserId2 = selectedUser2.id;
+        console.log(selectedUserId2);
+
+        const point = await (score(profileData, selectedUser2.data()));
+        await generateRecommendList(recommendList, pointList, selectedUserId2, point);
+        await updateAvoid(selectedUserId2);
       }
       else {
-        const q3 = query(profileRef, where("show", "==", 3), where("match", "==", true));
+        const q3 = query(profileRef, where("show", "==", 3));
         const querySnapshot3 = await (getDocs(q3));
-        if (querySnapshot3.size != 0) {
-          const index = Math.floor(Math.random() * querySnapshot3.size);
-          console.log(querySnapshot3.docs[index].id);
-          console.log(querySnapshot3.docs[index].id, querySnapshot3.docs[index].data());
-          const point = await (score(profileData, querySnapshot3.docs[index].data()));
-          await generateRecommendList(recommendList, pointList, querySnapshot3.docs[index].id, point);
-          await (updateAvoid(querySnapshot3.docs[index].id));
+        const filteredUsers3 = querySnapshot3.docs.filter(doc => {
+          const avoidList = doc.data().avoid || [];
+          return !avoidList.includes(auth.currentUser.uid);
+        });
+        if (filteredUsers3.length != 0) {
+          const selectedUser3 = filteredUsers3[Math.floor(Math.random() * filteredUsers3.length)];
+          const selectedUserId3 = selectedUser3.id;
+          console.log(selectedUserId3);
+
+          const point = await (score(profileData, selectedUser3.data()));
+          await generateRecommendList(recommendList, pointList, selectedUserId3, point);
+          await updateAvoid(selectedUserId3);
         }
         else {
-          const index = Math.floor(Math.random() * querySnapshot.size);
-          console.log(querySnapshot.docs[index].id);
-          console.log(querySnapshot.docs[index].id, querySnapshot.docs[index].data());
-          const point = await (score(profileData, querySnapshot.docs[index].data()));
-          await generateRecommendList(recommendList, pointList, querySnapshot.docs[index].id, point);
-          await (updateAvoid(querySnapshot.docs[index].id));
+          const selectedUser = filteredUsers[Math.floor(Math.random() * filteredUsers.length)];
+          const selectedUserId = selectedUser.id;
+          console.log(selectedUserId);
+
+          const point = await (score(profileData, selectedUser.data()));
+          await generateRecommendList(recommendList, pointList, selectedUserId, point);
+          await updateAvoid(selectedUserId);
         }
       }
     }
   }
   else {
     console.log("no match");
+  }
+}
+
+export async function match() {
+  const profileData = await getDoc(doc(db, "NUS/users", "profile", auth.currentUser.uid))
+    .then(docSnap => docSnap.data());
+  const recommendList = profileData.recommend;
+  let length = recommendList.length;
+  while (length < 20) {
+    await generateMatchingPool();
+    length++;
   }
 }
 

@@ -33,11 +33,8 @@ const TopTab = createMaterialTopTabNavigator();
 
 
 export function HomePage() {
-  //initializeMatch();
-  //setMatchValue();
-  //updateAvoid("test3");
+  match();
   //generateMatchingPool();
-  //match();
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text>Home</Text>
@@ -97,6 +94,12 @@ export default function Home() {
             }}>{profileData.name}</Text>
           )}
         </View>
+
+        <TouchableOpacity
+            activeOpacity={0.75}
+            onPress={() => navigation.navigate("Edit")}>
+            <Text>Edit Profile</Text>
+          </TouchableOpacity>
 
         <View style={{ width: Dimensions.get('window').width - 60, borderBottomWidth: 1, flexDirection: "row", borderBottomColor: '#DEDEDE' }}>
           <Text style={{ width: 80, marginBottom: 5, marginTop: 5 }}>Name</Text>
