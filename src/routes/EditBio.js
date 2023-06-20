@@ -16,7 +16,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 import Chat from './Chat';
 import Forum from './Forum';
@@ -28,64 +28,37 @@ import { addDoc, collection, setDoc, doc, updateDoc, getDoc } from "firebase/fir
 
 import Request from './Request';
 import { generateMatchingPool } from '../../api/matching';
+import { Alert } from 'react-native';
 
 
 import {
   setBio,
-  setGender,
-  setMajor,
-  setCourse,
-  setCountryAndRegion,
-  setHobby,
-  setYear,
 } from '../../api/setProfile';
 
-export default function Home() {
-  const [editBio, setEditBio] = useState("");
+
+
+export default function EditBio() {
+  const route = useRoute();
+  const { bio } = route.params;
+  const [editBio, setEditBio] = useState(bio);
+  const navigation = useNavigation();
+  const handleUpdateBio = () => {
+    setBio({bio: editBio});
+    navigation.navigate('Edit');
+  }
+
 
   const saveProfile = () => {
-    if (editBio !== "") {
-      navigation.navigate('Edit', { updatedBio: editBio});
-    }
-
-  useEffect(() => {
-    const fetchProfileData = async () => {
-      try {
-        const profileDoc = doc(db, "NUS", "users",`${auth.currentUser.uid}`, "profile");
-        const docSnapshot = await getDoc(profileDoc);
-
-        if (docSnapshot.exists()) {
-          const data = docSnapshot.data();
-          setEditBio(data.Bio || "");
-        } else {
-          // Handle profile not found
-        }
-      } catch (error) {
-        console.error("Error fetching profile data: ", error);
-      }
-    };
-
-    fetchProfileData();
-  }, []);
-
-  const saveProfile = () => {
-    if (editBio !== "") {
-      setDoc(
-        doc(db, "NUS", "users",`${auth.currentUser.uid}`, "profile"),
-        { Name: editBio },
-        { merge: true }
-      )
-        .then(() => {
-          console.log("Bio updated successfully!");
-        })
-        .catch((error) => {
-          console.error("Error updating name: ", error);
-        });
+    if (editBio != "") {
+      handleUpdateBio();}
+    else {
+      Alert.alert(('error',('Bio cannot be empty')))
     }
   };
-}
 
-return (
+
+
+  return (
     <View style={styles.container}>
       <Text style={styles.title}>Change your bio</Text>
 
@@ -119,18 +92,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
   },
-  mainText: {
-    color: 'black',
-    fontWeight: 'bold',
-    fontSize: 26,
-    margin: 10
-  },
-  usual: {
-    color: 'black',
-    fontSize: 14,
-    margin: 10,
-    marginTop: -5
-  },
   input: {
     width: Dimensions.get('window').width - 20,
     height: 40,
@@ -153,7 +114,22 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
   },
+  resetButton: {
+    height: 40,
+    width: Dimensions.get('window').width - 100,
+    backgroundColor: 'red',
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  resetText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
 });
+
 
 
 
