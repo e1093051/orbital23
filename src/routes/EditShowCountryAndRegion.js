@@ -6,17 +6,15 @@ import {
   TouchableOpacity,
   Dimensions,
   ScrollView,
-  Image,
-  TextInput,
-  Button
+  Image
 } from 'react-native';
-
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { Dropdown } from 'react-native-element-dropdown';
 
 import Chat from './Chat';
 import Forum from './Forum';
@@ -24,49 +22,42 @@ import StudyBuddy, { StudyBuddyPage } from './StudyBuddy';
 
 import { createStackNavigator } from '@react-navigation/stack';
 import { db, auth } from '../../api/fireConfig';
-import { addDoc, collection, setDoc, doc, updateDoc, getDoc } from "firebase/firestore";
+import { addDoc, collection, setDoc, doc, updateDoc, getDoc, onSnapshot } from "firebase/firestore";
 
 import Request from './Request';
-import { generateMatchingPool } from '../../api/matching';
-import { Alert } from 'react-native';
-import { Dropdown } from 'react-native-element-dropdown';
-
+import { generateMatchingPool, initializeMatch, updateRecommendAndPoint, setMatchValue, updateAvoid, match } from '../../api/matching';
 
 import {
-  setYear
+  showMajorAPI,
+  showCountryAndRegionAPI,
+  showCourseAPI,
+  showYearAPI,
+  showHobbyAPI
 } from '../../api/setProfile';
 
+export default () => {
 
+    const whoCanSeeData = [
+    { label: 'Everyone', value: 'Everyone' },
+    { label: 'No one', value: 'No one' },
+  ];
 
-export default function EditYear() {
-
-  const yearData = [
-
-  { label: 'Year 1', value: 1 },
-  { label: 'Year 2', value: 2 },
-  { label: 'Year 3', value: 3 },
-  { label: 'Year 4', value: 4 },
-  { label: 'Year 5', value: 5 },
-  { label: 'Year 6', value: 6 },
-];
-
-
-  
   const route = useRoute();
-  const { year } = route.params;
-  const [editYear, setEditYear] = useState(year);
+  const { showCountryAndRegion } = route.params;
+  const [editShowCountryAndRegion, setEditShowCountryAndRegion] = useState(showCountryAndRegion);
   const navigation = useNavigation();
-  const handleUpdateYear = () => {
-    setYear({year: editYear, showYear: true});
-    navigation.navigate('Edit');
+  const handleUpdateShowCountryAndRegion = () => {
+    const newShowCountryAndRegionValue = editShowCountryAndRegion === 'No one' ? false : true;
+    showCountryAndRegionAPI({showCountryAndRegion: newShowCountryAndRegionValue});
+    navigation.navigate('Setting');
   }
 
 
   const saveProfile = () => {
-    if (editYear != "") {
-      handleUpdateYear();}
+    if (editShowCountryAndRegion != "") {
+      handleUpdateShowCountryAndRegion();}
     else {
-      Alert.alert('error', 'Year cannot be empty');
+      Alert.alert('error', 'Cannot be empty');
 
     }
   };
@@ -75,7 +66,7 @@ export default function EditYear() {
   return (
 
     <View style={styles.container}>
-      <Text style={styles.title}>Change your year</Text>
+      <Text style={styles.title}>Change your settings for Country/Region</Text>
 
       <Dropdown
         search
@@ -85,10 +76,10 @@ export default function EditYear() {
         inputSearchStyle={styles.inputSearchStyle}
         maxHeight={300}
         labelField="label"
-        data={yearData}
-        onChange={item => setEditYear(item.value)}
-        value={year}
-        placeholder="Select your year"
+        data={whoCanSeeData}
+        onChange={item => setEditShowCountryAndRegion(item.value)}
+        value={showCountryAndRegion}
+        placeholder="Select your option"
         valueField="value"
       />
 
@@ -97,7 +88,7 @@ export default function EditYear() {
         style={styles.saveButton}
         onPress={saveProfile}
       >
-        <Text style={styles.saveText}>Save Year</Text>
+        <Text style={styles.saveText}>Save Settings For Country/Region</Text>
       </TouchableOpacity>
     </View>
   );

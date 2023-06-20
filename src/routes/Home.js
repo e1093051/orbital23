@@ -59,7 +59,7 @@ export default function Home() {
     const [profileData, setProfileData] = useState(null);
 
     const getData = () => {
-      onSnapshot(doc(db, "NUS/users", "profile", auth.currentUser.uid), (doc) => {
+      onSnapshot(doc(db, "NUS", "users",`${auth.currentUser.uid}`, "profile"), (doc) => {
         setProfileData(doc.data());})
       //getDoc(doc(db, "NUS/users", auth.currentUser.uid, "profile")).then(docSnap => setProfileData(docSnap.data()));
     }
@@ -94,11 +94,19 @@ export default function Home() {
             }}>{profileData.name}</Text>
           )}
         </View>
+
+        <View style={styles.spacer} />
+
         <TouchableOpacity
-            activeOpacity={0.75}
-            onPress={() => navigation.navigate("Edit")}>
-            <Text>Edit Profile</Text>
-          </TouchableOpacity>
+          activeOpacity={0.75}
+          onPress={() => navigation.navigate("Edit")}
+          style={styles.button}
+          >
+          <Text style={styles.buttonText}>Edit Profile</Text>
+        </TouchableOpacity>
+
+        <View style={styles.spacer} />
+
 
         <View style={{ width: Dimensions.get('window').width - 60, borderBottomWidth: 1, flexDirection: "row", borderBottomColor: '#DEDEDE' }}>
           <Text style={{ width: 80, marginBottom: 5, marginTop: 5 }}>Name</Text>
@@ -121,10 +129,6 @@ export default function Home() {
           <Text style={{ width: 80, marginBottom: 5, marginTop: 5 }}>Major</Text>
           {profileData && <Text style={{ color: '#808080', marginBottom: 5, marginTop: 5 }}>{profileData.major}</Text>}
         </View>
-        <View style={{ width: Dimensions.get('window').width - 60, borderBottomWidth: 1, flexDirection: "row", borderBottomColor: '#DEDEDE' }}>
-          <Text style={{ width: 80, marginBottom: 5, marginTop: 5 }}>Year</Text>
-          {profileData && <Text style={{ color: '#808080', marginBottom: 5, marginTop: 5 }}>{profileData.year}</Text>}
-        </View>
         <View style={{ width: Dimensions.get('window').width - 60, flexDirection: "row", borderBottomWidth: 1, alignItems: 'center', justifyContent: 'flex-start', flexWrap: 'wrap', borderBottomColor: '#DEDEDE' }}>
           <Text style={{ width: 80, justifyContent: 'flex-start', verticalAlign: 'middle' }}>Course</Text>
           {profileData && <Text style={{ width: Dimensions.get('window').width - 180, color: '#808080', marginBottom: 5, marginTop: 5 }}>{profileData.course.join(", ")}</Text>}
@@ -133,6 +137,15 @@ export default function Home() {
           <Text style={{ width: 80, justifyContent: 'flex-start', verticalAlign: 'middle' }}>Hobby</Text>
           {profileData && <Text style={{ width: Dimensions.get('window').width - 180, color: '#808080', marginBottom: 5, marginTop: 5 }}>{profileData.hobby.join(", ")}</Text>}
         </View>
+        <View style={{ width: Dimensions.get('window').width - 60, borderBottomWidth: 1, flexDirection: "row", borderBottomColor: '#DEDEDE' }}>
+          <Text style={{ width: 80, marginBottom: 5, marginTop: 5 }}>Country/Region</Text>
+          {profileData && <Text style={{ color: '#808080', marginBottom: 5, marginTop: 5 }}>{profileData.countryAndRegion}</Text>}
+        </View>
+        <View style={{ width: Dimensions.get('window').width - 60, borderBottomWidth: 1, flexDirection: "row", borderBottomColor: '#DEDEDE' }}>
+          <Text style={{ width: 80, marginBottom: 5, marginTop: 5 }}>Year</Text>
+          {profileData && <Text style={{ color: '#808080', marginBottom: 5, marginTop: 5 }}>{profileData.year}</Text>}
+        </View>
+        
 
 
       </View>
@@ -215,6 +228,29 @@ export default function Home() {
     </BottomTab.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+  button: {
+    height: 30,
+    width: Dimensions.get("window").width - 200,
+    backgroundColor: "#2de0ff",
+    borderRadius: 5,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 20,
+  },
+  buttonText: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+
+  spacer: {
+    height: 20,
+  },
+
+});
+
 
 
 

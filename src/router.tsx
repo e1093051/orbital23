@@ -33,6 +33,11 @@ import EditMajor from './routes/EditMajor';
 import EditHobby from './routes/EditHobby';
 import EditYear from './routes/EditYear';
 import EditCountryAndRegion from './routes/EditCountryAndRegion';
+import EditShowMajor from './routes/EditShowMajor';
+import EditShowCourse from './routes/EditShowCourse';
+import EditShowHobby from './routes/EditShowHobby';
+import EditShowCountryAndRegion from './routes/EditShowCountryAndRegion';
+import EditShowYear from './routes/EditShowYear';
 
 const Stack = createStackNavigator();
 const StackNavigator = () => (
@@ -80,6 +85,11 @@ const StackNavigator = () => (
     <Stack.Screen name="EditHobby" component={EditHobby} />
     <Stack.Screen name="EditCountryAndRegion" component={EditCountryAndRegion} />
     <Stack.Screen name="EditYear" component={EditYear} />
+    <Stack.Screen name="EditShowMajor" component={EditShowMajor} />
+    <Stack.Screen name="EditShowCourse" component={EditShowCourse} />
+    <Stack.Screen name="EditShowCountryAndRegion" component={EditShowCountryAndRegion} />
+    <Stack.Screen name="EditShowYear" component={EditShowYear} />
+    <Stack.Screen name="EditShowHobby" component={EditShowHobby} />
   </Stack.Navigator>
 );
 
