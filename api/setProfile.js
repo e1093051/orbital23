@@ -11,10 +11,46 @@ import { addDoc, collection, setDoc, doc, updateDoc, getDoc } from "firebase/fir
 import * as ImagePicker from 'expo-image-picker';
 
 
+export const showMajorAPI = async ({ showMajor }) => {
+  await updateDoc(doc(db, "NUS", "users",`${auth.currentUser.uid}`, "profile"), {
+    showMajor: showMajor
+  });
+}
+
+
+export const showCourseAPI = async ({ showCourse }) => {
+  await updateDoc(doc(db, "NUS", "users",`${auth.currentUser.uid}`, "profile"), {
+    showCourse: showCourse
+  });
+}
+
+
+export const showHobbyAPI = async ({ showHobby }) => {
+  await updateDoc(doc(db, "NUS", "users",`${auth.currentUser.uid}`, "profile"), {
+    showHobby: showHobby
+  });
+}
+
+
+
+export const showCountryAndRegionAPI = async ({ showCountryAndRegion }) => {
+  await updateDoc(doc(db, "NUS", "users",`${auth.currentUser.uid}`, "profile"), {
+    showCountryAndRegion: showCountryAndRegion
+  });
+}
+
+
+export const showYearAPI = async ({ showYear }) => {
+  await updateDoc(doc(db, "NUS", "users",`${auth.currentUser.uid}`, "profile"), {
+    showYear: showYear
+  });
+}
+
+
 
 
 export const updateName = async ({ name }) => {
-  await setDoc(doc(db, "NUS", "users", "profile", `${auth.currentUser.uid}`), {
+  await setDoc(doc(db, "NUS", "users",`${auth.currentUser.uid}`, "profile"), {
     name: name,
   },
     { merge: true });
@@ -57,7 +93,7 @@ export const updatePhoto = async () => {
 
 
 export const setNameAndPhoto = async () => {
-  await setDoc(doc(db, "NUS", "users", "profile", `${auth.currentUser.uid}`), {
+  await setDoc(doc(db, "NUS", "users",`${auth.currentUser.uid}`, "profile"), {
     name: auth.currentUser.displayName,
     photoURL: auth.currentUser.photoURL
   },
@@ -66,7 +102,7 @@ export const setNameAndPhoto = async () => {
 
 export const setBio = async ({ bio }, onSuccess, onError) => {
   try {
-    await setDoc(doc(db, "NUS", "users", "profile", `${auth.currentUser.uid}`), {
+    await setDoc(doc(db, "NUS", "users",`${auth.currentUser.uid}`, "profile"), {
       bio: bio,
       rejected: [],  //who the user is rejected by
       accepted: [],  //who the user is accepted
@@ -84,7 +120,7 @@ export const setBio = async ({ bio }, onSuccess, onError) => {
 
 export const setGender = async ({ gender }, onSuccess, onError) => {
   try {
-    await setDoc(doc(db, "NUS", "users", "profile", `${auth.currentUser.uid}`), {
+    await setDoc(doc(db, "NUS", "users",`${auth.currentUser.uid}`, "profile"), {
       gender: gender
     },
       { merge: true });
@@ -97,7 +133,7 @@ export const setGender = async ({ gender }, onSuccess, onError) => {
 
 export const setMajor = async ({ major, showMajor }, onSuccess, onError) => {
   try {
-    await setDoc(doc(db, "NUS", "users", "profile", `${auth.currentUser.uid}`), {
+    await setDoc(doc(db, "NUS", "users",`${auth.currentUser.uid}`, "profile"), {
       major: major,
       showMajor: showMajor
     },
@@ -110,7 +146,7 @@ export const setMajor = async ({ major, showMajor }, onSuccess, onError) => {
 
 export const setCourse = async ({ course, showCourse }, onSuccess, onError) => {
   try {
-    await setDoc(doc(db, "NUS", "users", "profile", `${auth.currentUser.uid}`), {
+    await setDoc(doc(db, "NUS", "users",`${auth.currentUser.uid}`, "profile"), {
       course: course,
       showCourse: showCourse
     },
@@ -123,7 +159,7 @@ export const setCourse = async ({ course, showCourse }, onSuccess, onError) => {
 
 export const setCountryAndRegion = async ({ countryAndRegion, showCountryAndRegion }, onSuccess, onError) => {
   try {
-    await setDoc(doc(db, "NUS", "users", "profile", `${auth.currentUser.uid}`), {
+    await setDoc(doc(db, "NUS", "users",`${auth.currentUser.uid}`, "profile"), {
       countryAndRegion: countryAndRegion,
       showCountryAndRegion: showCountryAndRegion
     },
@@ -136,7 +172,7 @@ export const setCountryAndRegion = async ({ countryAndRegion, showCountryAndRegi
 
 export const setHobby = async ({ hobby, showHobby }, onSuccess, onError) => {
   try {
-    await setDoc(doc(db, "NUS", "users", "profile", `${auth.currentUser.uid}`), {
+    await setDoc(doc(db, "NUS", "users",`${auth.currentUser.uid}`, "profile"), {
       hobby: hobby,
       showHobby: showHobby
     },
@@ -149,7 +185,7 @@ export const setHobby = async ({ hobby, showHobby }, onSuccess, onError) => {
 
 export const setYear = async ({ year, showYear }, onSuccess, onError) => {
   try {
-    const snapShot = await (getDoc(doc(db, "NUS/users", "profile", auth.currentUser.uid)));
+    const snapShot = await (getDoc(doc(db, "NUS", "users",`${auth.currentUser.uid}`, "profile")));
     const profileData = snapShot.data();
     let show = 0;
     if (profileData.showMajor == true) {
@@ -167,7 +203,7 @@ export const setYear = async ({ year, showYear }, onSuccess, onError) => {
     if (profileData.showHobby == true) {
       show += 1;
     }
-    await setDoc(doc(db, "NUS", "users", "profile", `${auth.currentUser.uid}`), {
+    await setDoc(doc(db, "NUS", "users",`${auth.currentUser.uid}`, "profile"), {
       year: year,
       showYear: showYear,
       show: show,
