@@ -34,9 +34,15 @@ export default () => {
   const navigation = useNavigation();
   const [profileData, setProfileData] = useState(null);
   const [name, setName] = useState ("")
+  const [bio, setBio] = useState ("")
+  const [major, setMajor] = useState ("")
+  const [countryAndRegion, setCountryAndRegion] = useState ("")
+  const [year, setYear] = useState ("")
+  const[course,setCourse]=useState("")
+  const[hobby,setHobby]=useState("")
 
   const getData = () => {
-    onSnapshot(doc(db, 'NUS/users','profile', auth.currentUser.uid), (doc) => {
+    onSnapshot(doc(db, "NUS", "users",`${auth.currentUser.uid}`, "profile"), (doc) => {
       setProfileData(doc.data());
     });
   };
@@ -48,8 +54,15 @@ export default () => {
   useEffect(() => {
     if (profileData) {
       setName(profileData.name);
+      setBio(profileData.bio);
+      setMajor(profileData.major);
+      setCountryAndRegion(profileData.countryAndRegion);
+      setYear(profileData.year);
+      setCourse(profileData.course);
+      setHobby(profileData.hobby);
     }
   }, [profileData]);
+
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-start', backgroundColor: 'white', paddingTop: 20 }}>
@@ -61,7 +74,7 @@ export default () => {
         </View>
       </TouchableOpacity>
 
-      <TouchableOpacity >
+      <TouchableOpacity onPress={() => navigation.navigate('EditBio', {bio})} >
         <View style={{ width: Dimensions.get('window').width - 60, borderBottomWidth: 1, flexDirection: "row", borderBottomColor: '#DEDEDE' }}>
           <Text style={{ width: 80, marginBottom: 5, marginTop: 5 }}>Bio</Text>
           {auth.currentUser && profileData && (
@@ -72,21 +85,21 @@ export default () => {
         </View>
       </TouchableOpacity>
 
-      <TouchableOpacity >
+      <TouchableOpacity onPress={() => navigation.navigate('EditMajor', {major})} >
         <View style={{ width: Dimensions.get('window').width - 60, borderBottomWidth: 1, flexDirection: "row", borderBottomColor: '#DEDEDE' }}>
           <Text style={{ width: 80, marginBottom: 5, marginTop: 5 }}>Major</Text>
           {profileData && <Text style={{ color: '#808080', marginBottom: 5, marginTop: 5 }}>{profileData.major}</Text>}
         </View>
       </TouchableOpacity>
 
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('EditCourse')}>
         <View style={{ width: Dimensions.get('window').width - 60, flexDirection: "row", borderBottomWidth: 1, alignItems: 'center', justifyContent: 'flex-start', flexWrap: 'wrap', borderBottomColor: '#DEDEDE' }}>
           <Text style={{ width: 80, justifyContent: 'flex-start', verticalAlign: 'middle' }}>Course</Text>
           {profileData && <Text style={{ width: Dimensions.get('window').width - 180, color: '#808080', marginBottom: 5, marginTop: 5 }}>{profileData.course.join(", ")}</Text>}
         </View>
       </TouchableOpacity>
 
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('EditHobby')} >
         <View style={{ width: Dimensions.get('window').width - 60, flexDirection: "row", borderBottomWidth: 1, alignItems: 'center', justifyContent: 'flex-start', flexWrap: 'wrap', borderBottomColor: '#DEDEDE' }}>
           <Text style={{ width: 80, justifyContent: 'flex-start', verticalAlign: 'middle' }}>Hobby</Text>
           {profileData && <Text style={{ width: Dimensions.get('window').width - 180, color: '#808080', marginBottom: 5, marginTop: 5 }}>{profileData.hobby.join(", ")}</Text>}
@@ -100,7 +113,7 @@ export default () => {
         </View>
       </TouchableOpacity>
 
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('EditYear')}>
         <View style={{ width: Dimensions.get('window').width - 60, borderBottomWidth: 1, flexDirection: "row", borderBottomColor: '#DEDEDE' }}>
           <Text style={{ width: 80, marginBottom: 5, marginTop: 5 }}>Year</Text>
           {profileData && <Text style={{ color: '#808080', marginBottom: 5, marginTop: 5 }}>{profileData.year}</Text>}
