@@ -39,7 +39,11 @@ export default () => {
   const [showYear, setShowYear] = useState ("")
 
   const getData = () => {
+<<<<<<< HEAD
       onSnapshot(doc(db, "NUS", "users", "profile",`${auth.currentUser.uid}`), (doc) => {
+=======
+      onSnapshot(doc(db, "NUS", "users", "profile", `${auth.currentUser.uid}`), (doc) => {
+>>>>>>> 0d3f7a2f12d3d9e96a9bf451db0efc453f586ce2
         setProfileData(doc.data());})
     }
 

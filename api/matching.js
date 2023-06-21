@@ -12,7 +12,7 @@ import React, { Component, useState, useRef } from 'react';
 
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, sendEmailVerification, signOut, sendPasswordResetEmail } from 'firebase/auth';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
-import { addDoc, collection, setDoc, doc, updateDoc, getDoc, query, where, getDocs, arrayUnion } from "firebase/firestore";
+import { addDoc, collection, setDoc, doc, updateDoc, getDoc, query, where, getDocs, arrayUnion, onSnapshot } from "firebase/firestore";
 
 const getData = (uid) => {
   getDoc(doc(db, "NUS/users", uid, "profile"))
@@ -201,8 +201,10 @@ export async function match() {
     .then(docSnap => docSnap.data());
   const recommendList = profileData.recommend;
   let length = recommendList.length;
-  while (length < 3) {
-    await generateMatchingPool();
+  while (length < 5) {
+    if (generateMatchingPool() == "no match") {
+      break;
+    };
     length++;
   }
 }
@@ -216,7 +218,9 @@ export async function showRecommendation() {
   if (recommendList.length != 0) {
     return recommendList[0];
   }
-  return "empty";
+  if (recommendList.length == 0) {
+    return "empty";
+  }
 }
 
 export async function connect(recommend, recommendList, pointList) {
