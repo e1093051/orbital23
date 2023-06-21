@@ -33,9 +33,17 @@ import { Dropdown } from 'react-native-element-dropdown';
 
 
 import {
-  setMajor
+  updateMajor
 } from '../../api/setProfile';
 
+const saveProfile = () => {
+  if (EditMajor.editMajor != "") {
+    handleUpdateMajor();
+  }
+  else {
+    Alert.alert('error', 'Major cannot be empty');
+  }
+};
 
 
 export default function EditMajor() {
@@ -95,29 +103,35 @@ export default function EditMajor() {
     { label: 'Quantitative Finance', value: 'Quantitative Finance' },
     { label: 'Statistics', value: 'Statistics' },
   ];
+  const renderItem = item => {
+    return (
+      <View style={styles.item}>
+        <Text style={styles.selectedTextStyle}>{item.label}</Text>
+      </View>
+    );
+  };
+
   const route = useRoute();
-  const { major } = route.params;
+  const {major} = route.params;
   const [editMajor, setEditMajor] = useState(major);
   const navigation = useNavigation();
   const handleUpdateMajor = () => {
-    setMajor({major: editMajor, showMajor: true});
-    navigation.navigate('Edit');
+    updateMajor({ major: editMajor }, () => navigation.navigate("Edit"), (error) => Alert.alert('error', (error.message || 'Something went wrong, try again later')));
   }
-
 
   const saveProfile = () => {
     if (editMajor != "") {
-      handleUpdateMajor();}
+      handleUpdateMajor();
+    }
     else {
       Alert.alert('error', 'Major cannot be empty');
-
     }
   };
 
 
   return (
 
-    <View style={styles.container}>
+  <View style={styles.container}>
       <Text style={styles.title}>Change your major</Text>
 
       <Dropdown
@@ -130,7 +144,7 @@ export default function EditMajor() {
         labelField="label"
         data={majorData}
         onChange={item => setEditMajor(item.value)}
-        value={major}
+        value={editMajor}
         placeholder="Select your major"
         valueField="value"
       />
@@ -143,8 +157,7 @@ export default function EditMajor() {
         <Text style={styles.saveText}>Save Major</Text>
       </TouchableOpacity>
     </View>
-  );
-}
+  )}   
 
 const styles = StyleSheet.create({
   container: {
