@@ -209,6 +209,9 @@ export default function Home() {
             }}>{profileData.name}</Text>
           )}
         </View>
+
+        <View style={styles.spacer} />
+
         <TouchableOpacity
           activeOpacity={0.75}
           onPress={() => navigation.navigate("Edit")}>
@@ -235,10 +238,6 @@ export default function Home() {
         <View style={{ width: Dimensions.get('window').width - 60, borderBottomWidth: 1, flexDirection: "row", borderBottomColor: '#DEDEDE' }}>
           <Text style={{ width: 80, marginBottom: 5, marginTop: 5 }}>Major</Text>
           {profileData && <Text style={{ color: '#808080', marginBottom: 5, marginTop: 5 }}>{profileData.major}</Text>}
-        </View>
-        <View style={{ width: Dimensions.get('window').width - 60, borderBottomWidth: 1, flexDirection: "row", borderBottomColor: '#DEDEDE' }}>
-          <Text style={{ width: 80, marginBottom: 5, marginTop: 5 }}>Year</Text>
-          {profileData && <Text style={{ color: '#808080', marginBottom: 5, marginTop: 5 }}>{profileData.year}</Text>}
         </View>
         <View style={{ width: Dimensions.get('window').width - 60, flexDirection: "row", borderBottomWidth: 1, alignItems: 'center', justifyContent: 'flex-start', flexWrap: 'wrap', borderBottomColor: '#DEDEDE' }}>
           <Text style={{ width: 80, justifyContent: 'flex-start', verticalAlign: 'middle' }}>Course</Text>
@@ -328,6 +327,29 @@ export default function Home() {
     </BottomTab.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+  button: {
+    height: 30,
+    width: Dimensions.get("window").width - 200,
+    backgroundColor: "#2de0ff",
+    borderRadius: 5,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 20,
+  },
+  buttonText: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+
+  spacer: {
+    height: 20,
+  },
+
+});
+
 
 
 

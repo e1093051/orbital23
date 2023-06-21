@@ -6,17 +6,15 @@ import {
   TouchableOpacity,
   Dimensions,
   ScrollView,
-  Image,
-  TextInput,
-  Button
+  Image
 } from 'react-native';
-
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { Dropdown } from 'react-native-element-dropdown';
 
 import Chat from './Chat';
 import Forum from './Forum';
@@ -24,49 +22,65 @@ import StudyBuddy, { StudyBuddyPage } from './StudyBuddy';
 
 import { createStackNavigator } from '@react-navigation/stack';
 import { db, auth } from '../../api/fireConfig';
-import { addDoc, collection, setDoc, doc, updateDoc, getDoc } from "firebase/firestore";
+import { addDoc, collection, setDoc, doc, updateDoc, getDoc, onSnapshot } from "firebase/firestore";
 
 import Request from './Request';
-import { generateMatchingPool } from '../../api/matching';
-import { Alert } from 'react-native';
-
+import { generateMatchingPool, initializeMatch, updateRecommendAndPoint, setMatchValue, updateAvoid, match } from '../../api/matching';
 
 import {
-  updateName
+  showMajorAPI,
+  showCountryAndRegionAPI,
+  showCourseAPI,
+  showYearAPI,
+  showHobbyAPI
 } from '../../api/setProfile';
 
+export default () => {
 
+    const whoCanSeeData = [
+    { label: 'Everyone', value: 'Everyone' },
+    { label: 'No one', value: 'No one' },
+  ];
 
-export default function EditName() {
   const route = useRoute();
-  const { name } = route.params;
-  const [editName, setEditName] = useState(name);
+  const { showCountryAndRegion } = route.params;
+  const [editShowCountryAndRegion, setEditShowCountryAndRegion] = useState(showCountryAndRegion);
   const navigation = useNavigation();
-  const handleUpdateName = () => {
-    updateName({name: editName});
-    navigation.navigate('Edit');
+  const handleUpdateShowCountryAndRegion = () => {
+    const newShowCountryAndRegionValue = editShowCountryAndRegion === 'No one' ? false : true;
+    showCountryAndRegionAPI({showCountryAndRegion: newShowCountryAndRegionValue});
+    navigation.navigate('Setting');
   }
 
 
   const saveProfile = () => {
-    if (editName != "") {
-      handleUpdateName();}
+    if (editShowCountryAndRegion != "") {
+      handleUpdateShowCountryAndRegion();}
     else {
-      Alert.alert(('error',('Name cannot be empty')))
+      Alert.alert('error', 'Cannot be empty');
+
     }
   };
 
 
-
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Change your name</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Edit Name"
-        value={editName}
-        onChangeText={(text) => setEditName(text)}
+    <View style={styles.container}>
+      <Text style={styles.title}>Change your settings for Country/Region</Text>
+
+      <Dropdown
+        search
+        style={styles.dropdown}
+        placeholderStyle={styles.placeholderStyle}
+        selectedTextStyle={styles.selectedTextStyle}
+        inputSearchStyle={styles.inputSearchStyle}
+        maxHeight={300}
+        labelField="label"
+        data={whoCanSeeData}
+        onChange={item => setEditShowCountryAndRegion(item.value)}
+        value={showCountryAndRegion}
+        placeholder="Select your option"
+        valueField="value"
       />
 
       <TouchableOpacity
@@ -74,7 +88,7 @@ export default function EditName() {
         style={styles.saveButton}
         onPress={saveProfile}
       >
-        <Text style={styles.saveText}>Save Name</Text>
+        <Text style={styles.saveText}>Save Settings For Country/Region</Text>
       </TouchableOpacity>
     </View>
   );
@@ -92,13 +106,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
   },
-  input: {
+  dropdown: {
     width: Dimensions.get('window').width - 20,
     height: 40,
-    borderWidth: 1,
-    borderColor: '#ccc',
     marginBottom: 10,
-    paddingHorizontal: 10,
   },
   saveButton: {
     height: 40,
@@ -114,21 +125,4 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
   },
-  resetButton: {
-    height: 40,
-    width: Dimensions.get('window').width - 100,
-    backgroundColor: 'red',
-    borderRadius: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  resetText: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
 });
-
-
-

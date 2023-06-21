@@ -26,7 +26,7 @@ export default () => {
   const [profileData, setProfileData] = useState(null);
   const [invite, setInvite] = useState([])
 
-  const getData = async () =>{
+  const getData = async () => {
     onSnapshot(doc(db, "NUS/users", "profile", auth.currentUser.uid), (doc) => {
       setProfileData(doc.data());
     })
@@ -37,10 +37,12 @@ export default () => {
 
     if (profileData && profileData.invite) {
       const formattedInvite = profileData.invite.map(async (uid) => {
+
         const inviteDocRef = doc(db, "NUS/users", "profile", uid);
         const inviteDocSnap = await getDoc(inviteDocRef);
         const inviteData = inviteDocSnap.data();
         return { name: inviteData.name, photoURL: inviteData.photoURL, bio: inviteData.bio };
+
       });
 
       Promise.all(formattedInvite).then((formattedData) => {
@@ -53,7 +55,7 @@ export default () => {
 
   useEffect(() => {
     getData();
-  }, []) 
+  }, [])
 
   useEffect(() => {
     processData();
@@ -76,11 +78,11 @@ export default () => {
         <Text style={{ fontSize: 18, fontWeight: '600' }}>{name}</Text>
         <Text style={{ fontSize: 14, paddingTop: 5 }}>{bio}</Text>
       </View>
-      <TouchableOpacity style = {{position: 'absolute', right: 75, borderWidth: 0.5, height: 30, width: 55, justifyContent: 'center'}}>
-        <Text style = {{textAlign: 'center'}}>Accept</Text>
+      <TouchableOpacity style={{ position: 'absolute', right: 75, borderWidth: 0.5, height: 30, width: 55, justifyContent: 'center' }}>
+        <Text style={{ textAlign: 'center' }}>Accept</Text>
       </TouchableOpacity>
-      <TouchableOpacity style = {{position: 'absolute', right: 10, borderWidth: 0.5, height: 30, width: 55, justifyContent: 'center'}}>
-        <Text style = {{textAlign: 'center'}}>Decline</Text>
+      <TouchableOpacity style={{ position: 'absolute', right: 10, borderWidth: 0.5, height: 30, width: 55, justifyContent: 'center' }}>
+        <Text style={{ textAlign: 'center' }}>Decline</Text>
       </TouchableOpacity>
     </View>
   );
