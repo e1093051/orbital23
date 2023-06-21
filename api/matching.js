@@ -40,6 +40,13 @@ export async function updateRecommendAndPoint(recommendList, pointList) {
     { merge: true });
 }
 
+export async function updatePoint(pointList) {
+  await setDoc(doc(db, "NUS", "users", "profile", `${auth.currentUser.uid}`), {
+    point: pointList
+  },
+    { merge: true });
+}
+
 export async function updateAvoid(uid) {
   await updateDoc(doc(db, "NUS", "users", "profile", uid), {
     avoid: arrayUnion(auth.currentUser.uid),
@@ -80,13 +87,13 @@ async function generateRecommendList(recommendList, pointList, data, point) {
     console.log(pointList);
   }
   else {
-    if (point > pointList[0]) {
+    if (point > pointList[0] || point == pointList[0]) {
       await pointList.splice(0, 0, point);
       await recommendList.splice(0, 0, data);
       console.log(recommendList);
       console.log(pointList);
     }
-    else if (point < pointList[pointList.length - 1]) {
+    else if (point < pointList[pointList.length - 1] || point == pointList[pointList.length - 1]) {
       await pointList.push(point);
       await recommendList.push(data);
       console.log(recommendList);
@@ -194,9 +201,45 @@ export async function match() {
     .then(docSnap => docSnap.data());
   const recommendList = profileData.recommend;
   let length = recommendList.length;
-  while (length < 20) {
+  while (length < 3) {
     await generateMatchingPool();
     length++;
   }
 }
 
+export async function showRecommendation() {
+  await match();
+  const profileData = await getDoc(doc(db, "NUS/users", "profile", auth.currentUser.uid))
+    .then(docSnap => docSnap.data());
+  const recommendList = profileData.recommend;
+  const pointList = profileData.point;
+  if (recommendList.length != 0) {
+    return recommendList[0];
+  }
+  return "empty";
+}
+
+export async function connect(recommend, recommendList, pointList) {
+  await updateDoc(doc(db, "NUS", "users", "profile", recommend), {
+    invite: arrayUnion(auth.currentUser.uid),
+  });
+  if (pointList.lengh > 1) {
+    pointList[1] = 100;
+  }
+  recommendList.shift();
+  pointList.shift();
+  await updateDoc(doc(db, "NUS/users", "profile", auth.currentUser.uid), {
+    recommend: recommendList,
+    point: pointList
+  })
+}
+
+export async function skip(recommendList, pointList) {
+  pointList[1] = 100;
+  recommendList.shift();
+  pointList.shift();
+  await updateDoc(doc(db, "NUS/users", "profile", auth.currentUser.uid), {
+    recommend: recommendList,
+    point: pointList
+  })
+}

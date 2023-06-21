@@ -178,3 +178,9 @@ export const setYear = async ({ year, showYear }, onSuccess, onError) => {
     return onError(error);
   }
 }
+
+export const showHobby = async ({ showHobby }) => {
+  await updateDoc(doc(db, "NUS", "users", "profile", `${auth.currentUser.uid}`), {
+    showHobby: showHobby
+  });
+}
