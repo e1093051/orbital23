@@ -33,9 +33,12 @@ const TopTab = createMaterialTopTabNavigator();
 
 
 export function HomePage() {
+  //match();
+
   const [profileData, setProfileData] = useState(null);
   const [profileData1, setProfileData1] = useState(null);
   const [id1, setId1] = useState("");
+  const [render, setRender] = useState(false)
 
 
   const getData0 = async () => {
@@ -45,40 +48,37 @@ export function HomePage() {
   }
 
 
-
-
   const getData = async () => {
     const recommend = await showRecommendation();
     setId1(recommend);
-    onSnapshot(doc(db, "NUS/users", "profile", recommend), (doc) => {
-      setProfileData1(doc.data());
-    })
-    console.log(profileData1);
+    if (recommend !== null) {
+      onSnapshot(doc(db, "NUS/users", "profile", recommend), (doc) => {
+        setProfileData1(doc.data());
+      })
+    }
+    
+    console.log("Hello");
   }
 
   const handleSkip = async () => {
     console.log(profileData.recommend.length);
-    skip(profileData.recommend, profileData.point);
-    if (profileData.recommend.length < 3) {
-      await generateMatchingPool();
-    }
+    await skip(profileData.recommend, profileData.point);
+    setRender(!render);
   }
 
   const handleConnect = async () => {
-    connect(id1, profileData.recommend, profileData.point);
-    if (profileData.recommend.length < 3) {
-      await generateMatchingPool();
-    }
+    await connect(id1, profileData.recommend, profileData.point);
+    setRender(!render);
   }
 
-  useEffect(() => {
+ useEffect(() => {
     getData();
-  }, [profileData])
+  }, [render])
   useEffect(() => {
     getData0();
   }, [])
 
-  if (id1 != "empty") {
+  if (id1 != null) {
     return (
       <ScrollView style={{ paddingBottom: 0, backgroundColor: 'white' }}>
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-start', backgroundColor: 'white', paddingTop: 20, paddingHorizontal: 30, paddingBottom: 10 }}>
@@ -135,7 +135,7 @@ export function HomePage() {
                 <Text style={{ color: 'white', fontWeight: '600' }}>Skip</Text>
               </TouchableOpacity>
               <TouchableOpacity style={{ height: 55, width: 100, borderColor: '#89CFF0', borderWidth: 0.8, alignItems: 'center', justifyContent: 'center', borderRadius: 10, backgroundColor: '#74D8E3' }}
-                onPress={() => connect(id1, profileData.recommend, profileData.point)}>
+                onPress={() => handleConnect()}>
                 <Text style={{ color: 'white', fontWeight: '600' }}>Connect</Text>
               </TouchableOpacity>
             </View>
@@ -167,7 +167,6 @@ const TopBar = () => (
 export default function Home() {
 
   const ProfilePage = () => {
-    //match();
 
     const navigation = useNavigation();
 
