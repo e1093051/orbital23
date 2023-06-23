@@ -18,13 +18,10 @@ import {
 import * as setProfile from "../../api/setProfile";
 
 export default () => {
-
   const navigation = useNavigation();
-
   const [module, setModule] = useState([]);
   const [moduleData, setModuleData] = useState([]);
-
-  const [checked, setChecked] = React.useState(true);
+  const [checked, setChecked] = useState(true);
 
   const renderItem = item => {
     return (
@@ -35,14 +32,17 @@ export default () => {
   };
 
   const handleSetCourse = () => {
+    if (module.length === 0) {
+      Alert.alert('Warning', 'Please select at least one course before proceeding');
+      return;
+    }
+  
     setProfile.setCourse(
       { course: module, showCourse: checked },
       () => navigation.navigate('Form5'),
       (error) => Alert.alert('error', (error.message || 'Something went wrong, try again later'))
-    )
-  }
-
-
+    );
+  };
 
   const getData = () => {
     fetch('https://api.nusmods.com/v2/2022-2023/moduleList.json')
@@ -50,21 +50,18 @@ export default () => {
       .then((json) => {
         const data = json.map((module) => ({ label: module.moduleCode + " " + module.title, value: module.moduleCode }));
         setModuleData(data);
-      })
-  }
-
+      });
+  };
 
   useEffect(() => {
     getData();
-  }, [])
-
+  }, []);
 
   return (
     <View style={styles.container_1}>
       <View style={styles.container}>
         <Text style={styles.mainText}>Which courses are you taking?</Text>
-        <ScrollView style = {{marginBottom: 115}}
-          contentInset={{bottom: 10}}>
+        <ScrollView style={{ marginBottom: 115 }} contentInset={{ bottom: 10 }}>
           <Text style={styles.usual}>Course</Text>
           <View style={{ marginLeft: 16 }}>
             <MultiSelect
@@ -80,7 +77,7 @@ export default () => {
               value={module}
               search
               searchPlaceholder="Search..."
-              onChange={item => {
+              onChange={(item) => {
                 setModule(item);
               }}
               selectedStyle={{ margin: 16 }}
@@ -111,16 +108,20 @@ export default () => {
       </View>
       <TouchableOpacity
         activeOpacity={0.75}
-        style={styles.buttonContainer}
-        onPress={() => handleSetCourse()} >
+        style={[
+          styles.buttonContainer,
+          { backgroundColor: module.length > 0 ? '#2de0ff' : '#808080' },
+        ]}
+        onPress={handleSetCourse}
+        disabled={module.length === 0}
+      >
         <Text style={styles.registerText}>Next</Text>
       </TouchableOpacity>
-      </View>
+    </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
-
   container_1: {
     flex: 1,
     alignItems: 'center',
@@ -163,7 +164,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     width: Dimensions.get('window').width - 32,
   },
-
   placeholderStyle: {
     fontSize: 16,
   },
@@ -209,7 +209,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.2,
     shadowRadius: 1.41,
-
     elevation: 2,
   },
   checkBoxContainer: {
@@ -249,5 +248,3 @@ const styles = StyleSheet.create({
     backgroundColor: 'white'
   }
 });
-
-

@@ -65,22 +65,123 @@ const StackNavigator = () => (
       options={{ headerShown: true, headerTitle: ' ', headerBackTitle: ' ', headerTintColor: '#2de0ff' }} />
     <Stack.Screen name='Home' component={Home}
       options={{ headerShown: false, headerTitle: ' ', headerBackTitle: ' ', headerTintColor: '#2de0ff' }} />
+
     <Stack.Screen name='Form' component={Form}
-      options={{ headerShown: true, headerTitle: 'Personal Profile', headerBackTitle: ' ', headerTintColor: '#2de0ff' }} />
+      options={({ navigation }) => ({
+        headerShown: true,
+        headerTitle: 'Personal Profile',
+        headerBackTitle: ' ',
+        headerTintColor: '#2de0ff',
+        headerRight: () => (
+          <TouchableOpacity
+          style={{ marginRight: 15 }}
+          activeOpacity={0.75}
+          onPress={() => navigation.navigate('Form1')}>
+             <Text>Skip</Text>
+        </TouchableOpacity>
+        ),
+      })} />
+
     <Stack.Screen name='Form1' component={Form1}
+      options={({ navigation }) => ({
+        headerShown: true,
+        headerTitle: 'Personal Profile',
+        headerBackTitle: ' ',
+        headerTintColor: '#2de0ff',
+        headerRight: () => (
+          <TouchableOpacity
+          style={{ marginRight: 15 }}
+          activeOpacity={0.75}
+          onPress={() => navigation.navigate('Form2')}>
+             <Text>Skip</Text>
+        </TouchableOpacity>
+        ),
+      })} />
+
+      <Stack.Screen name='Form2' component={Form2}
       options={{ headerShown: true, headerTitle: 'Personal Profile', headerBackTitle: ' ', headerTintColor: '#2de0ff' }} />
-    <Stack.Screen name='Form2' component={Form2}
-      options={{ headerShown: true, headerTitle: 'Personal Profile', headerBackTitle: ' ', headerTintColor: '#2de0ff' }} />
+
     <Stack.Screen name='Form3' component={Form3}
-      options={{ headerShown: true, headerTitle: 'Personal Profile', headerBackTitle: ' ', headerTintColor: '#2de0ff' }} />
+      options={({ navigation }) => ({
+        headerShown: true,
+        headerTitle: 'Personal Profile',
+        headerBackTitle: ' ',
+        headerTintColor: '#2de0ff',
+        headerRight: () => (
+          <TouchableOpacity
+          style={{ marginRight: 15 }}
+          activeOpacity={0.75}
+          onPress={() => navigation.navigate('Form4')}>
+             <Text>Skip</Text>
+        </TouchableOpacity>
+        ),
+      })} />
+
     <Stack.Screen name='Form4' component={Form4}
-      options={{ headerShown: true, headerTitle: 'Personal Profile', headerBackTitle: ' ', headerTintColor: '#2de0ff' }} />
+      options={({ navigation }) => ({
+        headerShown: true,
+        headerTitle: 'Personal Profile',
+        headerBackTitle: ' ',
+        headerTintColor: '#2de0ff',
+        headerRight: () => (
+          <TouchableOpacity
+          style={{ marginRight: 15 }}
+          activeOpacity={0.75}
+          onPress={() => navigation.navigate('Form5')}>
+             <Text>Skip</Text>
+        </TouchableOpacity>
+        ),
+      })} />
+
     <Stack.Screen name='Form5' component={Form5}
-      options={{ headerShown: true, headerTitle: 'Personal Profile', headerBackTitle: ' ', headerTintColor: '#2de0ff' }} />
+      options={({ navigation }) => ({
+        headerShown: true,
+        headerTitle: 'Personal Profile',
+        headerBackTitle: ' ',
+        headerTintColor: '#2de0ff',
+        headerRight: () => (
+          <TouchableOpacity
+          style={{ marginRight: 15 }}
+          activeOpacity={0.75}
+          onPress={() => navigation.navigate('Form5')}>
+             <Text>Skip</Text>
+        </TouchableOpacity>
+        ),
+      })} />
+
+
     <Stack.Screen name='Form6' component={Form6}
-      options={{ headerShown: true, headerTitle: 'Personal Profile', headerBackTitle: ' ', headerTintColor: '#2de0ff' }} />
-    <Stack.Screen name='Form7' component={Form7}
-      options={{ headerShown: true, headerTitle: 'Personal Profile', headerBackTitle: ' ', headerTintColor: '#2de0ff' }} />
+      options={({ navigation }) => ({
+        headerShown: true,
+        headerTitle: 'Personal Profile',
+        headerBackTitle: ' ',
+        headerTintColor: '#2de0ff',
+        headerRight: () => (
+          <TouchableOpacity
+          style={{ marginRight: 15 }}
+          activeOpacity={0.75}
+          onPress={() => navigation.navigate('Form7')}>
+             <Text>Skip</Text>
+        </TouchableOpacity>
+        ),
+      })} />
+
+      <Stack.Screen name='Form7' component={Form7}
+      options={({ navigation }) => ({
+        headerShown: true,
+        headerTitle: 'Personal Profile',
+        headerBackTitle: ' ',
+        headerTintColor: '#2de0ff',
+        headerRight: () => (
+          <TouchableOpacity
+          style={{ marginRight: 15 }}
+          activeOpacity={0.75}
+          onPress={() => navigation.navigate('Home')}>
+             <Text>Skip</Text>
+        </TouchableOpacity>
+        ),
+      })} />
+
     <Stack.Screen name='Photo' component={Photo}
       options={{ headerShown: true, headerTitle: 'Personal Profile', headerBackTitle: ' ', headerTintColor: '#2de0ff' }} />
     <Stack.Screen name='StudyBuddy' component={StudyBuddy}

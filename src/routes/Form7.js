@@ -34,17 +34,21 @@ export default () => {
   const navigation = useNavigation();
 
   const handleSetYear = () => {
-    setProfile.setYear(
-      { year, showYear: checked },
-      () => navigation.navigate('Home'),
-      (error) => Alert.alert('error', (error.message || 'Something went wrong, try again later'))
-    )
+    if (year !== "") {
+      setProfile.setYear(
+        { year, showYear: checked },
+        () => navigation.navigate('Home'),
+        (error) => Alert.alert('Error', error.message || 'Something went wrong, try again later')
+      );
+    } else {
+      Alert.alert('Warning', 'Please select a major before proceeding');
+    }
   }
 
   return (
     <View style={styles.container_1}>
       <View style={styles.container}>
-        <Text style={styles.mainText}>Which year are you in? </Text>
+        <Text style={styles.mainText}>What's your year?</Text>
         <Text style={styles.usual}>Year</Text>
         <Dropdown
           search
@@ -55,36 +59,40 @@ export default () => {
           maxHeight={300}
           labelField="label"
           data={yearData}
-          onChange={item => setYear(item.value)}
+          onChange={(item) => setYear(item.value)}
           value={year}
           placeholder=" "
           valueField="value"
         />
-        </View>
-        <View style = {styles.checkBoxContainer}>
-          <CheckBox
-            center
-            title="Show my year of study to others"
-            checked={checked}
-            onPress={() => setChecked(!checked)}
-            iconType="material-community"
-            checkedIcon="checkbox-outline"
-            uncheckedIcon={'checkbox-blank-outline'}
-            titleProps={styles.checkbox}
-          />
-          </View>
-          <TouchableOpacity
-            activeOpacity={0.75}
-            style={styles.buttonContainer}
-            onPress={() => handleSetYear()} >
-            <Text style={styles.next}>Next</Text>
-          </TouchableOpacity>
+      </View>
+      <View style={styles.checkBoxContainer}>
+        <CheckBox
+          center
+          title="Show my year to others"
+          checked={checked}
+          onPress={() => setChecked(!checked)}
+          iconType="material-community"
+          checkedIcon="checkbox-outline"
+          uncheckedIcon="checkbox-blank-outline"
+          titleProps={styles.checkbox}
+        />
+      </View>
+      <TouchableOpacity
+        activeOpacity={0.75}
+        style={[
+          styles.buttonContainer,
+          { backgroundColor: year !== '' ? '#2de0ff' : '#808080' },
+        ]}
+        onPress={handleSetYear}
+        disabled={year === ''}
+      >
+        <Text style={styles.next}>Next</Text>
+      </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-
   container_1: {
     flex: 1,
     alignItems: 'center',
@@ -146,7 +154,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     margin: 10,
-    backgroundColor: '#2de0ff',
   },
   next: {
     color: 'white',

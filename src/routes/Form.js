@@ -26,11 +26,9 @@ import {
 
 
 export default () => {
-
   const navigation = useNavigation();
 
   const [hasChangedPicture, setHasChangedPicture] = useState(false);
-
   const [image, setImage] = useState(null);
 
   const setProfilePicture = () => {
@@ -38,16 +36,16 @@ export default () => {
       Authentication.setProfilePicture(
         { image },
         () => navigation.navigate('Form1'),
-        (error) => Alert.alert('error', (error.message || 'Something went wrong, try again later'))
-      )
+        (error) =>
+          Alert.alert(
+            'Error',
+            error.message || 'Something went wrong, try again later'
+          )
+      );
+    } else {
+      Alert.alert('Warning', 'Please add a profile picture first or press "skip" to set profile picture as default');
     }
-    else {
-      Authentication.setDefaultProfilePicture(
-        () => navigation.navigate('Form1'),
-        (error) => Alert.alert('error', (error.message || 'Something went wrong, try again later'))
-      )
-    }
-  }
+  };
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -57,7 +55,7 @@ export default () => {
       quality: 1,
     });
 
-    if (!result.canceled) {
+    if (!result.cancelled) {
       setImage(result.assets[0].uri);
       setHasChangedPicture(true);
     }
@@ -67,10 +65,16 @@ export default () => {
     <View style={styles.bigContainer}>
       <View style={styles.container}>
         <Text style={styles.mainText}>Add your profile picture</Text>
-        <Text style={styles.usual}>Share a picture that best represents you! </Text>
+        <Text style={styles.usual}>
+          Share a picture that best represents you!{' '}
+        </Text>
       </View>
       <View style={styles.imageContainer}>
-        <TouchableOpacity onPress={pickImage} style={[styles.circle, { marginTop: -300 }]} activityOpacity={0.8}>
+        <TouchableOpacity
+          onPress={pickImage}
+          style={[styles.circle, { marginTop: -300 }]}
+          activityOpacity={0.8}
+        >
           <Image
             source={image ? { uri: image } : require('./Standard_Profile.png')}
             style={styles.image}
@@ -78,26 +82,28 @@ export default () => {
         </TouchableOpacity>
         <TouchableOpacity onPress={pickImage} style={styles.changeImageContainer}>
           <Text style={styles.changeImageText}>
-
-            {hasChangedPicture ? "Change profile picture" : "Add profile picture"}
-
+            {hasChangedPicture ? 'Change profile picture' : 'Add profile picture'}
           </Text>
         </TouchableOpacity>
       </View>
       <TouchableOpacity
         activeOpacity={0.75}
-        style={styles.buttonContainer}
-        onPress={() => setProfilePicture()}>
+        style={[
+          styles.buttonContainer,
+          { backgroundColor: hasChangedPicture ? '#2de0ff' : '#808080' },
+        ]}
+        onPress={setProfilePicture}
+        disabled={!hasChangedPicture}
+      >
         <Text style={styles.registerText}>Next</Text>
       </TouchableOpacity>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   bigContainer: {
     flex: 1,
-    //alignItems: 'center',
     backgroundColor: '#FFFFFF',
   },
   container: {
@@ -110,33 +116,13 @@ const styles = StyleSheet.create({
     color: 'black',
     fontWeight: 'bold',
     fontSize: 26,
-    margin: 10
+    margin: 10,
   },
   usual: {
     color: 'black',
     fontSize: 14,
     margin: 10,
-    marginTop: -5
-  },
-  signUpButton: {
-    height: 40,
-    width: Dimensions.get('window').width - 20,
-    backgroundColor: '#2de0ff',
-    borderRadius: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
-    left: 10,
-    margin: 0
-  },
-  signUpText: {
-    color: 'white',
-    fontWeight: 'bold',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  buttonContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    marginTop: -5,
   },
   buttonContainer: {
     height: 40,
@@ -147,21 +133,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     margin: 10,
-    backgroundColor: '#2de0ff',
   },
   registerText: {
     color: 'white',
     fontWeight: 'bold',
   },
   imageContainer: {
-
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
-
   circle: {
-
     width: 200,
     height: 200,
     borderRadius: 100,
@@ -170,33 +152,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10,
   },
-
   image: {
     width: 200,
     height: 200,
     borderRadius: 100,
   },
-
-  placeholder: {
-
-    width: 180,
-    height: 180,
-    borderRadius: 90,
-    backgroundColor: 'white',
-    borderWidth: 1,
-    borderColor: 'gray',
-
-  },
-
   changeImageContainer: {
     marginTop: 10,
     alignItems: 'center',
     justifyContent: 'center',
   },
-
   changeImageText: {
     color: '#2de0ff',
     fontSize: 16,
   },
-
 });
+
+  

@@ -74,129 +74,133 @@ export default () => {
   ];
 
   const [major, setMajor] = useState("");
-  const [checked, setChecked] = React.useState(true);
+  const [checked, setChecked] = useState(true);
   const navigation = useNavigation();
 
   const handleSetMajor = () => {
-    setProfile.setMajor(
-      { major, showMajor: checked },
-      () => navigation.navigate('Form4'),
-      (error) => Alert.alert('error', (error.message || 'Something went wrong, try again later'))
-    )
+    if (major !== "") {
+      setProfile.setMajor(
+        { major, showMajor: checked },
+        () => navigation.navigate('Form4'),
+        (error) => Alert.alert('Error', error.message || 'Something went wrong, try again later')
+      );
+    } else {
+      Alert.alert('Warning', 'Please select a major before proceeding');
+    }
   }
 
-
-    return (
-      <View style={styles.container_1}>
-        <View style={styles.container}>
-          <Text style={styles.mainText}>What's your major?</Text>
-          <Text style={styles.usual}>Major</Text>
-          <Dropdown
-
-            search
-            style={styles.dropdown}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            maxHeight={300}
-            labelField="label"
-            data={majorData}
-            onChange={item => setMajor(item.value)}
-            value={major}
-            placeholder=" "
-            valueField="value"
-          />
-        </View>
-        <View style={styles.checkBoxContainer}>
-          <CheckBox
-            center
-            title="Show my major to others"
-            checked={checked}
-            onPress={() => setChecked(!checked)}
-            iconType="material-community"
-            checkedIcon="checkbox-outline"
-            uncheckedIcon={'checkbox-blank-outline'}
-            titleProps={styles.checkbox}
-          />
-        </View>
-        <TouchableOpacity
-          activeOpacity={0.75}
-          style={styles.buttonContainer}
-          onPress={() => handleSetMajor()} >
-          <Text style={styles.next}>Next</Text>
-        </TouchableOpacity>
+  return (
+    <View style={styles.container_1}>
+      <View style={styles.container}>
+        <Text style={styles.mainText}>What's your major?</Text>
+        <Text style={styles.usual}>Major</Text>
+        <Dropdown
+          search
+          style={styles.dropdown}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          inputSearchStyle={styles.inputSearchStyle}
+          maxHeight={300}
+          labelField="label"
+          data={majorData}
+          onChange={(item) => setMajor(item.value)}
+          value={major}
+          placeholder=" "
+          valueField="value"
+        />
       </View>
-    );
-  }
+      <View style={styles.checkBoxContainer}>
+        <CheckBox
+          center
+          title="Show my major to others"
+          checked={checked}
+          onPress={() => setChecked(!checked)}
+          iconType="material-community"
+          checkedIcon="checkbox-outline"
+          uncheckedIcon="checkbox-blank-outline"
+          titleProps={styles.checkbox}
+        />
+      </View>
+      <TouchableOpacity
+        activeOpacity={0.75}
+        style={[
+          styles.buttonContainer,
+          { backgroundColor: major !== '' ? '#2de0ff' : '#808080' },
+        ]}
+        onPress={handleSetMajor}
+        disabled={major === ''}
+      >
+        <Text style={styles.next}>Next</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
 
-  const styles = StyleSheet.create({
-
-    container_1: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-      color: 'white'
-    },
-    container: {
-      flex: 1,
-      paddingTop: 10,
-      justifyContent: 'flex-start',
-      alignItems: 'flex-start',
-      backgroundColor: '#FFFFFF',
-    },
-    mainText: {
-      color: 'black',
-      fontWeight: 'bold',
-      fontSize: 26,
-      margin: 10
-    },
-    usual: {
-      color: 'gray',
-      fontSize: 16,
-      margin: 3,
-      left: 12
-    },
-    list: {
-      fontSize: 14
-    },
-    dropdown: {
-      margin: 16,
-      marginTop: -8,
-      height: 50,
-      borderBottomColor: 'gray',
-      borderBottomWidth: 0.5,
-      width: Dimensions.get('window').width - 32,
-    },
-    placeholderStyle: {
-      fontSize: 16,
-    },
-    selectedTextStyle: {
-      fontSize: 16,
-    },
-    inputSearchStyle: {
-      height: 40,
-      fontSize: 16,
-    },
-    checkBoxContainer: {
-      position: 'absolute',
-      bottom: 60,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    buttonContainer: {
-      height: 40,
-      width: Dimensions.get('window').width - 20,
-      position: 'absolute',
-      bottom: 15,
-      borderRadius: 2,
-      justifyContent: 'center',
-      alignItems: 'center',
-      margin: 10,
-      backgroundColor: '#2de0ff',
-    },
-    next: {
-      color: 'white',
-      fontWeight: 'bold',
-    },
-
-  });
+const styles = StyleSheet.create({
+  container_1: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: 'white'
+  },
+  container: {
+    flex: 1,
+    paddingTop: 10,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    backgroundColor: '#FFFFFF',
+  },
+  mainText: {
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 26,
+    margin: 10
+  },
+  usual: {
+    color: 'gray',
+    fontSize: 16,
+    margin: 3,
+    left: 12
+  },
+  list: {
+    fontSize: 14
+  },
+  dropdown: {
+    margin: 16,
+    marginTop: -8,
+    height: 50,
+    borderBottomColor: 'gray',
+    borderBottomWidth: 0.5,
+    width: Dimensions.get('window').width - 32,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
+  },
+  checkBoxContainer: {
+    position: 'absolute',
+    bottom: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  buttonContainer: {
+    height: 40,
+    width: Dimensions.get('window').width - 20,
+    position: 'absolute',
+    bottom: 15,
+    borderRadius: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 10,
+  },
+  next: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+});

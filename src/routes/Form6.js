@@ -18,12 +18,15 @@ import {
 } from 'react-native';
 
 export default () => {
-
   const navigation = useNavigation();
 
   const [hobby, setHobby] = useState([]);
+  const [checked, setChecked] = useState(true);
+  const [isNextDisabled, setIsNextDisabled] = useState(true);
 
-  const [checked, setChecked] = React.useState(true);
+  useEffect(() => {
+    setIsNextDisabled(hobby.length === 0);
+  }, [hobby]);
 
   const renderItem = item => {
     return (
@@ -33,7 +36,7 @@ export default () => {
     );
   };
 
-  const hobbyData = [
+   const hobbyData = [
     
     { label: 'Painting and Drawing', value: 'Painting and Drawing' },
     { label: 'Calligraphy', value: 'Calligraphy' },
@@ -86,24 +89,23 @@ export default () => {
     { label: 'Meditation and Yoga', value: 'Meditation and Yoga' },
     { label: 'Volunteer work', value: 'Volunteer work' }
 ];
-
-const handleSetHobby = () => {
-  setProfile.setHobby(
-    { hobby, showHobby: checked },
-    () => navigation.navigate('Form7'),
-    (error) => Alert.alert('error', (error.message || 'Something went wrong, try again later'))
-  )
-}
-
-
-
+  const handleSetHobby = () => {
+    setProfile.setHobby(
+      { hobby, showHobby: checked },
+      () => navigation.navigate('Form7'),
+      (error) =>
+        Alert.alert(
+          'Error',
+          error.message || 'Something went wrong, try again later'
+        )
+    );
+  };
 
   return (
     <View style={styles.container_1}>
       <View style={styles.container}>
         <Text style={styles.mainText}>What are your hobbies?</Text>
-        <ScrollView style = {{marginBottom: 115}}
-          contentInset={{bottom: 10}}>
+        <ScrollView style={{ marginBottom: 115 }} contentInset={{ bottom: 10 }}>
           <Text style={styles.usual}>Hobby</Text>
           <View style={{ marginLeft: 16 }}>
             <MultiSelect
@@ -150,13 +152,18 @@ const handleSetHobby = () => {
       </View>
       <TouchableOpacity
         activeOpacity={0.75}
-        style={styles.buttonContainer}
-        onPress={() => handleSetHobby()} >
+        style={[
+          styles.buttonContainer,
+          { backgroundColor: isNextDisabled ? 'gray' : '#2de0ff' }
+        ]}
+        onPress={() => handleSetHobby()}
+        disabled={isNextDisabled}
+      >
         <Text style={styles.registerText}>Next</Text>
       </TouchableOpacity>
-      </View>
+    </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
 
