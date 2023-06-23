@@ -80,40 +80,46 @@ async function score(profileData1, profileData2) {
 
 
 async function generateRecommendList(recommendList, pointList, data, point) {
+  let modified = false;
+
   if (recommendList.length == 0) {
-    await recommendList.push(data);
-    await pointList.push(point);
-    console.log(recommendList);
-    console.log(pointList);
-  }
-  else {
-    if (point > pointList[0] || point == pointList[0]) {
-      await pointList.splice(0, 0, point);
-      await recommendList.splice(0, 0, data);
-      console.log(recommendList);
-      console.log(pointList);
-    }
-    else if (point < pointList[pointList.length - 1] || point == pointList[pointList.length - 1]) {
-      await pointList.push(point);
-      await recommendList.push(data);
-      console.log(recommendList);
-      console.log(pointList);
-    }
-    else {
+    recommendList.push(data);
+    pointList.push(point);
+    modified = true;
+    //console.log(recommendList);
+    //console.log(pointList);
+  } else {
+    if (point >= pointList[0]) {
+      pointList.splice(0, 0, point);
+      recommendList.splice(0, 0, data);
+      modified = true;
+      //console.log(recommendList);
+      //console.log(pointList);
+    } else if (point <= pointList[pointList.length - 1]) {
+      pointList.push(point);
+      recommendList.push(data);
+      modified = true;
+      //console.log(recommendList);
+      //console.log(pointList);
+    } else {
       let i;
       for (i = 0; i < pointList.length - 1; i += 1) {
         if (point < pointList[i] && (point > pointList[i + 1] || point == pointList[i + 1])) {
-          await pointList.splice(i + 1, 0, point);
-          await recommendList.splice(i + 1, 0, data);
+          pointList.splice(i + 1, 0, point);
+          recommendList.splice(i + 1, 0, data);
+          modified = true;
           i = pointList.length;
-          console.log(recommendList);
-          console.log(pointList);
+          console.log("Hello");
         }
       }
     }
   }
-  await updateRecommendAndPoint(recommendList, pointList);
+
+  if (modified) {
+    await updateRecommendAndPoint(recommendList, pointList);
+  }
 }
+
 
 
 
@@ -190,19 +196,22 @@ export async function generateMatchingPool() {
         }
       }
     }
+    return true;
   }
   else {
-    console.log("no match");
+    console.log("no match")
+    return(false);
   }
 }
 
 export async function match() {
   const profileData = await getDoc(doc(db, "NUS/users", "profile", auth.currentUser.uid))
-    .then(docSnap => docSnap.data());
+    .then(docSnap => docSnap.data()).then()
   const recommendList = profileData.recommend;
   let length = recommendList.length;
-  while (length < 5) {
-    if (generateMatchingPool() == "no match") {
+  while (length < 20) {
+    const matchFound = await generateMatchingPool();
+    if (!matchFound) {
       break;
     };
     length++;
@@ -215,11 +224,11 @@ export async function showRecommendation() {
     .then(docSnap => docSnap.data());
   const recommendList = profileData.recommend;
   const pointList = profileData.point;
-  if (recommendList.length != 0) {
+  if (recommendList.length !== 0) {
     return recommendList[0];
   }
-  if (recommendList.length == 0) {
-    return "empty";
+  if (recommendList.length === 0) {
+    return null;
   }
 }
 
@@ -239,7 +248,9 @@ export async function connect(recommend, recommendList, pointList) {
 }
 
 export async function skip(recommendList, pointList) {
-  pointList[1] = 100;
+  if (pointList.lengh > 1) {
+    pointList[1] = 100;
+  }
   recommendList.shift();
   pointList.shift();
   await updateDoc(doc(db, "NUS/users", "profile", auth.currentUser.uid), {

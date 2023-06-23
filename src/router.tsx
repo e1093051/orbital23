@@ -39,6 +39,8 @@ import EditShowHobby from './routes/EditShowHobby';
 import EditShowCountryAndRegion from './routes/EditShowCountryAndRegion';
 import EditShowYear from './routes/EditShowYear';
 import ChangePassword from './routes/ChangePassword';
+import EditPhoto from './routes/EditPhoto';
+
 import {
   StyleSheet,
   Text,
@@ -106,6 +108,7 @@ const StackNavigator = () => (
     <Stack.Screen name="EditShowYear" component={EditShowYear} />
     <Stack.Screen name="EditShowHobby" component={EditShowHobby} />
     <Stack.Screen name="ChangePassword" component={ChangePassword} />
+    <Stack.Screen name="EditPhoto" component={EditPhoto} />
 
   </Stack.Navigator>
 );

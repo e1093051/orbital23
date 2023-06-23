@@ -24,7 +24,7 @@ import { db, auth } from '../../api/fireConfig';
 import { addDoc, collection, setDoc, doc, updateDoc, getDoc, onSnapshot } from "firebase/firestore";
 
 import Request from './Request';
-import { generateMatchingPool, initializeMatch, updateRecommendAndPoint, setMatchValue, updateAvoid, match } from '../../api/matching';
+import { generateMatchingPool, match, showRecommendation, connect, skip } from '../../api/matching';
 
 
 const BottomTab = createBottomTabNavigator();
@@ -34,12 +34,126 @@ const TopTab = createMaterialTopTabNavigator();
 
 export function HomePage() {
   //match();
-  //generateMatchingPool()
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Home</Text>
-    </View>
-  );
+
+  const [profileData, setProfileData] = useState(null);
+  const [profileData1, setProfileData1] = useState(null);
+  const [id1, setId1] = useState("");
+  const [render, setRender] = useState(false)
+
+
+  const getData0 = async () => {
+    onSnapshot(doc(db, "NUS/users", "profile", auth.currentUser.uid), (doc) => {
+      setProfileData(doc.data());
+    })
+  }
+
+
+  const getData = async () => {
+    const recommend = await showRecommendation();
+    setId1(recommend);
+    if (recommend !== null) {
+      onSnapshot(doc(db, "NUS/users", "profile", recommend), (doc) => {
+        setProfileData1(doc.data());
+      })
+    }
+    
+    console.log("Hello");
+  }
+
+  const handleSkip = async () => {
+    console.log(profileData.recommend.length);
+    await skip(profileData.recommend, profileData.point);
+    setRender(!render);
+  }
+
+  const handleConnect = async () => {
+    await connect(id1, profileData.recommend, profileData.point);
+    setRender(!render);
+  }
+
+ useEffect(() => {
+    getData();
+  }, [render])
+  useEffect(() => {
+    getData0();
+  }, [])
+
+  if (id1 != null) {
+    return (
+      <ScrollView style={{ paddingBottom: 0, backgroundColor: 'white' }}>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-start', backgroundColor: 'white', paddingTop: 20, paddingHorizontal: 30, paddingBottom: 10 }}>
+          <View style={{ borderColor: '#74D8E3', borderWidth: 1.3, width: Dimensions.get('window').width - 60, alignItems: 'center', borderTopLeftRadius: 20, borderTopRightRadius: 20 }}>
+            {profileData1 && (
+              <Image
+                style={{
+                  width: 150,
+                  height: 150,
+                  borderRadius: 200,
+                  marginBottom: 6,
+                  marginTop: 10
+                }}
+                source={{ uri: profileData1.photoURL }}
+              />
+            )}
+            <View style={{ alignItems: 'center', marginTop: 0, justifyContent: 'flex-start', }}>
+              {profileData1 && (<Text style={{ fontSize: 24, fontWeight: '500', marginTop: 0, }}>{profileData1.name}</Text>)}
+            </View>
+
+            <View style={{ alignItems: 'center', marginTop: 0, justifyContent: 'flex-start', }}>
+              {profileData1 && (<Text style={{ fontSize: 17, marginTop: -2, marginBottom: 8 }}>{profileData1.bio}</Text>)}
+            </View>
+          </View>
+
+          <View style={{ borderLeftWidth: 1.3, borderRightWidth: 1.3, borderBottomWidth: 1.3, width: Dimensions.get('window').width - 60, borderBottomLeftRadius: 20, borderBottomRightRadius: 20, borderColor: '#43ccde', backgroundColor: '#E5F3FD', paddingLeft: 15, paddingVertical: 5 }}>
+            <View style={{ marginBottom: 10 }}>
+              <Text style={{ fontSize: 15, color: 'gray' }}>Gender</Text>
+              {profileData1 && (<Text style={{ fontSize: 15, marginTop: 3, marginBottom: 4, paddingLeft: 3 }}>{profileData1.gender}</Text>)}
+            </View>
+            {profileData1 && profileData1.showCountryAndRegion && <View style={{ marginBottom: 10 }}>
+              <Text style={{ fontSize: 15, color: 'gray' }}>Country and Region</Text>
+              {profileData1 && (<Text style={{ fontSize: 15, marginTop: 3, marginBottom: 4, paddingLeft: 3 }}>{profileData1.countryAndRegion}</Text>)}
+            </View>}
+            {profileData1 && profileData1.showMajor && <View style={{ marginBottom: 10 }}>
+              <Text style={{ fontSize: 15, color: 'gray' }}>Major</Text>
+              {profileData1 && (<Text style={{ fontSize: 15, marginTop: 3, marginBottom: 4, paddingLeft: 3 }}>{profileData1.major}</Text>)}
+            </View>}
+            {profileData1 && profileData1.showYear && <View style={{ marginBottom: 10 }}>
+              <Text style={{ fontSize: 15, color: 'gray' }}>Year</Text>
+              {profileData1 && (<Text style={{ fontSize: 15, marginTop: 3, marginBottom: 4, paddingLeft: 3 }}>{profileData1.year}</Text>)}
+            </View>}
+            {profileData1 && profileData1.showCourse && <View style={{ marginBottom: 10, flexWrap: 'wrap' }}>
+              <Text style={{ fontSize: 15, color: 'gray' }}>Course</Text>
+              {profileData1 && <Text style={{ width: Dimensions.get('window').width - 180, fontSize: 15, marginTop: 3, marginBottom: 4, paddingLeft: 3 }}>{profileData1.course.join(", ")}</Text>}
+            </View>}
+            {profileData1 && profileData1.showHobby && <View style={{ marginBottom: 10, flexWrap: 'wrap' }}>
+              <Text style={{ fontSize: 15, color: 'gray' }}>Hobby</Text>
+              {profileData1 && <Text style={{ width: Dimensions.get('window').width - 180, fontSize: 15, marginTop: 3, marginBottom: 4, paddingLeft: 3 }}>{profileData1.hobby.join(", ")}</Text>}
+            </View>}
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: 15, paddingBottom: 5, marginHorizontal: 6 }}>
+              <TouchableOpacity style={{ height: 55, width: 100, borderColor: '#89CFF0', borderWidth: 0.8, alignItems: 'center', justifyContent: 'center', borderRadius: 10, backgroundColor: '#74D8E3' }}
+                onPress={() => handleSkip()}>
+                <Text style={{ color: 'white', fontWeight: '600' }}>Skip</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={{ height: 55, width: 100, borderColor: '#89CFF0', borderWidth: 0.8, alignItems: 'center', justifyContent: 'center', borderRadius: 10, backgroundColor: '#74D8E3' }}
+                onPress={() => handleConnect()}>
+                <Text style={{ color: 'white', fontWeight: '600' }}>Connect</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </ScrollView>
+    );
+  }
+  else {
+    return (
+      <View style = {{flex:1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 50, backgroundColor: 'white' }}>
+        <View style = {{backgroundColor: 'white', alignItems: 'center', justifyContent: 'center'}}>
+          <Text style = {{color: '#9fd8f3', fontWeight: '600', paddingHorizontal: 5, fontSize: 18, textAlign: 'center', fontStyle: 'italic'}}>Oops! We've run out of recommendations🙁 </Text>
+          <Text style = {{color: '#9fd8f3', fontWeight: '600', paddingHorizontal: 5, fontSize: 18, textAlign: 'center', fontStyle: 'italic'}}>Come back later!</Text>
+        </View>
+      </View>
+    )
+  }
 }
 
 const TopBar = () => (
@@ -59,9 +173,9 @@ export default function Home() {
     const [profileData, setProfileData] = useState(null);
 
     const getData = () => {
-      onSnapshot(doc(db, "NUS", "users", "profile",`${auth.currentUser.uid}`), (doc) => {
-        setProfileData(doc.data());})
-      //getDoc(doc(db, "NUS/users", auth.currentUser.uid, "profile")).then(docSnap => setProfileData(docSnap.data()));
+      onSnapshot(doc(db, "NUS/users", "profile", auth.currentUser.uid), (doc) => {
+        setProfileData(doc.data());
+      })
     }
 
     useEffect(() => {
@@ -99,14 +213,9 @@ export default function Home() {
 
         <TouchableOpacity
           activeOpacity={0.75}
-          onPress={() => navigation.navigate("Edit")}
-          style={styles.button}
-          >
-          <Text style={styles.buttonText}>Edit Profile</Text>
+          onPress={() => navigation.navigate("Edit")}>
+          <Text>Edit Profile</Text>
         </TouchableOpacity>
-
-        <View style={styles.spacer} />
-
 
         <View style={{ width: Dimensions.get('window').width - 60, borderBottomWidth: 1, flexDirection: "row", borderBottomColor: '#DEDEDE' }}>
           <Text style={{ width: 80, marginBottom: 5, marginTop: 5 }}>Name</Text>
@@ -137,17 +246,6 @@ export default function Home() {
           <Text style={{ width: 80, justifyContent: 'flex-start', verticalAlign: 'middle' }}>Hobby</Text>
           {profileData && <Text style={{ width: Dimensions.get('window').width - 180, color: '#808080', marginBottom: 5, marginTop: 5 }}>{profileData.hobby.join(", ")}</Text>}
         </View>
-        <View style={{ width: Dimensions.get('window').width - 60, borderBottomWidth: 1, flexDirection: "row", borderBottomColor: '#DEDEDE' }}>
-          <Text style={{ width: 80, marginBottom: 5, marginTop: 5 }}>Country/Region</Text>
-          {profileData && <Text style={{ color: '#808080', marginBottom: 5, marginTop: 5 }}>{profileData.countryAndRegion}</Text>}
-        </View>
-        <View style={{ width: Dimensions.get('window').width - 60, borderBottomWidth: 1, flexDirection: "row", borderBottomColor: '#DEDEDE' }}>
-          <Text style={{ width: 80, marginBottom: 5, marginTop: 5 }}>Year</Text>
-          {profileData && <Text style={{ color: '#808080', marginBottom: 5, marginTop: 5 }}>{profileData.year}</Text>}
-        </View>
-        
-
-
       </View>
     );
   }
@@ -250,6 +348,12 @@ const styles = StyleSheet.create({
   },
 
 });
+
+
+
+
+
+
 
 
 
