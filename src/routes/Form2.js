@@ -18,9 +18,9 @@ import {
 
   export default () => {
     const genderData = [
-      { label: 'Female', value: 1 },
-      { label: 'Male', value: 2 },
-      { label: 'Others', value: 3 },
+      { label: 'Female', value: 'Female' },
+      { label: 'Male', value: 'Male' },
+      { label: 'Others', value: 'Others'},
     ];
 
     const [gender, setGender] = useState("");

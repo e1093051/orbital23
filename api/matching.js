@@ -12,7 +12,7 @@ import React, { Component, useState, useRef } from 'react';
 
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, sendEmailVerification, signOut, sendPasswordResetEmail } from 'firebase/auth';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
-import { addDoc, collection, setDoc, doc, updateDoc, getDoc, query, where, getDocs, arrayUnion, onSnapshot } from "firebase/firestore";
+import { addDoc, collection, setDoc, doc, updateDoc, getDoc, query, where, getDocs, arrayUnion, onSnapshot, arrayRemove } from "firebase/firestore";
 
 const getData = (uid) => {
   getDoc(doc(db, "NUS/users", uid, "profile"))
@@ -257,4 +257,21 @@ export async function skip(recommendList, pointList) {
     recommend: recommendList,
     point: pointList
   })
+}
+
+export async function acceptRequest(uid) {
+  await updateDoc(doc(db, "NUS", "users", "profile", uid), {
+    friend: arrayUnion(auth.currentUser.uid),
+  });
+  await updateDoc(doc(db, "NUS", "users", "profile", auth.currentUser.uid), {
+    friend: arrayUnion(uid),
+    invite: arrayRemove(uid),
+    avoid: arrayUnion(uid)
+  });
+}
+
+export async function skipReqest(uid) {
+  await updateDoc(doc(db, "NUS", "users", "profile", auth.currentUser.uid), {
+    invite: arrayRemove(uid)
+  });
 }

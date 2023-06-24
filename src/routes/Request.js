@@ -8,6 +8,7 @@ import Stack from '@mui/material/Stack';
 
 import { db, auth } from '../../api/fireConfig';
 import { addDoc, collection, setDoc, doc, updateDoc, getDoc, onSnapshot } from "firebase/firestore";
+import { acceptRequest, skipReqest } from '../../api/matching';
 
 
 import {
@@ -41,7 +42,7 @@ export default () => {
         const inviteDocRef = doc(db, "NUS/users", "profile", uid);
         const inviteDocSnap = await getDoc(inviteDocRef);
         const inviteData = inviteDocSnap.data();
-        return { name: inviteData.name, photoURL: inviteData.photoURL, bio: inviteData.bio };
+        return { name: inviteData.name, photoURL: inviteData.photoURL, bio: inviteData.bio, uid: uid };
 
       });
 
@@ -51,7 +52,6 @@ export default () => {
       });
     }
   };
-
 
   useEffect(() => {
     getData();
@@ -64,7 +64,7 @@ export default () => {
 
 
 
-  const Item = ({ name, bio, photoURL }) => (
+  const Item = ({ name, bio, photoURL, uid }) => (
     <View style={{ flexDirection: 'row', paddingLeft: 20, width: Dimensions.get('window').width, justifyContent: 'flex-start', alignItems: 'center', borderBottomWidth: 1 }}>
       <Image
         style={{
@@ -78,10 +78,12 @@ export default () => {
         <Text style={{ fontSize: 18, fontWeight: '600' }}>{name}</Text>
         <Text style={{ fontSize: 14, paddingTop: 5 }}>{bio}</Text>
       </View>
-      <TouchableOpacity style={{ position: 'absolute', right: 75, borderWidth: 0.5, height: 30, width: 55, justifyContent: 'center' }}>
+      <TouchableOpacity style={{ position: 'absolute', right: 75, borderWidth: 0.5, height: 30, width: 55, justifyContent: 'center' }}
+      onPress={() => acceptRequest(uid)}>
         <Text style={{ textAlign: 'center' }}>Accept</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={{ position: 'absolute', right: 10, borderWidth: 0.5, height: 30, width: 55, justifyContent: 'center' }}>
+      <TouchableOpacity style={{ position: 'absolute', right: 10, borderWidth: 0.5, height: 30, width: 55, justifyContent: 'center' }}
+      onPress={() => skipReqest(uid)}>
         <Text style={{ textAlign: 'center' }}>Decline</Text>
       </TouchableOpacity>
     </View>
@@ -91,7 +93,7 @@ export default () => {
     <View style={{ flex: 1, alignItems: 'flex-start', backgroundColor: 'white' }}>
       <FlatList
         data={invite}
-        renderItem={({ item }) => <Item name={item.name} photoURL={item.photoURL} bio={item.bio} />}
+        renderItem={({ item }) => <Item name={item.name} photoURL={item.photoURL} bio={item.bio} uid={item.uid} />}
       />
     </View>
   );

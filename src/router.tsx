@@ -38,6 +38,8 @@ import EditShowCourse from './routes/EditShowCourse';
 import EditShowHobby from './routes/EditShowHobby';
 import EditShowCountryAndRegion from './routes/EditShowCountryAndRegion';
 import EditShowYear from './routes/EditShowYear';
+import Filter from './routes/Filter';
+
 import {
   StyleSheet,
   Text,
@@ -67,7 +69,20 @@ const StackNavigator = () => (
     <Stack.Screen name='Form1' component={Form1}
       options={{ headerShown: true, headerTitle: 'Personal Profile', headerBackTitle: ' ', headerTintColor: '#2de0ff' }} />
     <Stack.Screen name='Form2' component={Form2}
-      options={{ headerShown: true, headerTitle: 'Personal Profile', headerBackTitle: ' ', headerTintColor: '#2de0ff' }} />
+      options={({ navigation }) => ({
+        headerShown: true,
+        headerTitle: 'Personal Profile',
+        headerBackTitle: ' ',
+        headerTintColor: 'black',
+        headerRight: () => (
+          <TouchableOpacity
+          style={{ marginRight: 10 }}
+          activeOpacity={0.75}
+          onPress={() => navigation.navigate('Form3')}>
+             <Text>Skip</Text>
+        </TouchableOpacity>
+        ),
+      })} />
     <Stack.Screen name='Form3' component={Form3}
       options={{ headerShown: true, headerTitle: 'Personal Profile', headerBackTitle: ' ', headerTintColor: '#2de0ff' }} />
     <Stack.Screen name='Form4' component={Form4}
@@ -104,6 +119,7 @@ const StackNavigator = () => (
     <Stack.Screen name="EditShowCountryAndRegion" component={EditShowCountryAndRegion} />
     <Stack.Screen name="EditShowYear" component={EditShowYear} />
     <Stack.Screen name="EditShowHobby" component={EditShowHobby} />
+    <Stack.Screen name="Filter" component={Filter} options={{headerShown: true, headerTitle: 'Find A Friend Filters',}}/>
   </Stack.Navigator>
 );
 

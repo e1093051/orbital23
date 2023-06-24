@@ -18,6 +18,7 @@ import { useNavigation } from '@react-navigation/native';
 import Chat from './Chat';
 import Forum from './Forum';
 import StudyBuddy, { StudyBuddyPage } from './StudyBuddy';
+import { Dropdown } from 'react-native-element-dropdown';
 
 import { createStackNavigator } from '@react-navigation/stack';
 import { db, auth } from '../../api/fireConfig';
@@ -25,15 +26,31 @@ import { addDoc, collection, setDoc, doc, updateDoc, getDoc, onSnapshot } from "
 
 import Request from './Request';
 import { generateMatchingPool, match, showRecommendation, connect, skip } from '../../api/matching';
-
+import * as setProfile from "../../api/setProfile";
 
 const BottomTab = createBottomTabNavigator();
 const TopTab = createMaterialTopTabNavigator();
 
 
 
-export function HomePage() {
+export function HomePage({navigation}) {
   //match();
+
+  const genderData = [
+    { label: 'Female', value: 'Female' },
+    { label: 'Male', value: 'Male' },
+    { label: 'Others', value: 'Others' },
+  ];
+
+  const [gender, setGender] = useState("");
+
+  const handleSetGender = () => {
+    setProfile.setGender(
+      { gender },
+      () => console.log("set gender filter"),
+      (error) => Alert.alert('error', (error.message || 'Something went wrong, try again later'))
+    )
+  }
 
   const [profileData, setProfileData] = useState(null);
   const [profileData1, setProfileData1] = useState(null);
@@ -56,7 +73,7 @@ export function HomePage() {
         setProfileData1(doc.data());
       })
     }
-    
+
     console.log("Hello");
   }
 
@@ -71,7 +88,7 @@ export function HomePage() {
     setRender(!render);
   }
 
- useEffect(() => {
+  useEffect(() => {
     getData();
   }, [render])
   useEffect(() => {
@@ -81,7 +98,10 @@ export function HomePage() {
   if (id1 != null) {
     return (
       <ScrollView style={{ paddingBottom: 0, backgroundColor: 'white' }}>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-start', backgroundColor: 'white', paddingTop: 20, paddingHorizontal: 30, paddingBottom: 10 }}>
+          <View style = {{alignItems: 'flex-end', paddingRight: 15, paddingVertical: 10}}>
+            <MaterialCommunityIcons name="tune" size={20} onPress={() => navigation.navigate("Filter")}/>
+          </View>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-start', backgroundColor: 'white', paddingTop: 0, paddingHorizontal: 30, paddingBottom: 10 }}>
           <View style={{ borderColor: '#74D8E3', borderWidth: 1.3, width: Dimensions.get('window').width - 60, alignItems: 'center', borderTopLeftRadius: 20, borderTopRightRadius: 20 }}>
             {profileData1 && (
               <Image
@@ -146,10 +166,10 @@ export function HomePage() {
   }
   else {
     return (
-      <View style = {{flex:1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 50, backgroundColor: 'white' }}>
-        <View style = {{backgroundColor: 'white', alignItems: 'center', justifyContent: 'center'}}>
-          <Text style = {{color: '#9fd8f3', fontWeight: '600', paddingHorizontal: 5, fontSize: 18, textAlign: 'center', fontStyle: 'italic'}}>Oops! We've run out of recommendations🙁 </Text>
-          <Text style = {{color: '#9fd8f3', fontWeight: '600', paddingHorizontal: 5, fontSize: 18, textAlign: 'center', fontStyle: 'italic'}}>Come back later!</Text>
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 50, backgroundColor: 'white' }}>
+        <View style={{ backgroundColor: 'white', alignItems: 'center', justifyContent: 'center' }}>
+          <Text style={{ color: '#9fd8f3', fontWeight: '600', paddingHorizontal: 5, fontSize: 18, textAlign: 'center', fontStyle: 'italic' }}>Oops! We've run out of recommendations🙁 </Text>
+          <Text style={{ color: '#9fd8f3', fontWeight: '600', paddingHorizontal: 5, fontSize: 18, textAlign: 'center', fontStyle: 'italic' }}>Come back later!</Text>
         </View>
       </View>
     )
@@ -345,6 +365,85 @@ const styles = StyleSheet.create({
 
   spacer: {
     height: 20,
+  },
+
+  container_1: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  bigContainer: {
+    flex: 1,
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+  },
+  container: {
+    flex: 1,
+    paddingTop: 10,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    backgroundColor: '#FFFFFF',
+  },
+  mainText: {
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 26,
+    margin: 10
+  },
+  usual: {
+    color: 'gray',
+    fontSize: 16,
+    margin: 3,
+    left: 12
+  },
+  list: {
+    fontSize: 14
+  },
+  dropdown: {
+    margin: 16,
+    marginTop: -8,
+    height: 50,
+    borderBottomColor: 'gray',
+    borderBottomWidth: 0.5,
+    width: 90,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
+  },
+  textInput: {
+    margin: 16,
+    marginTop: -8,
+    height: 50,
+    borderBottomColor: 'gray',
+    borderBottomWidth: 0.5,
+    width: Dimensions.get('window').width - 32,
+    fontSize: 16,
+  },
+  buttomContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  buttonContainer: {
+    height: 40,
+    width: Dimensions.get('window').width - 20,
+    position: 'absolute',
+    bottom: 15,
+    borderRadius: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 10,
+    backgroundColor: '#2de0ff',
+  },
+  registerText: {
+    color: 'white',
+    fontWeight: 'bold',
   },
 
 });
