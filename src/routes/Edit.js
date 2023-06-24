@@ -17,6 +17,9 @@ import { addDoc, collection, setDoc, doc, updateDoc, getDoc, onSnapshot } from "
 import Request from './Request';
 import { generateMatchingPool, initializeMatch, updateRecommendAndPoint, setMatchValue, updateAvoid, match } from '../../api/matching';
 
+import { Image } from 'react-native';
+
+
 
 import {
   StyleSheet,
@@ -24,7 +27,8 @@ import {
   View,
   TouchableOpacity,
   Dimensions,
-  ScrollView
+  ScrollView,
+  TouchableWithoutFeedback
 } from 'react-native';
 
 
@@ -40,6 +44,7 @@ export default () => {
   const [year, setYear] = useState ("")
   const[course,setCourse]=useState([])
   const[hobby,setHobby]=useState([])
+
 
   const getData = () => {
     onSnapshot(doc(db, "NUS", "users", "profile",`${auth.currentUser.uid}`), (doc) => {
@@ -66,6 +71,20 @@ export default () => {
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-start', backgroundColor: 'white', paddingTop: 20 }}>
+
+    <TouchableOpacity onPress={() => navigation.navigate('EditPhoto')}>
+        {profileData && (
+          <Image
+            style={{
+              width: 150,
+              height: 150,
+              borderRadius: 75,
+              marginBottom: 10,
+            }}
+            source={{ uri: profileData.photoURL }}
+          />
+        )}
+      </TouchableOpacity>
 
       <TouchableOpacity onPress={() => navigation.navigate('EditName', {name})}>
         <View style={{ width: Dimensions.get('window').width - 60, borderBottomWidth: 1, flexDirection: "row", borderBottomColor: '#DEDEDE' }}>

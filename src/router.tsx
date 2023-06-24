@@ -38,7 +38,12 @@ import EditShowCourse from './routes/EditShowCourse';
 import EditShowHobby from './routes/EditShowHobby';
 import EditShowCountryAndRegion from './routes/EditShowCountryAndRegion';
 import EditShowYear from './routes/EditShowYear';
+<<<<<<< HEAD
 import Filter from './routes/Filter';
+=======
+import ChangePassword from './routes/ChangePassword';
+import EditPhoto from './routes/EditPhoto';
+>>>>>>> 883d3188be88bda8eefa5d8fe1e048937137df6f
 
 import {
   StyleSheet,
@@ -64,35 +69,122 @@ const StackNavigator = () => (
       options={{ headerShown: true, headerTitle: ' ', headerBackTitle: ' ', headerTintColor: '#2de0ff' }} />
     <Stack.Screen name='Home' component={Home}
       options={{ headerShown: false, headerTitle: ' ', headerBackTitle: ' ', headerTintColor: '#2de0ff' }} />
+
     <Stack.Screen name='Form' component={Form}
-      options={{ headerShown: true, headerTitle: 'Personal Profile', headerBackTitle: ' ', headerTintColor: '#2de0ff' }} />
-    <Stack.Screen name='Form1' component={Form1}
-      options={{ headerShown: true, headerTitle: 'Personal Profile', headerBackTitle: ' ', headerTintColor: '#2de0ff' }} />
-    <Stack.Screen name='Form2' component={Form2}
       options={({ navigation }) => ({
         headerShown: true,
         headerTitle: 'Personal Profile',
         headerBackTitle: ' ',
-        headerTintColor: 'black',
+        headerTintColor: '#2de0ff',
         headerRight: () => (
           <TouchableOpacity
-          style={{ marginRight: 10 }}
+          style={{ marginRight: 15 }}
           activeOpacity={0.75}
-          onPress={() => navigation.navigate('Form3')}>
+          onPress={() => navigation.navigate('Form1')}>
              <Text>Skip</Text>
         </TouchableOpacity>
         ),
       })} />
+
+    <Stack.Screen name='Form1' component={Form1}
+      options={({ navigation }) => ({
+        headerShown: true,
+        headerTitle: 'Personal Profile',
+        headerBackTitle: ' ',
+        headerTintColor: '#2de0ff',
+        headerRight: () => (
+          <TouchableOpacity
+          style={{ marginRight: 15 }}
+          activeOpacity={0.75}
+          onPress={() => navigation.navigate('Form2')}>
+             <Text>Skip</Text>
+        </TouchableOpacity>
+        ),
+      })} />
+
+      <Stack.Screen name='Form2' component={Form2}
+      options={{ headerShown: true, headerTitle: 'Personal Profile', headerBackTitle: ' ', headerTintColor: '#2de0ff' }} />
     <Stack.Screen name='Form3' component={Form3}
-      options={{ headerShown: true, headerTitle: 'Personal Profile', headerBackTitle: ' ', headerTintColor: '#2de0ff' }} />
+      options={({ navigation }) => ({
+        headerShown: true,
+        headerTitle: 'Personal Profile',
+        headerBackTitle: ' ',
+        headerTintColor: '#2de0ff',
+        headerRight: () => (
+          <TouchableOpacity
+          style={{ marginRight: 15 }}
+          activeOpacity={0.75}
+          onPress={() => navigation.navigate('Form4')}>
+             <Text>Skip</Text>
+        </TouchableOpacity>
+        ),
+      })} />
+
     <Stack.Screen name='Form4' component={Form4}
-      options={{ headerShown: true, headerTitle: 'Personal Profile', headerBackTitle: ' ', headerTintColor: '#2de0ff' }} />
+      options={({ navigation }) => ({
+        headerShown: true,
+        headerTitle: 'Personal Profile',
+        headerBackTitle: ' ',
+        headerTintColor: '#2de0ff',
+        headerRight: () => (
+          <TouchableOpacity
+          style={{ marginRight: 15 }}
+          activeOpacity={0.75}
+          onPress={() => navigation.navigate('Form5')}>
+             <Text>Skip</Text>
+        </TouchableOpacity>
+        ),
+      })} />
+
     <Stack.Screen name='Form5' component={Form5}
-      options={{ headerShown: true, headerTitle: 'Personal Profile', headerBackTitle: ' ', headerTintColor: '#2de0ff' }} />
+      options={({ navigation }) => ({
+        headerShown: true,
+        headerTitle: 'Personal Profile',
+        headerBackTitle: ' ',
+        headerTintColor: '#2de0ff',
+        headerRight: () => (
+          <TouchableOpacity
+          style={{ marginRight: 15 }}
+          activeOpacity={0.75}
+          onPress={() => navigation.navigate('Form5')}>
+             <Text>Skip</Text>
+        </TouchableOpacity>
+        ),
+      })} />
+
+
     <Stack.Screen name='Form6' component={Form6}
-      options={{ headerShown: true, headerTitle: 'Personal Profile', headerBackTitle: ' ', headerTintColor: '#2de0ff' }} />
-    <Stack.Screen name='Form7' component={Form7}
-      options={{ headerShown: true, headerTitle: 'Personal Profile', headerBackTitle: ' ', headerTintColor: '#2de0ff' }} />
+      options={({ navigation }) => ({
+        headerShown: true,
+        headerTitle: 'Personal Profile',
+        headerBackTitle: ' ',
+        headerTintColor: '#2de0ff',
+        headerRight: () => (
+          <TouchableOpacity
+          style={{ marginRight: 15 }}
+          activeOpacity={0.75}
+          onPress={() => navigation.navigate('Form7')}>
+             <Text>Skip</Text>
+        </TouchableOpacity>
+        ),
+      })} />
+
+      <Stack.Screen name='Form7' component={Form7}
+      options={({ navigation }) => ({
+        headerShown: true,
+        headerTitle: 'Personal Profile',
+        headerBackTitle: ' ',
+        headerTintColor: '#2de0ff',
+        headerRight: () => (
+          <TouchableOpacity
+          style={{ marginRight: 15 }}
+          activeOpacity={0.75}
+          onPress={() => navigation.navigate('Home')}>
+             <Text>Skip</Text>
+        </TouchableOpacity>
+        ),
+      })} />
+
     <Stack.Screen name='Photo' component={Photo}
       options={{ headerShown: true, headerTitle: 'Personal Profile', headerBackTitle: ' ', headerTintColor: '#2de0ff' }} />
     <Stack.Screen name='StudyBuddy' component={StudyBuddy}
@@ -119,7 +211,13 @@ const StackNavigator = () => (
     <Stack.Screen name="EditShowCountryAndRegion" component={EditShowCountryAndRegion} />
     <Stack.Screen name="EditShowYear" component={EditShowYear} />
     <Stack.Screen name="EditShowHobby" component={EditShowHobby} />
+<<<<<<< HEAD
     <Stack.Screen name="Filter" component={Filter} options={{headerShown: true, headerTitle: 'Find A Friend Filters',}}/>
+=======
+    <Stack.Screen name="ChangePassword" component={ChangePassword} />
+    <Stack.Screen name="EditPhoto" component={EditPhoto} />
+
+>>>>>>> 883d3188be88bda8eefa5d8fe1e048937137df6f
   </Stack.Navigator>
 );
 

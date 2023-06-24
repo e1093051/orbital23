@@ -28,8 +28,8 @@ export default () => {
   const handleLogin = () => {
     Authentication.logIn(
       { email, password },
-      (user) =>  navigation.navigate('Home'),
-      (user) =>  navigation.navigate('Home'),
+      (user) =>  navigation.navigate('Form'),
+      (user) =>  navigation.navigate('Form'),
       (error) => Alert.alert('error',(error.message || 'Something went wrong, try again later'))
     );
   }

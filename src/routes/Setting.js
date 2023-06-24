@@ -39,7 +39,7 @@ export default () => {
   const [showYear, setShowYear] = useState ("")
 
   const getData = () => {
-      onSnapshot(doc(db, "NUS", "users", "profile", `${auth.currentUser.uid}`), (doc) => {
+      onSnapshot(doc(db, "NUS", "users", "profile",`${auth.currentUser.uid}`), (doc) => {
         setProfileData(doc.data());})
     }
 
@@ -67,12 +67,16 @@ export default () => {
           {<Text style={{ color: '#808080', marginBottom: 5, marginTop: 5 }}>{auth.currentUser.email}</Text>}
      </View>
 
+     <TouchableOpacity onPress={() => navigation.navigate('ChangePassword')}>
+
      <View style={{ width: Dimensions.get('window').width - 60, borderBottomWidth: 1, flexDirection: "row", borderBottomColor: '#DEDEDE' }}>
           <Text style={{ width: 80, marginBottom: 5, marginTop: 5, marginLeft:10 }}>Password</Text>
-          {<Text style={{ color: '#808080', marginBottom: 5, marginTop: 5 }}>change password</Text>}
+          {<Text style={{ color: '#2de0ff', marginBottom: 5, marginTop: 5 }}>Click here to change your password</Text>}
      </View>
 
-     <Text style={{ fontSize: 15,marginLeft: 10, marginTop: 10,marginBottom:10, color: "#939799"}}>Who can see your profile</Text>
+     </TouchableOpacity>
+
+     <Text style={{ fontSize: 15,marginLeft: 10, marginTop: 10,marginBottom:10, color: "#939799"}}>Profile Privacy Settings</Text>
 
     <TouchableOpacity onPress={() => navigation.navigate('EditShowMajor', {showMajor})}>
 

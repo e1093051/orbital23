@@ -220,18 +220,22 @@ export default () => {
   const navigation = useNavigation();
 
   const handleSetCountryAndRegion = () => {
-    setProfile.setCountryAndRegion(
-      { countryAndRegion, showCountryAndRegion: checked },
-      () => navigation.navigate('Form6'),
-      (error) => Alert.alert('error', (error.message || 'Something went wrong, try again later'))
-    )
+    if (countryAndRegion !== "") {
+      setProfile.setCountryAndRegion(
+        { countryAndRegion, showCountryAndRegion: checked },
+        () => navigation.navigate('Form6'),
+        (error) => Alert.alert('Error', error.message || 'Something went wrong, try again later')
+      );
+    } else {
+      Alert.alert('Warning', 'Please select a country before proceeding');
+    }
   }
 
   return (
     <View style={styles.container_1}>
       <View style={styles.container}>
-        <Text style={styles.mainText}>Where are you from?</Text>
-        <Text style={styles.usual}>Country/Region</Text>
+        <Text style={styles.mainText}>What's your country?</Text>
+        <Text style={styles.usual}>Country</Text>
         <Dropdown
           search
           style={styles.dropdown}
@@ -241,36 +245,40 @@ export default () => {
           maxHeight={300}
           labelField="label"
           data={countryAndRegionData}
-          onChange={item => setCountryAndRegion(item.value)}
+          onChange={(item) => setCountryAndRegion(item.value)}
           value={countryAndRegion}
           placeholder=" "
           valueField="value"
         />
-        </View>
-        <View style = {styles.checkBoxContainer}>
-          <CheckBox
-            center
-            title="Show my country/region to others"
-            checked={checked}
-            onPress={() => setChecked(!checked)}
-            iconType="material-community"
-            checkedIcon="checkbox-outline"
-            uncheckedIcon={'checkbox-blank-outline'}
-            titleProps={styles.checkbox}
-          />
-          </View>
-          <TouchableOpacity
-            activeOpacity={0.75}
-            style={styles.buttonContainer}
-            onPress={() => handleSetCountryAndRegion()} >
-            <Text style={styles.next}>Next</Text>
-          </TouchableOpacity>
+      </View>
+      <View style={styles.checkBoxContainer}>
+        <CheckBox
+          center
+          title="Show my country/region to others"
+          checked={checked}
+          onPress={() => setChecked(!checked)}
+          iconType="material-community"
+          checkedIcon="checkbox-outline"
+          uncheckedIcon="checkbox-blank-outline"
+          titleProps={styles.checkbox}
+        />
+      </View>
+      <TouchableOpacity
+        activeOpacity={0.75}
+        style={[
+          styles.buttonContainer,
+          { backgroundColor: countryAndRegion !== '' ? '#2de0ff' : '#808080' },
+        ]}
+        onPress={handleSetCountryAndRegion}
+        disabled={countryAndRegion === ''}
+      >
+        <Text style={styles.next}>Next</Text>
+      </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-
   container_1: {
     flex: 1,
     alignItems: 'center',
@@ -332,7 +340,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     margin: 10,
-    backgroundColor: '#2de0ff',
   },
   next: {
     color: 'white',
