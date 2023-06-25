@@ -38,6 +38,8 @@ import EditShowCourse from './routes/EditShowCourse';
 import EditShowHobby from './routes/EditShowHobby';
 import EditShowCountryAndRegion from './routes/EditShowCountryAndRegion';
 import EditShowYear from './routes/EditShowYear';
+import ChangePassword from './routes/ChangePassword';
+
 
 import {
   StyleSheet,
@@ -49,6 +51,7 @@ import {
 } from 'react-native';
 
 import { setMajor } from '../api/setProfile';
+import EditPhoto from './routes/EditPhoto';
 
 const Stack = createStackNavigator();
 
@@ -136,6 +139,7 @@ const StackNavigator = () => (
     <Stack.Screen name='Forum' component={Forum} />
     <Stack.Screen name='Setting' component={Setting} />
     <Stack.Screen name='Edit' component={Edit} />
+    <Stack.Screen name='EditPhoto' component={EditPhoto} />
     <Stack.Screen name="EditName" component={EditName} />
     <Stack.Screen name="EditBio" component={EditBio} />
     <Stack.Screen name="EditMajor" component={EditMajor} />
@@ -153,6 +157,7 @@ const StackNavigator = () => (
     <Stack.Screen name="EditShowCountryAndRegion" component={EditShowCountryAndRegion} />
     <Stack.Screen name="EditShowYear" component={EditShowYear} />
     <Stack.Screen name="EditShowHobby" component={EditShowHobby} />
+    <Stack.Screen name="ChangePassword" component={ChangePassword} />
   </Stack.Navigator>
 );
 

@@ -232,10 +232,15 @@ export default function Home() {
         <View style={styles.spacer} />
 
         <TouchableOpacity
-          activeOpacity={0.75}
-          onPress={() => navigation.navigate("Edit")}>
-          <Text>Edit Profile</Text>
+        
+        style={styles.button}
+        activeOpacity={0.75}
+        onPress={() => navigation.navigate("Edit")}
+        >
+        <Text style={styles.buttonText}>Edit Profile</Text>
         </TouchableOpacity>
+
+        <View style={styles.spacer_1} />
 
         <View style={{ width: Dimensions.get('window').width - 60, borderBottomWidth: 1, flexDirection: "row", borderBottomColor: '#DEDEDE' }}>
           <Text style={{ width: 80, marginBottom: 5, marginTop: 5 }}>Name</Text>
@@ -364,6 +369,11 @@ const styles = StyleSheet.create({
   },
 
   spacer: {
+    height: 20,
+  },
+
+   spacer_1: {
+
     height: 20,
   },
 
