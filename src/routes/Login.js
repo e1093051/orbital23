@@ -28,6 +28,15 @@ export default () => {
   const handleLogin = () => {
     Authentication.logIn(
       { email, password },
+      (user) =>  navigation.navigate('Home'),
+      (user) =>  navigation.navigate('Home'),
+      (error) => Alert.alert('error',(error.message || 'Something went wrong, try again later'))
+    );
+  }
+
+  const handleFirstTimeLogin = () => {
+    Authentication.logIn(
+      { email, password },
       (user) =>  navigation.navigate('Form'),
       (user) =>  navigation.navigate('Form'),
       (error) => Alert.alert('error',(error.message || 'Something went wrong, try again later'))
@@ -60,6 +69,12 @@ export default () => {
           style={styles.loginButton}
           onPress={() => handleLogin()}>
           <Text style={styles.loginText}>Log In</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={0.75}
+          style={styles.loginButton}
+          onPress={() => handleFirstTimeLogin()}>
+          <Text style={styles.loginText}>First Time Log In</Text>
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.75}

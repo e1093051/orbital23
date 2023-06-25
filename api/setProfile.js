@@ -107,9 +107,10 @@ export const setBio = async ({ bio }, onSuccess, onError) => {
       rejected: [],  //who the user is rejected by
       accepted: [],  //who the user is accepted
       waiting: [],  //who the user is waiting for reply
-      recommended: [],  //who the user is waiting to be recommended
+      recommend: [],  //who the user is waiting to be recommended
+      point: [],
       invite: [], //the invitation the user received, showin in request page
-      friend: [auth.currentUser.uid],
+      friend: [],
       avoid: [auth.currentUser.uid],  //the union of rejected, accepted, waiting, recommended and friend
     },
       { merge: true });

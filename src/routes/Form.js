@@ -55,7 +55,7 @@ export default () => {
       quality: 1,
     });
 
-    if (!result.cancelled) {
+    if (!result.canceled) {
       setImage(result.assets[0].uri);
       setHasChangedPicture(true);
     }

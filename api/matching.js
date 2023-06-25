@@ -209,7 +209,7 @@ export async function match() {
     .then(docSnap => docSnap.data()).then()
   const recommendList = profileData.recommend;
   let length = recommendList.length;
-  while (length < 20) {
+  while (length < 10) {
     const matchFound = await generateMatchingPool();
     if (!matchFound) {
       break;

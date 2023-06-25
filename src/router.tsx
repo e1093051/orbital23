@@ -38,12 +38,6 @@ import EditShowCourse from './routes/EditShowCourse';
 import EditShowHobby from './routes/EditShowHobby';
 import EditShowCountryAndRegion from './routes/EditShowCountryAndRegion';
 import EditShowYear from './routes/EditShowYear';
-<<<<<<< HEAD
-import Filter from './routes/Filter';
-=======
-import ChangePassword from './routes/ChangePassword';
-import EditPhoto from './routes/EditPhoto';
->>>>>>> 883d3188be88bda8eefa5d8fe1e048937137df6f
 
 import {
   StyleSheet,
@@ -53,6 +47,8 @@ import {
   Dimensions,
   ScrollView
 } from 'react-native';
+
+import { setMajor } from '../api/setProfile';
 
 const Stack = createStackNavigator();
 
@@ -76,14 +72,6 @@ const StackNavigator = () => (
         headerTitle: 'Personal Profile',
         headerBackTitle: ' ',
         headerTintColor: '#2de0ff',
-        headerRight: () => (
-          <TouchableOpacity
-          style={{ marginRight: 15 }}
-          activeOpacity={0.75}
-          onPress={() => navigation.navigate('Form1')}>
-             <Text>Skip</Text>
-        </TouchableOpacity>
-        ),
       })} />
 
     <Stack.Screen name='Form1' component={Form1}
@@ -92,32 +80,18 @@ const StackNavigator = () => (
         headerTitle: 'Personal Profile',
         headerBackTitle: ' ',
         headerTintColor: '#2de0ff',
-        headerRight: () => (
-          <TouchableOpacity
-          style={{ marginRight: 15 }}
-          activeOpacity={0.75}
-          onPress={() => navigation.navigate('Form2')}>
-             <Text>Skip</Text>
-        </TouchableOpacity>
-        ),
       })} />
 
       <Stack.Screen name='Form2' component={Form2}
       options={{ headerShown: true, headerTitle: 'Personal Profile', headerBackTitle: ' ', headerTintColor: '#2de0ff' }} />
+
+      
     <Stack.Screen name='Form3' component={Form3}
       options={({ navigation }) => ({
         headerShown: true,
         headerTitle: 'Personal Profile',
         headerBackTitle: ' ',
         headerTintColor: '#2de0ff',
-        headerRight: () => (
-          <TouchableOpacity
-          style={{ marginRight: 15 }}
-          activeOpacity={0.75}
-          onPress={() => navigation.navigate('Form4')}>
-             <Text>Skip</Text>
-        </TouchableOpacity>
-        ),
       })} />
 
     <Stack.Screen name='Form4' component={Form4}
@@ -126,14 +100,6 @@ const StackNavigator = () => (
         headerTitle: 'Personal Profile',
         headerBackTitle: ' ',
         headerTintColor: '#2de0ff',
-        headerRight: () => (
-          <TouchableOpacity
-          style={{ marginRight: 15 }}
-          activeOpacity={0.75}
-          onPress={() => navigation.navigate('Form5')}>
-             <Text>Skip</Text>
-        </TouchableOpacity>
-        ),
       })} />
 
     <Stack.Screen name='Form5' component={Form5}
@@ -142,14 +108,6 @@ const StackNavigator = () => (
         headerTitle: 'Personal Profile',
         headerBackTitle: ' ',
         headerTintColor: '#2de0ff',
-        headerRight: () => (
-          <TouchableOpacity
-          style={{ marginRight: 15 }}
-          activeOpacity={0.75}
-          onPress={() => navigation.navigate('Form5')}>
-             <Text>Skip</Text>
-        </TouchableOpacity>
-        ),
       })} />
 
 
@@ -159,14 +117,6 @@ const StackNavigator = () => (
         headerTitle: 'Personal Profile',
         headerBackTitle: ' ',
         headerTintColor: '#2de0ff',
-        headerRight: () => (
-          <TouchableOpacity
-          style={{ marginRight: 15 }}
-          activeOpacity={0.75}
-          onPress={() => navigation.navigate('Form7')}>
-             <Text>Skip</Text>
-        </TouchableOpacity>
-        ),
       })} />
 
       <Stack.Screen name='Form7' component={Form7}
@@ -175,14 +125,6 @@ const StackNavigator = () => (
         headerTitle: 'Personal Profile',
         headerBackTitle: ' ',
         headerTintColor: '#2de0ff',
-        headerRight: () => (
-          <TouchableOpacity
-          style={{ marginRight: 15 }}
-          activeOpacity={0.75}
-          onPress={() => navigation.navigate('Home')}>
-             <Text>Skip</Text>
-        </TouchableOpacity>
-        ),
       })} />
 
     <Stack.Screen name='Photo' component={Photo}
@@ -211,13 +153,6 @@ const StackNavigator = () => (
     <Stack.Screen name="EditShowCountryAndRegion" component={EditShowCountryAndRegion} />
     <Stack.Screen name="EditShowYear" component={EditShowYear} />
     <Stack.Screen name="EditShowHobby" component={EditShowHobby} />
-<<<<<<< HEAD
-    <Stack.Screen name="Filter" component={Filter} options={{headerShown: true, headerTitle: 'Find A Friend Filters',}}/>
-=======
-    <Stack.Screen name="ChangePassword" component={ChangePassword} />
-    <Stack.Screen name="EditPhoto" component={EditPhoto} />
-
->>>>>>> 883d3188be88bda8eefa5d8fe1e048937137df6f
   </Stack.Navigator>
 );
 
