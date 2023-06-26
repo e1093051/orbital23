@@ -120,10 +120,6 @@ async function generateRecommendList(recommendList, pointList, data, point) {
   }
 }
 
-
-
-
-
 export async function generateMatchingPool() {
   const profileData = await getDoc(doc(db, "NUS/users", "profile", auth.currentUser.uid))
     .then(docSnap => docSnap.data());
