@@ -234,3 +234,25 @@ export const updateHobby = async ({ hobby }, onSuccess, onError) => {
     return onError(error);
   }
 }
+
+export const updateMajor = async ({ major }, onSuccess, onError) => {
+  try {
+    await updateDoc(doc(db, "NUS", "users", "profile",`${auth.currentUser.uid}`), {
+      major: major,
+    });
+    return onSuccess();
+  } catch (error) {
+    return onError(error);
+  }
+}
+
+export const updateCourse = async ({ course }, onSuccess, onError) => {
+  try {
+    await updateDoc(doc(db, "NUS", "users", "profile",`${auth.currentUser.uid}`), {
+      course: course,
+    });
+    return onSuccess();
+  } catch (error) {
+    return onError(error);
+  }
+}

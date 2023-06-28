@@ -11,6 +11,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import * as ImagePicker from 'expo-image-picker';
 
 import * as Authentication from "../../api/auth";
+import { addDoc, collection, setDoc, doc, updateDoc, getDoc } from "firebase/firestore";
 
 
 import {
@@ -23,6 +24,8 @@ import {
   TouchableOpacity,
   Dimensions
 } from 'react-native';
+import { updatePhoto } from '../../api/setProfile';
+import { db, auth } from '../../api/fireConfig';
 
 
 export default () => {
@@ -37,7 +40,11 @@ export default () => {
     if (hasChangedPicture) {
       Authentication.setProfilePicture(
         { image },
-        () => navigation.navigate('Edit'),
+        async() => {
+          await updateDoc(doc(db, "NUS", "users", "profile",`${auth.currentUser.uid}`), {
+            photoURL: image,
+          });
+          navigation.navigate('Edit')},
         (error) => Alert.alert('error', (error.message || 'Something went wrong, try again later'))
       )
     }

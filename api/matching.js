@@ -275,3 +275,47 @@ export async function skipReqest(uid) {
     invite: arrayRemove(uid)
   });
 }
+
+
+export function filter(filterGender, filterMajor, filterCourse, filterCountryAndRegion, filterYear, filterHobby) {
+  let query = collection(db, "NUS", "users", "profile");
+
+  if (filterGender !== '') {
+    query = query.where('gender', '==', filterGender);
+  }
+  if (filterMajor !== '') {
+    query = query.where('major', '==', filterMajor);
+  }
+  if (filterCourse !== '') {
+    query = query.where('course', '==', filterCourse);
+  }
+  if (filterCountryAndRegion !== '') {
+    query = query.where('countryAndRegion', '==', filterCountryAndRegion);
+  }
+  if (filterYear !== '') {
+    query = query.where('year', '==', filterYear);
+  }
+  if (filterHobby !== '') {
+    query = query.where('hobby', '==', filterHobby);
+  }
+  return query;
+}
+
+export async function filterMatch(filterGender, filterMajor, filterCourse, filterCountryAndRegion, filterYear, filterHobby) {
+  filter(filterGender, filterMajor, filterCourse, filterCountryAndRegion, filterYear, filterHobby)
+  .then(async(query) => {
+    const querySnapshot = await (getDocs(query));
+    const filteredUsers = querySnapshot.docs.filter(doc => {
+      const avoidList = doc.data().avoid || [];
+      return !avoidList.includes(auth.currentUser.uid);
+    });
+    if (filteredUsers.length != 0) {
+      const selectedUser = filteredUsers[Math.floor(Math.random() * filteredUsers.length)];
+      const selectedUserId = selectedUser.id;
+      console.log(selectedUserId);
+    }
+    else {
+      console.log("no available users")
+    }
+  })
+}

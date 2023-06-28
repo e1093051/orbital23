@@ -6,7 +6,8 @@ import { auth, firebase, storage } from './fireConfig'
 import { Alert } from 'react-native';
 
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, sendEmailVerification, signOut, sendPasswordResetEmail } from 'firebase/auth';
-import { ref, uploadBytes, getDownloadURL, uploadBytesResumable } from "firebase/storage"
+import { ref, uploadBytes, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import { addDoc, collection, setDoc, doc, updateDoc, getDoc } from "firebase/firestore";
 
 
 export const logIn = async ( {email, password}, firstTimeUser, onSuccess, onError) => {

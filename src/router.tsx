@@ -37,7 +37,9 @@ import EditShowMajor from './routes/EditShowMajor';
 import EditShowCourse from './routes/EditShowCourse';
 import EditShowHobby from './routes/EditShowHobby';
 import EditShowCountryAndRegion from './routes/EditShowCountryAndRegion';
+import EditPhoto from './routes/EditPhoto';
 import EditShowYear from './routes/EditShowYear';
+import Filter from './routes/Filter';
 
 import {
   StyleSheet,
@@ -140,6 +142,7 @@ const StackNavigator = () => (
     <Stack.Screen name="EditBio" component={EditBio} />
     <Stack.Screen name="EditMajor" component={EditMajor} />
     <Stack.Screen name="EditCourse" component={EditCourse} />
+    <Stack.Screen name="EditPhoto" component={EditPhoto} />
     <Stack.Screen name="EditHobby" component={EditHobby}
       options={{
         headerShown: true,
@@ -153,6 +156,8 @@ const StackNavigator = () => (
     <Stack.Screen name="EditShowCountryAndRegion" component={EditShowCountryAndRegion} />
     <Stack.Screen name="EditShowYear" component={EditShowYear} />
     <Stack.Screen name="EditShowHobby" component={EditShowHobby} />
+    <Stack.Screen name="Filter" component={Filter} 
+    options={{headerShown: true}}/>
   </Stack.Navigator>
 );
 

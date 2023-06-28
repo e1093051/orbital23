@@ -30,6 +30,7 @@ import Request from './Request';
 import { generateMatchingPool } from '../../api/matching';
 import { Alert } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
+import { filterMatch } from '../../api/matching';
 
 
 import {
@@ -39,6 +40,8 @@ import {
 
 
 export default function Filter() {
+
+  //filterMatch("Female")
 
   const majorData = [
     { label: 'Pharmacy', value: 'Pharmacy' },
@@ -394,7 +397,6 @@ export default function Filter() {
         <Text style={{ fontSize: 16, color: 'gray', alignItems: 'flex-start',marginLeft: -2}}>Gender</Text>
         <View style={{ alignItems: 'center' }}>
           <Dropdown
-            search
             style={styles.dropdown}
             placeholderStyle={styles.placeholderStyle}
             selectedTextStyle={styles.selectedTextStyle}
@@ -466,14 +468,13 @@ export default function Filter() {
         <Text style={{ fontSize: 16, color: 'gray', alignItems: 'flex-start',marginLeft: -2}}>Year</Text>
         <View style={{ alignItems: 'center' }}>
           <Dropdown
-            search
             style={styles.dropdown}
             placeholderStyle={styles.placeholderStyle}
             selectedTextStyle={styles.selectedTextStyle}
             inputSearchStyle={styles.inputSearchStyle}
             maxHeight={300}
             labelField="label"
-            data={countryAndRegionData}
+            data={yearData}
             onChange={item => setFilterYear(item.value)}
             placeholder="Year"
             valueField="value"
