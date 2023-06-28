@@ -37,7 +37,6 @@ import EditShowMajor from './routes/EditShowMajor';
 import EditShowCourse from './routes/EditShowCourse';
 import EditShowHobby from './routes/EditShowHobby';
 import EditShowCountryAndRegion from './routes/EditShowCountryAndRegion';
-import EditPhoto from './routes/EditPhoto';
 import EditShowYear from './routes/EditShowYear';
 import Filter from './routes/Filter';
 
@@ -51,6 +50,7 @@ import {
 } from 'react-native';
 
 import { setMajor } from '../api/setProfile';
+import EditPhoto from './routes/EditPhoto';
 
 const Stack = createStackNavigator();
 
@@ -138,6 +138,7 @@ const StackNavigator = () => (
     <Stack.Screen name='Forum' component={Forum} />
     <Stack.Screen name='Setting' component={Setting} />
     <Stack.Screen name='Edit' component={Edit} />
+    <Stack.Screen name='EditPhoto' component={EditPhoto} />
     <Stack.Screen name="EditName" component={EditName} />
     <Stack.Screen name="EditBio" component={EditBio} />
     <Stack.Screen name="EditMajor" component={EditMajor} />

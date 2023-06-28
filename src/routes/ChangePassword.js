@@ -44,7 +44,6 @@ export default () => {
       <Text style = {styles.usual}>Enter the email address you used to sign up. You will get an email on this address to change your password </Text>
       <TextInput
           style={{ height: 40, width: Dimensions.get('window').width - 20, borderWidth: 1, margin: 10, marginTop: -3}}
-          //placeholder = " Name"
           value={email}
           onChangeText={setEmail}
       />
