@@ -29,12 +29,21 @@ import { db, auth } from '../../api/fireConfig';
 
 
 export default () => {
-
+  
   const navigation = useNavigation();
 
   const [hasChangedPicture, setHasChangedPicture] = useState(false);
 
   const [image, setImage] = useState(null);
+
+  const [profileData, setProfileData] = useState(null);
+
+  useEffect(() => {
+  if (profileData) {
+    setPhoto(profileData.photo);
+  }
+}, [profileData]);
+
 
   const setProfilePicture = () => {
     if (hasChangedPicture) {
@@ -79,7 +88,8 @@ export default () => {
       <View style={styles.imageContainer}>
         <TouchableOpacity onPress={pickImage} style={[styles.circle, { marginTop: -300 }]} activityOpacity={0.8}>
           <Image
-            source={image ? { uri: image } : require('./Standard_Profile.png')}
+            source={image ? { uri: image } : { uri: profileData.photoURL }}
+
             style={styles.image}
           />
         </TouchableOpacity>

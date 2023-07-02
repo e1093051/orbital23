@@ -138,7 +138,6 @@ const StackNavigator = () => (
     <Stack.Screen name='Forum' component={Forum} />
     <Stack.Screen name='Setting' component={Setting} />
     <Stack.Screen name='Edit' component={Edit} />
-    <Stack.Screen name='EditPhoto' component={EditPhoto} />
     <Stack.Screen name="EditName" component={EditName} />
     <Stack.Screen name="EditBio" component={EditBio} />
     <Stack.Screen name="EditMajor" component={EditMajor} />
