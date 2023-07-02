@@ -47,8 +47,6 @@ export const showYearAPI = async ({ showYear }) => {
 }
 
 
-
-
 export const updateName = async ({ name }) => {
   await setDoc(doc(db, "NUS", "users", "profile",`${auth.currentUser.uid}`), {
     name: name,
