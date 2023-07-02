@@ -33,15 +33,15 @@ import { Dropdown } from 'react-native-element-dropdown';
 import { filterMatch } from '../../api/matching';
 
 
-import {
-  setMajor
-} from '../../api/setProfile';
 
 
 
 export default function Filter() {
 
-  //filterMatch("Female")
+  const navigation = useNavigation();
+
+  //filterMatch("1", "", "", "", "", "");
+  //console.log("I want to die right now")
 
   const majorData = [
     { label: 'Pharmacy', value: 'Pharmacy' },
@@ -102,7 +102,7 @@ export default function Filter() {
   const genderData = [
     { label: 'Female', value: 'Female' },
     { label: 'Male', value: 'Male' },
-    { label: 'Others', value: 'Others'},
+    { label: 'Others', value: 'Others' },
   ];
 
   const countryAndRegionData = [
@@ -363,12 +363,11 @@ export default function Filter() {
     { label: 'Gardening', value: 'Gardening' },
     { label: 'Meditation and Yoga', value: 'Meditation and Yoga' },
     { label: 'Volunteer work', value: 'Volunteer work' }
-];
+  ];
 
   const route = useRoute();
   const [filterMajor, setFilterMajor] = useState("");
   const [filterGender, setFilterGender] = useState("")
-  const navigation = useNavigation();
   const [filterModule, setFilterModule] = useState("");
   const [filterCountryAndRegion, setFilterCountryAndRegion] = useState("");
   const [filterYear, setFilterYear] = useState("");
@@ -391,124 +390,123 @@ export default function Filter() {
 
 
   return (
-
-    <View style={{ flex: 1, paddingTop: 10, backgroundColor: 'white', alignItems: 'center'}}>
-      <View>
-        <Text style={{ fontSize: 16, color: 'gray', alignItems: 'flex-start',marginLeft: -2}}>Gender</Text>
-        <View style={{ alignItems: 'center' }}>
-          <Dropdown
-            style={styles.dropdown}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            maxHeight={300}
-            labelField="label"
-            data={genderData}
-            onChange={item => setFilterGender(item.value)}
-            placeholder="Gender"
-            valueField="value"
-          />
+      <View style={{ flex: 1, paddingTop: 10, backgroundColor: 'white', alignItems: 'center' }}>
+        <View>
+          <Text style={{ fontSize: 16, color: 'gray', alignItems: 'flex-start', marginLeft: -2 }}>Gender</Text>
+          <View style={{ alignItems: 'center' }}>
+            <Dropdown
+              style={styles.dropdown}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              maxHeight={300}
+              labelField="label"
+              data={genderData}
+              onChange={item => setFilterGender(item.value)}
+              placeholder="Gender"
+              valueField="value"
+            />
+          </View>
+        </View>
+        <View>
+          <Text style={{ fontSize: 16, color: 'gray', alignItems: 'flex-start', marginLeft: -2 }}>Major</Text>
+          <View style={{ alignItems: 'center' }}>
+            <Dropdown
+              search
+              style={styles.dropdown}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              maxHeight={300}
+              labelField="label"
+              data={majorData}
+              onChange={item => setFilterMajor(item.value)}
+              placeholder="Major"
+              valueField="value"
+            />
+          </View>
+        </View>
+        <View>
+          <Text style={{ fontSize: 16, color: 'gray', alignItems: 'flex-start', marginLeft: -2 }}>Course</Text>
+          <View style={{ alignItems: 'center' }}>
+            <Dropdown
+              search
+              style={styles.dropdown}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              maxHeight={300}
+              labelField="label"
+              data={moduleData}
+              onChange={item => setFilterModule(item.value)}
+              placeholder="Module"
+              valueField="value"
+            />
+          </View>
+        </View>
+        <View>
+          <Text style={{ fontSize: 16, color: 'gray', alignItems: 'flex-start', marginLeft: -2 }}>Country and Region</Text>
+          <View style={{ alignItems: 'center' }}>
+            <Dropdown
+              search
+              style={styles.dropdown}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              maxHeight={300}
+              labelField="label"
+              data={countryAndRegionData}
+              onChange={item => setFilterCountryAndRegion(item.value)}
+              placeholder="Country and Region"
+              valueField="value"
+            />
+          </View>
+        </View>
+        <View>
+          <Text style={{ fontSize: 16, color: 'gray', alignItems: 'flex-start', marginLeft: -2 }}>Year</Text>
+          <View style={{ alignItems: 'center' }}>
+            <Dropdown
+              style={styles.dropdown}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              maxHeight={300}
+              labelField="label"
+              data={yearData}
+              onChange={item => setFilterYear(item.value)}
+              placeholder="Year"
+              valueField="value"
+            />
+          </View>
+        </View>
+        <View>
+          <Text style={{ fontSize: 16, color: 'gray', alignItems: 'flex-start', marginLeft: -2 }}>Hobby</Text>
+          <View style={{ alignItems: 'center' }}>
+            <Dropdown
+              search
+              style={styles.dropdown}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              maxHeight={300}
+              labelField="label"
+              data={hobbyData}
+              onChange={item => setFilterHobby(item.value)}
+              placeholder="Hobby"
+              valueField="value"
+            />
+          </View>
+        </View>
+        <View style={{ position: 'absolute', bottom: 15, alignItems: 'center', }}>
+          <TouchableOpacity
+            activeOpacity={0.75}
+            style={styles.saveButton}
+            onPress={console.log("set major filter")}
+          >
+            <Text style={styles.saveText}>Apply Filters</Text>
+          </TouchableOpacity>
         </View>
       </View>
-      <View>
-        <Text style={{ fontSize: 16, color: 'gray', alignItems: 'flex-start',marginLeft: -2}}>Major</Text>
-        <View style={{ alignItems: 'center' }}>
-          <Dropdown
-            search
-            style={styles.dropdown}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            maxHeight={300}
-            labelField="label"
-            data={majorData}
-            onChange={item => setFilterMajor(item.value)}
-            placeholder="Major"
-            valueField="value"
-          />
-        </View>
-      </View>
-      <View>
-        <Text style={{ fontSize: 16, color: 'gray', alignItems: 'flex-start',marginLeft: -2}}>Course</Text>
-        <View style={{ alignItems: 'center' }}>
-          <Dropdown
-            search
-            style={styles.dropdown}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            maxHeight={300}
-            labelField="label"
-            data={moduleData}
-            onChange={item => setFilterModule(item.value)}
-            placeholder="Module"
-            valueField="value"
-          />
-        </View>
-      </View>
-      <View>
-        <Text style={{ fontSize: 16, color: 'gray', alignItems: 'flex-start',marginLeft: -2}}>Country and Region</Text>
-        <View style={{ alignItems: 'center' }}>
-          <Dropdown
-            search
-            style={styles.dropdown}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            maxHeight={300}
-            labelField="label"
-            data={countryAndRegionData}
-            onChange={item => setFilterCountryAndRegion(item.value)}
-            placeholder="Country and Region"
-            valueField="value"
-          />
-        </View>
-      </View>
-      <View>
-        <Text style={{ fontSize: 16, color: 'gray', alignItems: 'flex-start',marginLeft: -2}}>Year</Text>
-        <View style={{ alignItems: 'center' }}>
-          <Dropdown
-            style={styles.dropdown}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            maxHeight={300}
-            labelField="label"
-            data={yearData}
-            onChange={item => setFilterYear(item.value)}
-            placeholder="Year"
-            valueField="value"
-          />
-        </View>
-      </View>
-      <View>
-        <Text style={{ fontSize: 16, color: 'gray', alignItems: 'flex-start',marginLeft: -2}}>Hobby</Text>
-        <View style={{ alignItems: 'center' }}>
-          <Dropdown
-            search
-            style={styles.dropdown}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            maxHeight={300}
-            labelField="label"
-            data={hobbyData}
-            onChange={item => setFilterHobby(item.value)}
-            placeholder="Hobby"
-            valueField="value"
-          />
-        </View>
-      </View>
-      <View style={{ position: 'absolute',  bottom: 15, alignItems: 'center', }}>
-        <TouchableOpacity
-          activeOpacity={0.75}
-          style={styles.saveButton}
-          onPress={console.log("set major filter")}
-        >
-          <Text style={styles.saveText}>Apply Filters</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
   );
 }
 

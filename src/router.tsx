@@ -138,12 +138,12 @@ const StackNavigator = () => (
     <Stack.Screen name='Forum' component={Forum} />
     <Stack.Screen name='Setting' component={Setting} />
     <Stack.Screen name='Edit' component={Edit} />
-    <Stack.Screen name='EditPhoto' component={EditPhoto} />
+    <Stack.Screen name='EditPhoto' component={EditPhoto} 
+    options={{ headerShown: false, headerTitle: ' ', headerBackTitle: ' ', headerTintColor: '#2de0ff' }} />
     <Stack.Screen name="EditName" component={EditName} />
     <Stack.Screen name="EditBio" component={EditBio} />
     <Stack.Screen name="EditMajor" component={EditMajor} />
     <Stack.Screen name="EditCourse" component={EditCourse} />
-    <Stack.Screen name="EditPhoto" component={EditPhoto} />
     <Stack.Screen name="EditHobby" component={EditHobby}
       options={{
         headerShown: true,
@@ -162,23 +162,6 @@ const StackNavigator = () => (
   </Stack.Navigator>
 );
 
-/**
- *  <Stack.Screen name="EditHobby" component={EditHobby}
-      options={({ navigation }) => ({
-        headerShown: true,
-        headerTitle: 'Hobby',
-        headerBackTitle: ' ',
-        headerTintColor: 'black',
-        headerRight: () => (
-          <TouchableOpacity
-          style={{ marginRight: 10 }}
-          activeOpacity={0.75}
-          onPress={() => saveProfile()}>
-             <Text>Save</Text>
-        </TouchableOpacity>
-        ),
-      })}/>
- */
 
 
 function Router(): JSX.Element {

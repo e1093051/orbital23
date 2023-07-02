@@ -273,35 +273,60 @@ export async function skipReqest(uid) {
 }
 
 
-export function filter(filterGender, filterMajor, filterCourse, filterCountryAndRegion, filterYear, filterHobby) {
+export async function filter(filterGender, filterMajor, filterCourse, filterCountryAndRegion, filterYear, filterHobby) {
   let query = collection(db, "NUS", "users", "profile");
-
+  let querySnapshot = await getDocs(query);
   if (filterGender !== '') {
-    query = query.where('gender', '==', filterGender);
+   querySnapshot = querySnapshot.docs.filter(doc => {
+    const gender = doc.data().gender || "";
+    return gender==filterGender;
+  });
+    console.log("Hola");
   }
   if (filterMajor !== '') {
-    query = query.where('major', '==', filterMajor);
+    querySnapshot = querySnapshot.filter(doc => {
+      const major = doc.data().major || "";
+      const show = doc.data().showMajor || false;
+      return major==filterMajor && show;
+    });
+    console.log("Haha");
   }
   if (filterCourse !== '') {
-    query = query.where('course', '==', filterCourse);
+    querySnapshot = querySnapshot.filter(doc => {
+      const course = doc.data().course || "";
+      const show = doc.data().showCourse || false;
+      return course==filterCourse && show;
+    });
+    console.log("Hehe");
   }
   if (filterCountryAndRegion !== '') {
-    query = query.where('countryAndRegion', '==', filterCountryAndRegion);
+    querySnapshot = querySnapshot.filter(doc => {
+      const countryAndRegion = doc.data().countryAndRegion || "";
+      const show = doc.data().showCountryAndRegion || false;
+      return countryAndRegion==filterCountryAndRegion && show;
+    });
   }
   if (filterYear !== '') {
-    query = query.where('year', '==', filterYear);
+    querySnapshot = querySnapshot.filter(doc => {
+      const year = doc.data().year || "";
+      const show = doc.data().showYear || false;
+      return year==filterYear && show;
+    });
   }
   if (filterHobby !== '') {
-    query = query.where('hobby', '==', filterHobby);
+    querySnapshot = querySnapshot.filter(doc => {
+      const hobby = doc.data().hobby || "";
+      const show = doc.data().showHobby || false;
+      return hobby==filterHobby && show;
+    });
   }
-  return query;
+  return querySnapshot;
 }
 
 export async function filterMatch(filterGender, filterMajor, filterCourse, filterCountryAndRegion, filterYear, filterHobby) {
-  filter(filterGender, filterMajor, filterCourse, filterCountryAndRegion, filterYear, filterHobby)
-  .then(async(query) => {
-    const querySnapshot = await (getDocs(query));
-    const filteredUsers = querySnapshot.docs.filter(doc => {
+filter(filterGender, filterMajor, filterCourse, filterCountryAndRegion, filterYear, filterHobby)
+  .then(async(querySnapshot) => {
+    const filteredUsers = querySnapshot.filter(doc => {
       const avoidList = doc.data().avoid || [];
       return !avoidList.includes(auth.currentUser.uid);
     });
