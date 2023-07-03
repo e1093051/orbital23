@@ -17,10 +17,9 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { SelectList, MultipleSelectList } from 'react-native-dropdown-select-list'
 
-import Chat from './Chat';
-import Forum from './Forum';
-import StudyBuddy, { StudyBuddyPage } from './StudyBuddy';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 import { createStackNavigator } from '@react-navigation/stack';
 import { db, auth } from '../../api/fireConfig';
@@ -31,7 +30,7 @@ import { generateMatchingPool } from '../../api/matching';
 import { Alert } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { filterMatch } from '../../api/matching';
-
+import { Picker } from '@react-native-picker/picker';
 
 
 
@@ -43,7 +42,7 @@ export default function Filter() {
   //filterMatch("1", "", "", "", "", "");
   //console.log("I want to die right now")
 
-  const majorData = [
+  const [majorData, setMajorData] = useState([
     { label: 'Pharmacy', value: 'Pharmacy' },
     { label: 'Nursing', value: 'Nursing' },
     { label: 'Medicine', value: 'Medicine' },
@@ -97,15 +96,15 @@ export default function Filter() {
     { label: 'Physics', value: 'Physics' },
     { label: 'Quantitative Finance', value: 'Quantitative Finance' },
     { label: 'Statistics', value: 'Statistics' },
-  ];
+  ]);
 
-  const genderData = [
+  const [genderData, setGenderData] = useState([
     { label: 'Female', value: 'Female' },
     { label: 'Male', value: 'Male' },
     { label: 'Others', value: 'Others' },
-  ];
+  ]);
 
-  const countryAndRegionData = [
+  const [countryAndRegionData, setCountryAndRegionData] = useState([
     { label: 'Afghanistan', value: 'Afghanistan' },
     { label: 'Albania', value: 'Albania' },
     { label: 'Algeria', value: 'Algeria' },
@@ -301,18 +300,18 @@ export default function Filter() {
     { label: 'Yemen', value: 'Yemen' },
     { label: 'Zambia', value: 'Zambia' },
     { label: 'Zimbabwe', value: 'Zimbabwe' },
-  ];
+  ]);
 
-  const yearData = [
+  const [yearData, setYearData] = useState([
     { label: 'Year 1', value: 1 },
     { label: 'Year 2', value: 2 },
     { label: 'Year 3', value: 3 },
     { label: 'Year 4', value: 4 },
     { label: 'Year 5', value: 5 },
     { label: 'Year 6', value: 6 },
-  ];
+  ]);
 
-  const hobbyData = [
+  const [hobbyData, setHobbyData] = useState([
     { label: 'Painting and Drawing', value: 'Painting and Drawing' },
     { label: 'Calligraphy', value: 'Calligraphy' },
     { label: 'Embroidery', value: 'Embroidery' },
@@ -363,11 +362,11 @@ export default function Filter() {
     { label: 'Gardening', value: 'Gardening' },
     { label: 'Meditation and Yoga', value: 'Meditation and Yoga' },
     { label: 'Volunteer work', value: 'Volunteer work' }
-  ];
+  ]);
 
   const route = useRoute();
   const [filterMajor, setFilterMajor] = useState("");
-  const [filterGender, setFilterGender] = useState("")
+  const [filterGender, setFilterGender] = useState()
   const [filterModule, setFilterModule] = useState("");
   const [filterCountryAndRegion, setFilterCountryAndRegion] = useState("");
   const [filterYear, setFilterYear] = useState("");
@@ -387,126 +386,104 @@ export default function Filter() {
     getData();
   }, [])
 
+  const [openGender, setOpenGender] = useState(false);
+  const [openMajor, setOpenMajor] = useState(false);
+  const [openModule, setOpenModule] = useState(false);
+  const [openCountryAndRegion, setOpenCountryAndRegion] = useState(false);
+  const [openYear, setOpenYear] = useState(false);
+  const [openHobby, setOpenHobby] = useState(false);
 
+  const handleApplyFilter = () => {
+    if (filterGender == "" && filterMajor == "" && filterModule == "" && filterCountryAndRegion == "" && filterYear == "" && filterHobby == "") {
+      console.log("cool");
+      navigation.goBack();
+    }
+    else {
+      console.log("not cool");
+      navigation.navigate("Home");
+    }
+  }
 
   return (
-      <View style={{ flex: 1, paddingTop: 10, backgroundColor: 'white', alignItems: 'center' }}>
-        <View>
-          <Text style={{ fontSize: 16, color: 'gray', alignItems: 'flex-start', marginLeft: -2 }}>Gender</Text>
-          <View style={{ alignItems: 'center' }}>
-            <Dropdown
-              style={styles.dropdown}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              maxHeight={300}
-              labelField="label"
-              data={genderData}
-              onChange={item => setFilterGender(item.value)}
-              placeholder="Gender"
-              valueField="value"
-            />
+    <View style = {{flex: 1}}> 
+    <View style={{ flex: 1, paddingTop: 10, backgroundColor: 'white', paddingHorizontal: 10}}>
+      <TouchableOpacity style = {{alignItems: 'flex-end'}}
+      onPress={() => {setFilterGender("");setFilterMajor("");setFilterModule("");setFilterCountryAndRegion("");setFilterYear("");setFilterHobby("");}}>
+        <Text>Reset</Text>
+      </TouchableOpacity>
+      <Text style={{ fontSize: 16, color: 'gray', alignItems: 'flex-start', paddingBottom: 3 }}>Gender</Text>
+          <DropDownPicker
+          zIndex={6000}
+          zIndexInverse={1000}
+            open={openGender}
+            setOpen={setOpenGender}
+            value={filterGender}
+            items={genderData}
+            setValue={setFilterGender}
+          />
+          <Text style={{ fontSize: 16, color: 'gray', alignItems: 'flex-start', paddingTop: 10, paddingBottom: 3 }}>Major</Text>
+        <DropDownPicker
+          zIndex={5000}
+          zIndexInverse={2000}
+            open={openMajor}
+            setOpen={setOpenMajor}
+            value={filterMajor}
+            items={majorData}
+            setValue={setFilterMajor}
+          />
+          <Text style={{ fontSize: 16, color: 'gray', alignItems: 'flex-start', paddingTop: 10, paddingBottom: 3 }}>Course</Text>
+        <DropDownPicker
+          zIndex={4000}
+          zIndexInverse={3000}
+            open={openModule}
+            setOpen={setOpenModule}
+            value={filterModule}
+            items={moduleData}
+            setValue={setFilterModule}
+          />
+          <Text style={{ fontSize: 16, color: 'gray', alignItems: 'flex-start', paddingTop: 10, paddingBottom: 3 }}>Country and Region</Text>
+        <DropDownPicker
+          zIndex={3000}
+          zIndexInverse={4000}
+            open={openCountryAndRegion}
+            setOpen={setOpenCountryAndRegion}
+            value={filterCountryAndRegion}
+            items={countryAndRegionData}
+            setValue={setFilterCountryAndRegion}
+          />
+          <Text style={{ fontSize: 16, color: 'gray', alignItems: 'flex-start', paddingTop: 10, paddingBottom: 3 }}>Year</Text>
+        <DropDownPicker
+          zIndex={2000}
+          zIndexInverse={5000}
+            open={openYear}
+            setOpen={setOpenYear}
+            value={filterYear}
+            items={yearData}
+            setValue={setFilterYear}
+          />
+      <Text style={{ fontSize: 16, color: 'gray', alignItems: 'flex-start', paddingTop: 10, paddingBottom: 3 }}>Hobby</Text>
+        <DropDownPicker
+          zIndex={1000}
+          zIndexInverse={6000}
+            open={openHobby}
+            setOpen={setOpenHobby}
+            value={filterHobby}
+            items={hobbyData}
+            setValue={setFilterHobby}
+          />
           </View>
-        </View>
-        <View>
-          <Text style={{ fontSize: 16, color: 'gray', alignItems: 'flex-start', marginLeft: -2 }}>Major</Text>
-          <View style={{ alignItems: 'center' }}>
-            <Dropdown
-              search
-              style={styles.dropdown}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              maxHeight={300}
-              labelField="label"
-              data={majorData}
-              onChange={item => setFilterMajor(item.value)}
-              placeholder="Major"
-              valueField="value"
-            />
-          </View>
-        </View>
-        <View>
-          <Text style={{ fontSize: 16, color: 'gray', alignItems: 'flex-start', marginLeft: -2 }}>Course</Text>
-          <View style={{ alignItems: 'center' }}>
-            <Dropdown
-              search
-              style={styles.dropdown}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              maxHeight={300}
-              labelField="label"
-              data={moduleData}
-              onChange={item => setFilterModule(item.value)}
-              placeholder="Module"
-              valueField="value"
-            />
-          </View>
-        </View>
-        <View>
-          <Text style={{ fontSize: 16, color: 'gray', alignItems: 'flex-start', marginLeft: -2 }}>Country and Region</Text>
-          <View style={{ alignItems: 'center' }}>
-            <Dropdown
-              search
-              style={styles.dropdown}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              maxHeight={300}
-              labelField="label"
-              data={countryAndRegionData}
-              onChange={item => setFilterCountryAndRegion(item.value)}
-              placeholder="Country and Region"
-              valueField="value"
-            />
-          </View>
-        </View>
-        <View>
-          <Text style={{ fontSize: 16, color: 'gray', alignItems: 'flex-start', marginLeft: -2 }}>Year</Text>
-          <View style={{ alignItems: 'center' }}>
-            <Dropdown
-              style={styles.dropdown}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              maxHeight={300}
-              labelField="label"
-              data={yearData}
-              onChange={item => setFilterYear(item.value)}
-              placeholder="Year"
-              valueField="value"
-            />
-          </View>
-        </View>
-        <View>
-          <Text style={{ fontSize: 16, color: 'gray', alignItems: 'flex-start', marginLeft: -2 }}>Hobby</Text>
-          <View style={{ alignItems: 'center' }}>
-            <Dropdown
-              search
-              style={styles.dropdown}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              maxHeight={300}
-              labelField="label"
-              data={hobbyData}
-              onChange={item => setFilterHobby(item.value)}
-              placeholder="Hobby"
-              valueField="value"
-            />
-          </View>
-        </View>
-        <View style={{ position: 'absolute', bottom: 15, alignItems: 'center', }}>
-          <TouchableOpacity
-            activeOpacity={0.75}
-            style={styles.saveButton}
-            onPress={console.log("set major filter")}
-          >
-            <Text style={styles.saveText}>Apply Filters</Text>
-          </TouchableOpacity>
-        </View>
+          <View style = {{alignItems: 'center'}}>
+      <View style={{ alignItems: 'center', position: 'absolute', bottom: 15}}>
+        <TouchableOpacity
+          activeOpacity={0.75}
+          style={styles.saveButton}
+          onPress={() => handleApplyFilter()}
+        >
+          <Text style={styles.saveText}>Apply Filters</Text>
+        </TouchableOpacity>
       </View>
+      </View>
+    </View>
   );
 }
 

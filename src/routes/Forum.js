@@ -8,7 +8,12 @@ import Stack from '@mui/material/Stack';
 
 import { launchCameraAsync, MediaTypeOptions } from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
-import * as photoFeatureAPI from "../../api/photoFeature";
+import * as ImagePicker from 'expo-image-picker';
+
+import firebase from 'firebase/app';
+import 'firebase/storage';
+import { photoFeatureAPI } from '../../api/photoFeature';
+
 
 import {
   StyleSheet,
@@ -22,115 +27,55 @@ import {
 } from 'react-native';
 
 export default function Forum() {
-  const navigation = useNavigation();
-  const route = useRoute();
+  const [image, setImage] = useState(null);
+  const [hasChangedPicture, setHasChangedPicture] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
-  const [cameraPermission, setCameraPermission] = useState(null);
-  const [hasPostedToday, setHasPostedToday] = useState(false);
-  const [takenPicture, setTakenPicture] = useState(null);
-
-  useEffect(() => {
-    getPermissions();
-    checkIfUserHasPostedToday();
-  }, []);
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('beforeRemove', (e) => {
-      if (!hasPostedToday && !takenPicture) {
-        // Prevent default behavior of leaving the screen
-        e.preventDefault();
-
-        // Show the same page if no picture has been posted
-        navigation.dispatch(StackActions.replace(route.name));
-      }
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
     });
 
-    return unsubscribe;
-  }, [navigation, hasPostedToday, takenPicture]);
-
-  const getPermissions = async () => {
-    const { status } = await Permissions.askAsync(Permissions.CAMERA, Permissions.CAMERA_ROLL);
-    setCameraPermission(status === 'granted');
-  };
-
-  const checkIfUserHasPostedToday = () => {
-    // Here, you can implement the logic to check if the user has already posted today.
-    // For example, you can store a timestamp or a flag in AsyncStorage or a backend database.
-
-    // Set the hasPostedToday state based on the result of the check
-    setHasPostedToday(/* Logic to determine if user has posted today */);
-  };
-
-  const openCamera = async () => {
-    if (!cameraPermission) {
-      console.log('Camera permission not granted');
-      return;
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+      setHasChangedPicture(true);
     }
+  };
 
-    const result = await launchCameraAsync({ mediaType: MediaTypeOptions.Images });
-    console.log(result);
 
-    if (!result.cancelled) {
-      setTakenPicture(result.uri);
+  const setPhotoFeature = () => {
+    if (hasChangedPicture) {
+      photoFeatureAPI(
+        { image },
+        () => console.log("uploaded!"),
+        (error) =>
+          Alert.alert(
+            'Error',
+            error.message || 'Something went wrong, try again later'
+          )
+      );
+    } else {
+      Alert.alert('Warning', 'Please upload a picture');
     }
-
-    // Once the user posts a photo, update the hasPostedToday state
-    setHasPostedToday(true);
   };
-
-  const retakePicture = () => {
-    setTakenPicture(null);
-    setHasPostedToday(false);
-  };
-
- const postPicture = async () => {
-  try {
-    await photoFeatureAPI(
-      { photo: takenPicture },
-      () => {
-        console.log('Picture uploaded successfully');
-        setHasPostedToday(true);
-      },
-      (error) => {
-        Alert.alert('Error', 'Failed to upload picture. Please try again.'); // Display error message as an alert
-        console.error('Error uploading picture:', error);
-      }
-    );
-  } catch (error) {
-    Alert.alert('Error', 'Failed to upload picture. Please try again.'); // Display error message as an alert
-    console.error('Error uploading picture:', error);
-  }
-};
 
   return (
     <View style={styles.container}>
-      {!hasPostedToday && !takenPicture && (
-        <View style={styles.textContainer}>
-          <Text style={styles.infoText}>
-            You have not posted a photo for today. Add your photo to see your friends' photos.
-          </Text>
-        </View>
-      )}
-
-      {takenPicture && (
-        <View style={styles.imageContainer}>
-          <Image source={{ uri: takenPicture }} style={styles.image} />
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button} onPress={retakePicture}>
-              <Text style={styles.buttonText}>Retake Picture</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={postPicture}>
-              <Text style={styles.buttonText}>Post Picture</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      )}
-
-      {!hasPostedToday && !takenPicture && (
-        <TouchableOpacity style={styles.button} onPress={openCamera}>
-          <Text style={styles.buttonText}>Open Camera</Text>
+      <TouchableOpacity style={styles.selectButton} onPress={pickImage}>
+        <Text style={styles.buttonText}>Select a photo</Text>
+      </TouchableOpacity>
+      <View style={styles.imageContainer}>
+      <Image
+            source={image ? { uri: image } : require('./Standard_Profile.png')}
+            style={styles.image}
+          />
+        <TouchableOpacity style={styles.uploadButton} onPress={setPhotoFeature()}>
+          <Text style={styles.buttonText}>Post</Text>
         </TouchableOpacity>
-      )}
+      </View>
     </View>
   );
 }
@@ -138,41 +83,33 @@ export default function Forum() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  textContainer: {
-    marginBottom: 20,
-  },
-  infoText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  button: {
-    width: 200,
-    height: 50,
-    borderWidth: 0.5,
-    borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  selectButton: {
     backgroundColor: '#2de0ff',
+    padding: 10,
+    borderRadius: 5,
     marginBottom: 10,
   },
   buttonText: {
     color: 'white',
+    fontSize: 16,
     fontWeight: 'bold',
+    textAlign: 'center',
   },
   imageContainer: {
     alignItems: 'center',
-    justifyContent: 'center',
   },
   image: {
-    width: 200,
-    height: 200,
-    marginBottom: 20,
+    width: 300,
+    height: 300,
+    marginBottom: 10,
   },
-  buttonContainer: {
-    flexDirection: 'row',
+  uploadButton: {
+    backgroundColor: '#2de0ff',
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 10,
   },
 });

@@ -202,7 +202,7 @@ export async function generateMatchingPool() {
 
 export async function match() {
   const profileData = await getDoc(doc(db, "NUS/users", "profile", auth.currentUser.uid))
-    .then(docSnap => docSnap.data()).then()
+    .then(docSnap => docSnap.data());
   const recommendList = profileData.recommend;
   let length = recommendList.length;
   while (length < 10) {

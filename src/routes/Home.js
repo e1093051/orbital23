@@ -34,7 +34,6 @@ const TopTab = createMaterialTopTabNavigator();
 
 
 export function HomePage({navigation}) {
-  //match();
 
   const genderData = [
     { label: 'Female', value: 'Female' },
@@ -57,6 +56,17 @@ export function HomePage({navigation}) {
   const [id1, setId1] = useState("");
   const [render, setRender] = useState(false)
 
+  /**
+  const [filterMajor, setFilterMajor] = useState("");
+  const [filterGender, setFilterGender] = useState()
+  const [filterModule, setFilterModule] = useState("");
+  const [filterCountryAndRegion, setFilterCountryAndRegion] = useState("");
+  const [filterYear, setFilterYear] = useState("");
+  const [filterHobby, setFilterHobby] = useState("");
+  const [moduleData, setModuleData] = useState([]);
+  */
+
+  const [filter, setFilter] = useState(false);
 
   const getData0 = async () => {
     onSnapshot(doc(db, "NUS/users", "profile", auth.currentUser.uid), (doc) => {
@@ -95,6 +105,9 @@ export function HomePage({navigation}) {
     getData0();
   }, [])
 
+  //const route = useRoute();
+
+  //setFilterGender(route.params || "");
   if (id1 != null) {
     return (
       <ScrollView style={{ paddingBottom: 0, backgroundColor: 'white' }}>
@@ -373,7 +386,6 @@ const styles = StyleSheet.create({
   },
 
    spacer_1: {
-
     height: 20,
   },
 
@@ -455,7 +467,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
   },
-
 });
 
 
