@@ -1,3 +1,5 @@
+//some parts referenced from Chat GPT and stack overflow
+
 import React, { useState, useEffect, Component } from 'react';
 import { Alert } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -28,10 +30,50 @@ import {
 
 export default function Forum() {
   const [image, setImage] = useState(null);
+
   const [hasChangedPicture, setHasChangedPicture] = useState(false);
+
   const [uploading, setUploading] = useState(false);
 
+  const [lastPostTimestamp, setLastPostTimestamp] = useState(null);
+
+  const [showFriendsPosts, setShowFriendsPosts] = useState(false);
+
   const navigation = useNavigation();
+
+  const fetchLastPostTimestampFromDatabase = async () => {
+    try {
+
+      const getData = () => {
+      onSnapshot(doc(db, "NUS", "users", "profile",`${auth.currentUser.uid}`), (doc) => {
+      setProfileData(doc.data());
+    });
+  };
+      
+    if (user) {
+      const snapshot = await //fetch the timestamp here 
+      const timestamp = snapshot.val();
+      return timestamp;
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+  useEffect(() => {
+
+    const getLastPostTimestamp = async () => {
+      try {
+        // Retrieve the timestamp from your database or storage
+        const timestamp = await fetchLastPostTimestampFromDatabase();
+        setLastPostTimestamp(timestamp);
+      } catch (error) {
+        console.log('Error retrieving last post timestamp:', error);
+      }
+    };
+
+    getLastPostTimestamp();
+  }, []);
 
   const takePhoto = async () => {
     let result = await launchCameraAsync({
@@ -44,38 +86,74 @@ export default function Forum() {
     if (!result.cancelled) {
       setImage(result.uri);
       setHasChangedPicture(true);
+      setShowFriendsPosts(false);
     }
   };
 
   const setPhotoFeature = () => {
     if (hasChangedPicture) {
-      photoFeatureAPI(
-        { image },
-        () => console.log("uploaded!"),
-        (error) =>
-          Alert.alert(
-            'Error',
-            error.message || 'Something went wrong, try again later'
-          )
-      );
+      if (isWithin24Hours()) {
+        photoFeatureAPI(
+          { image },
+          () => {
+            console.log('uploaded!');
+            setLastPostTimestamp(Date.now());
+            setShowFriendsPosts(true);
+          },
+          (error) =>
+            Alert.alert(
+              'Error',
+              error.message || 'Something went wrong, try again later'
+            )
+        );
+      } else {
+        Alert.alert(
+          'Error',
+          'You can only post a photo once every 24 hours.'
+        );
+      }
     } else {
       Alert.alert('Warning', 'Please take a photo');
     }
   };
 
+  const isWithin24Hours = () => {
+    if (!lastPostTimestamp) {
+      return true;
+    }
+
+    const currentTime = Date.now();
+    const elapsedTime = currentTime - lastPostTimestamp;
+    const hoursPassed = elapsedTime / (1000 * 60 * 60);
+
+    return hoursPassed >= 24;
+  };
+
+  const fetchFriendsPosts = () => {
+
+    // Fetch and display friends' posts
+
+    console.log('Fetching friends posts');
+  };
+
+  useEffect(() => {
+    if (showFriendsPosts) {
+      fetchFriendsPosts();
+    }
+  }, [showFriendsPosts]);
+
   return (
     <View style={styles.container}>
       {hasChangedPicture ? (
         <View style={styles.imageContainer}>
-          <Image
-            source={{ uri: image }}
-            style={styles.image}
-          />
+          <Image source={{ uri: image }} style={styles.image} />
           <TouchableOpacity
-            style={[styles.uploadButton, !hasChangedPicture && styles.disabledButton]}
+            style={[
+              styles.uploadButton,
+              !hasChangedPicture && styles.disabledButton,
+            ]}
             onPress={setPhotoFeature}
             disabled={!hasChangedPicture}
-            //onPress={() => navigation.navigate('Forum2')}
           >
             <Text style={styles.buttonText}>Post</Text>
           </TouchableOpacity>
@@ -89,7 +167,15 @@ export default function Forum() {
         </View>
       )}
 
-      <View style={styles.spacer} />
+      {showFriendsPosts ? (
+        <View style={styles.friendsPostsContainer}>
+          {/* Display friends' posts */}
+          <Text style={styles.friendsPostsText}>Friends' Posts</Text>
+          {/* Implement your logic to display friends' posts here */}
+        </View>
+      ) : (
+        <View style={styles.spacer} />
+      )}
 
       <TouchableOpacity style={styles.selectButton} onPress={takePhoto}>
         <Text style={styles.buttonText}>
