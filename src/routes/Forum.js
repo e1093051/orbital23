@@ -31,20 +31,21 @@ export default function Forum() {
   const [hasChangedPicture, setHasChangedPicture] = useState(false);
   const [uploading, setUploading] = useState(false);
 
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
+  const navigation = useNavigation();
+
+  const takePhoto = async () => {
+    let result = await launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
     });
 
-    if (!result.canceled) {
-      setImage(result.assets[0].uri);
+    if (!result.cancelled) {
+      setImage(result.uri);
       setHasChangedPicture(true);
     }
   };
-
 
   const setPhotoFeature = () => {
     if (hasChangedPicture) {
@@ -58,24 +59,43 @@ export default function Forum() {
           )
       );
     } else {
-      Alert.alert('Warning', 'Please upload a picture');
+      Alert.alert('Warning', 'Please take a photo');
     }
   };
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.selectButton} onPress={pickImage}>
-        <Text style={styles.buttonText}>Select a photo</Text>
-      </TouchableOpacity>
-      <View style={styles.imageContainer}>
-      <Image
-            source={image ? { uri: image } : require('./Standard_Profile.png')}
+      {hasChangedPicture ? (
+        <View style={styles.imageContainer}>
+          <Image
+            source={{ uri: image }}
             style={styles.image}
           />
-        <TouchableOpacity style={styles.uploadButton} onPress={setPhotoFeature()}>
-          <Text style={styles.buttonText}>Post</Text>
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity
+            style={[styles.uploadButton, !hasChangedPicture && styles.disabledButton]}
+            onPress={setPhotoFeature}
+            disabled={!hasChangedPicture}
+            //onPress={() => navigation.navigate('Forum2')}
+          >
+            <Text style={styles.buttonText}>Post</Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <View style={styles.emptyContainer}>
+          <Text style={styles.emptyText}>
+            You have not taken a photo for today.
+            Please take a photo to see your friends' photos.
+          </Text>
+        </View>
+      )}
+
+      <View style={styles.spacer} />
+
+      <TouchableOpacity style={styles.selectButton} onPress={takePhoto}>
+        <Text style={styles.buttonText}>
+          {hasChangedPicture ? 'Retake Photo; Open Camera' : 'Open Camera'}
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -100,11 +120,24 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     alignItems: 'center',
+    marginBottom: 10,
   },
   image: {
     width: 300,
     height: 300,
     marginBottom: 10,
+  },
+  emptyContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+    paddingHorizontal: 20,
+  },
+  emptyText: {
+    textAlign: 'center',
+    fontSize: 16,
+    color: 'black',
+    fontWeight: 'bold',
   },
   uploadButton: {
     backgroundColor: '#2de0ff',
@@ -112,4 +145,14 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 10,
   },
+  disabledButton: {
+    opacity: 0.5,
+  },
+
+  spacer: {
+    height: 20,
+  },
+
+
+
 });
