@@ -102,12 +102,13 @@ export const setBio = async ({ bio }, onSuccess, onError) => {
   try {
     await setDoc(doc(db, "NUS", "users", "profile",`${auth.currentUser.uid}`), {
       bio: bio,
-      rejected: [],  //who the user is rejected by
-      accepted: [],  //who the user is accepted
+      rejected: [],  //在推薦頁上對使用者按下略過者
+      accepted: [], //在推薦頁上對使用者按下connect者
       waiting: [],  //who the user is waiting for reply
+      reacted: [], //在推薦頁上對使用者檔案進行過判斷者：skip/connect
       recommend: [],  //who the user is waiting to be recommended
       point: [],
-      invite: [], //the invitation the user received, showin in request page
+      invite: [], //the invitation the user received, shown in request page
       friend: [],
       avoid: [auth.currentUser.uid],  //the union of rejected, accepted, waiting, recommended and friend
     },

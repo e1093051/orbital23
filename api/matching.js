@@ -196,7 +196,7 @@ export async function generateMatchingPool() {
   }
   else {
     console.log("no match")
-    return(false);
+    return (false);
   }
 }
 
@@ -214,23 +214,38 @@ export async function match() {
   }
 }
 
+/** */
 export async function showRecommendation() {
   await match();
   const profileData = await getDoc(doc(db, "NUS/users", "profile", auth.currentUser.uid))
     .then(docSnap => docSnap.data());
   const recommendList = profileData.recommend;
   const pointList = profileData.point;
+  console.log("before");
   if (recommendList.length !== 0) {
-    return recommendList[0];
+    const recommendationId = recommendList[0];
+    const recommendationData =  await getDoc(doc(db, "NUS/users", "profile", recommendationId))
+    .then(docSnap => docSnap.data());
+    const reacted = recommendationData.reacted || [];
+    if (!reacted.includes(auth.currentUser.uid)) {
+      return recommendationId;
+    } else {
+      await skip(recommendationId, recommendList, pointList);
+      console.log("skip");
+      return showRecommendation();
+    }
   }
   if (recommendList.length === 0) {
     return null;
   }
 }
 
+
+
 export async function connect(recommend, recommendList, pointList) {
   await updateDoc(doc(db, "NUS", "users", "profile", recommend), {
     invite: arrayUnion(auth.currentUser.uid),
+    reacted: arrayUnion(auth.currentUser.uid),
   });
   if (pointList.lengh > 1) {
     pointList[1] = 100;
@@ -243,8 +258,23 @@ export async function connect(recommend, recommendList, pointList) {
   })
 }
 
-export async function skip(recommendList, pointList) {
-  if (pointList.lengh > 1) {
+export async function filterSkip(recommend) {
+  await updateAvoid(recommend);
+  await updateDoc(doc(db, "NUS", "users", "profile", recommend), {
+    reacted: arrayUnion(auth.currentUser.uid),
+  });
+}
+
+export async function filterConnect(recommend) {
+  await updateDoc(doc(db, "NUS", "users", "profile", recommend), {
+    invite: arrayUnion(auth.currentUser.uid),
+    reacted: arrayUnion(auth.currentUser.uid),
+  });
+  await updateAvoid(recommend);
+}
+
+export async function skip(recommend, recommendList, pointList) {
+  if (pointList.length > 1) {
     pointList[1] = 100;
   }
   recommendList.shift();
@@ -253,6 +283,9 @@ export async function skip(recommendList, pointList) {
     recommend: recommendList,
     point: pointList
   })
+  await updateDoc(doc(db, "NUS", "users", "profile", recommend), {
+    reacted: arrayUnion(auth.currentUser.uid),
+  });
 }
 
 export async function acceptRequest(uid) {
@@ -262,7 +295,8 @@ export async function acceptRequest(uid) {
   await updateDoc(doc(db, "NUS", "users", "profile", auth.currentUser.uid), {
     friend: arrayUnion(uid),
     invite: arrayRemove(uid),
-    avoid: arrayUnion(uid)
+    avoid: arrayUnion(uid),
+    reacted: arrayUnion(uid)
   });
 }
 
@@ -273,70 +307,74 @@ export async function skipReqest(uid) {
 }
 
 
-export async function filter(filterGender, filterMajor, filterCourse, filterCountryAndRegion, filterYear, filterHobby) {
+export async function filter(filterGender, filterMajor, filterModule, filterCountryAndRegion, filterYear, filterHobby) {
   let query = collection(db, "NUS", "users", "profile");
-  let querySnapshot = await getDocs(query);
-  if (filterGender !== '') {
-   querySnapshot = querySnapshot.docs.filter(doc => {
-    const gender = doc.data().gender || "";
-    return gender==filterGender;
-  });
+  let querySnapshot = (await getDocs(query)).docs;
+  if (filterGender !== "") {
+    querySnapshot = querySnapshot.filter(doc => {
+      const gender = doc.data().gender || "";
+      return gender == filterGender;
+    });
     console.log("Hola");
   }
-  if (filterMajor !== '') {
+  if (filterMajor !== "") {
     querySnapshot = querySnapshot.filter(doc => {
       const major = doc.data().major || "";
       const show = doc.data().showMajor || false;
-      return major==filterMajor && show;
+      return major == filterMajor && show;
     });
     console.log("Haha");
   }
-  if (filterCourse !== '') {
+  if (filterModule !== "") {
     querySnapshot = querySnapshot.filter(doc => {
       const course = doc.data().course || "";
       const show = doc.data().showCourse || false;
-      return course==filterCourse && show;
+      return course == filterModule && show;
     });
     console.log("Hehe");
   }
-  if (filterCountryAndRegion !== '') {
+  if (filterCountryAndRegion !== "") {
     querySnapshot = querySnapshot.filter(doc => {
       const countryAndRegion = doc.data().countryAndRegion || "";
       const show = doc.data().showCountryAndRegion || false;
-      return countryAndRegion==filterCountryAndRegion && show;
+      return countryAndRegion == filterCountryAndRegion && show;
     });
   }
-  if (filterYear !== '') {
+  if (filterYear !== "") {
     querySnapshot = querySnapshot.filter(doc => {
       const year = doc.data().year || "";
       const show = doc.data().showYear || false;
-      return year==filterYear && show;
+      return year == filterYear && show;
     });
   }
   if (filterHobby !== '') {
     querySnapshot = querySnapshot.filter(doc => {
       const hobby = doc.data().hobby || "";
       const show = doc.data().showHobby || false;
-      return hobby==filterHobby && show;
+      return hobby == filterHobby && show;
     });
   }
   return querySnapshot;
 }
 
 export async function filterMatch(filterGender, filterMajor, filterCourse, filterCountryAndRegion, filterYear, filterHobby) {
-filter(filterGender, filterMajor, filterCourse, filterCountryAndRegion, filterYear, filterHobby)
-  .then(async(querySnapshot) => {
-    const filteredUsers = querySnapshot.filter(doc => {
-      const avoidList = doc.data().avoid || [];
-      return !avoidList.includes(auth.currentUser.uid);
-    });
-    if (filteredUsers.length != 0) {
-      const selectedUser = filteredUsers[Math.floor(Math.random() * filteredUsers.length)];
-      const selectedUserId = selectedUser.id;
-      console.log(selectedUserId);
-    }
-    else {
-      console.log("no available users")
-    }
-  })
+  let user = null;
+  await filter(filterGender, filterMajor, filterCourse, filterCountryAndRegion, filterYear, filterHobby)
+    .then(async (querySnapshot) => {
+      const filteredUsers = querySnapshot.filter(doc => {
+        const avoidList = doc.data().avoid || [];
+        return !avoidList.includes(auth.currentUser.uid);
+      });
+      if (filteredUsers.length != 0) {
+        const selectedUser = filteredUsers[Math.floor(Math.random() * filteredUsers.length)];
+        const selectedUserId = selectedUser.id;
+        console.log(selectedUserId);
+        user = selectedUserId;
+      }
+      else {
+        console.log("no available users")
+      }
+    })
+  console.log(user);
+  return user;
 }

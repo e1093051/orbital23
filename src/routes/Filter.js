@@ -1,46 +1,23 @@
-import React, { useState, useEffect, Component, Linking } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
   Dimensions,
-  ScrollView,
-  Image,
-  TextInput,
-  Button
 } from 'react-native';
 
 
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import AntDesign from '@expo/vector-icons/AntDesign';
+
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { SelectList, MultipleSelectList } from 'react-native-dropdown-select-list'
 
 import DropDownPicker from 'react-native-dropdown-picker';
-
-import { createStackNavigator } from '@react-navigation/stack';
-import { db, auth } from '../../api/fireConfig';
-import { addDoc, collection, setDoc, doc, updateDoc, getDoc } from "firebase/firestore";
-
-import Request from './Request';
-import { generateMatchingPool } from '../../api/matching';
-import { Alert } from 'react-native';
-import { Dropdown } from 'react-native-element-dropdown';
-import { filterMatch } from '../../api/matching';
-import { Picker } from '@react-native-picker/picker';
-
-
-
 
 export default function Filter() {
 
   const navigation = useNavigation();
 
-  //filterMatch("1", "", "", "", "", "");
-  //console.log("I want to die right now")
+
 
   const [majorData, setMajorData] = useState([
     { label: 'Pharmacy', value: 'Pharmacy' },
@@ -365,12 +342,35 @@ export default function Filter() {
   ]);
 
   const route = useRoute();
-  const [filterMajor, setFilterMajor] = useState("");
-  const [filterGender, setFilterGender] = useState()
-  const [filterModule, setFilterModule] = useState("");
-  const [filterCountryAndRegion, setFilterCountryAndRegion] = useState("");
-  const [filterYear, setFilterYear] = useState("");
-  const [filterHobby, setFilterHobby] = useState("");
+
+  const {
+    filterGender: initialFilterGender,
+    filterMajor: initialFilterMajor,
+    filterModule: initialFilterModule,
+    filterCountryAndRegion: initialFilterCountryAndRegion,
+    filterYear: initialFilterYear,
+    filterHobby: initialFilterHobby,
+  } = route.params;
+
+  //reference to chatGPT and StackOverflow: https://stackoverflow.com/questions/44223727/react-navigation-goback-and-update-parent-state
+  const goBack = () => {
+    navigation.goBack();
+    route.params.updateVariables({
+      updatedVariable1: filterGender,
+      updatedVariable2: filterMajor,
+      updatedVariable3: filterModule,
+      updatedVariable4: filterCountryAndRegion,
+      updatedVariable5: filterYear,
+      updatedVariable6: filterHobby,
+    });
+  }
+
+  const [filterMajor, setFilterMajor] = useState(initialFilterMajor);
+  const [filterGender, setFilterGender] = useState(initialFilterGender);
+  const [filterModule, setFilterModule] = useState(initialFilterModule);
+  const [filterCountryAndRegion, setFilterCountryAndRegion] = useState(initialFilterCountryAndRegion);
+  const [filterYear, setFilterYear] = useState(initialFilterYear);
+  const [filterHobby, setFilterHobby] = useState(initialFilterHobby);
   const [moduleData, setModuleData] = useState([]);
 
   const getData = () => {
@@ -393,14 +393,14 @@ export default function Filter() {
   const [openYear, setOpenYear] = useState(false);
   const [openHobby, setOpenHobby] = useState(false);
 
+
   const handleApplyFilter = () => {
-    if (filterGender == "" && filterMajor == "" && filterModule == "" && filterCountryAndRegion == "" && filterYear == "" && filterHobby == "") {
+    if (filterGender == initialFilterGender && filterMajor == initialFilterMajor && filterModule == initialFilterModule && filterCountryAndRegion == initialFilterCountryAndRegion && filterYear == initialFilterYear && filterHobby == initialFilterHobby) {
       console.log("cool");
       navigation.goBack();
     }
     else {
-      console.log("not cool");
-      navigation.navigate("Home");
+      goBack();
     }
   }
 

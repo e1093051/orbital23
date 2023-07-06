@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Component, Linking } from 'react';
+import React, { useState, useEffect, useRoute } from 'react';
 import {
   StyleSheet,
   Text,
@@ -25,7 +25,7 @@ import { db, auth } from '../../api/fireConfig';
 import { addDoc, collection, setDoc, doc, updateDoc, getDoc, onSnapshot } from "firebase/firestore";
 
 import Request from './Request';
-import { generateMatchingPool, match, showRecommendation, connect, skip } from '../../api/matching';
+import { generateMatchingPool, match, showRecommendation, connect, skip, filter, filterMatch, filterConnect, filterSkip } from '../../api/matching';
 import * as setProfile from "../../api/setProfile";
 
 const BottomTab = createBottomTabNavigator();
@@ -33,40 +33,40 @@ const TopTab = createMaterialTopTabNavigator();
 
 
 
-export function HomePage({navigation}) {
+export function HomePage({ navigation, route }) {
 
-  const genderData = [
-    { label: 'Female', value: 'Female' },
-    { label: 'Male', value: 'Male' },
-    { label: 'Others', value: 'Others' },
-  ];
+  const [filterMajor, setFilterMajor] = useState("");
+  const [filterGender, setFilterGender] = useState("");
+  const [filterModule, setFilterModule] = useState("");
+  const [filterCountryAndRegion, setFilterCountryAndRegion] = useState("");
+  const [filterYear, setFilterYear] = useState("");
+  const [filterHobby, setFilterHobby] = useState("");
+  const [render, setRender] = useState(false)
 
-  const [gender, setGender] = useState("");
 
-  const handleSetGender = () => {
-    setProfile.setGender(
-      { gender },
-      () => console.log("set gender filter"),
-      (error) => Alert.alert('error', (error.message || 'Something went wrong, try again later'))
-    )
+
+
+  //reference to chatGPT and StackOverflow: https://stackoverflow.com/questions/44223727/react-navigation-goback-and-update-parent-state
+  const updateVariables = (updatedVariables) => {
+    setFilterGender(updatedVariables.updatedVariable1);
+    setFilterMajor(updatedVariables.updatedVariable2);
+    setFilterModule(updatedVariables.updatedVariable3);
+    setFilterCountryAndRegion(updatedVariables.updatedVariable4)
+    setFilterYear(updatedVariables.updatedVariable5);
+    setFilterHobby(updatedVariables.updatedVariable6);
+  };
+
+  console.log(filterHobby)
+
+
+  const onPress = () => {
+    navigation.navigate("Filter", { updateVariables, filterGender, filterMajor, filterModule, filterCountryAndRegion, filterYear, filterHobby });
   }
 
   const [profileData, setProfileData] = useState(null);
   const [profileData1, setProfileData1] = useState(null);
   const [id1, setId1] = useState("");
-  const [render, setRender] = useState(false)
-
-  /**
-  const [filterMajor, setFilterMajor] = useState("");
-  const [filterGender, setFilterGender] = useState()
-  const [filterModule, setFilterModule] = useState("");
-  const [filterCountryAndRegion, setFilterCountryAndRegion] = useState("");
-  const [filterYear, setFilterYear] = useState("");
-  const [filterHobby, setFilterHobby] = useState("");
-  const [moduleData, setModuleData] = useState([]);
-  */
-
-  const [filter, setFilter] = useState(false);
+  console.log("hello");
 
   const getData0 = async () => {
     onSnapshot(doc(db, "NUS/users", "profile", auth.currentUser.uid), (doc) => {
@@ -76,44 +76,66 @@ export function HomePage({navigation}) {
 
 
   const getData = async () => {
-    const recommend = await showRecommendation();
-    setId1(recommend);
-    if (recommend !== null) {
-      onSnapshot(doc(db, "NUS/users", "profile", recommend), (doc) => {
-        setProfileData1(doc.data());
-      })
+    if (filterGender == "" && filterMajor == "" && filterModule == "" && filterCountryAndRegion == "" && filterYear == "" && filterHobby == "") {
+      const recommend = await showRecommendation();
+      setId1(recommend);
+      if (recommend !== null) {
+        onSnapshot(doc(db, "NUS/users", "profile", recommend), (doc) => {
+          setProfileData1(doc.data());
+        })
+      }
+      console.log("Hello");
     }
-
-    console.log("Hello");
+    else {
+      const recommend = await filterMatch(filterGender, filterMajor, filterModule, filterCountryAndRegion, filterYear, filterHobby);
+      setId1(recommend);
+      console.log("recommend");
+      console.log(id1);
+      if (recommend !== null) {
+        onSnapshot(doc(db, "NUS/users", "profile", recommend), (doc) => {
+          setProfileData1(doc.data());
+        })
+        console.log("id");
+        console.log(id1)
+      }
+    }
   }
 
   const handleSkip = async () => {
-    console.log(profileData.recommend.length);
-    await skip(profileData.recommend, profileData.point);
+    if (filterGender == "" && filterMajor == "" && filterModule == "" && filterCountryAndRegion == "" && filterYear == "" && filterHobby == "") {
+      console.log(profileData.recommend.length);
+      await skip(id1, profileData.recommend, profileData.point);
+    }
+    else {
+      filterSkip(id1);
+    }
     setRender(!render);
   }
 
   const handleConnect = async () => {
+    if (filterGender == "" && filterMajor == "" && filterModule == "" && filterCountryAndRegion == "" && filterYear == "" && filterHobby == "") {
     await connect(id1, profileData.recommend, profileData.point);
+    }
+    else {
+      await filterConnect(id1);
+    }
     setRender(!render);
   }
 
   useEffect(() => {
     getData();
-  }, [render])
+  }, [render, filterGender, filterMajor, filterModule, filterCountryAndRegion, filterYear, filterHobby])
   useEffect(() => {
     getData0();
   }, [])
 
-  //const route = useRoute();
 
-  //setFilterGender(route.params || "");
   if (id1 != null) {
     return (
       <ScrollView style={{ paddingBottom: 0, backgroundColor: 'white' }}>
-          <View style = {{alignItems: 'flex-end', paddingRight: 15, paddingVertical: 10}}>
-            <MaterialCommunityIcons name="tune" size={20} onPress={() => navigation.navigate("Filter")}/>
-          </View>
+        <View style={{ alignItems: 'flex-end', paddingRight: 15, paddingVertical: 10 }}>
+          <MaterialCommunityIcons name="tune" size={20} onPress={() => onPress()} />
+        </View>
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-start', backgroundColor: 'white', paddingTop: 0, paddingHorizontal: 30, paddingBottom: 10 }}>
           <View style={{ borderColor: '#74D8E3', borderWidth: 1.3, width: Dimensions.get('window').width - 60, alignItems: 'center', borderTopLeftRadius: 20, borderTopRightRadius: 20 }}>
             {profileData1 && (
@@ -180,6 +202,9 @@ export function HomePage({navigation}) {
   else {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 50, backgroundColor: 'white' }}>
+        <View style={{ alignItems: 'flex-end', paddingRight: 15, paddingVertical: 10 }}>
+          <MaterialCommunityIcons name="tune" size={20} onPress={() => onPress()} />
+        </View>
         <View style={{ backgroundColor: 'white', alignItems: 'center', justifyContent: 'center' }}>
           <Text style={{ color: '#9fd8f3', fontWeight: '600', paddingHorizontal: 5, fontSize: 18, textAlign: 'center', fontStyle: 'italic' }}>Oops! We've run out of recommendations🙁 </Text>
           <Text style={{ color: '#9fd8f3', fontWeight: '600', paddingHorizontal: 5, fontSize: 18, textAlign: 'center', fontStyle: 'italic' }}>Come back later!</Text>
@@ -197,7 +222,7 @@ const TopBar = () => (
 );
 
 
-export default function Home() {
+export default function Home(route) {
 
   const ProfilePage = () => {
 
@@ -245,12 +270,12 @@ export default function Home() {
         <View style={styles.spacer} />
 
         <TouchableOpacity
-        
-        style={styles.button}
-        activeOpacity={0.75}
-        onPress={() => navigation.navigate("Edit")}
+
+          style={styles.button}
+          activeOpacity={0.75}
+          onPress={() => navigation.navigate("Edit")}
         >
-        <Text style={styles.buttonText}>Edit Profile</Text>
+          <Text style={styles.buttonText}>Edit Profile</Text>
         </TouchableOpacity>
 
         <View style={styles.spacer_1} />
@@ -290,6 +315,7 @@ export default function Home() {
 
 
   const navigation = useNavigation();
+
   return (
     <BottomTab.Navigator
       initialRouteName="navigationHome"
@@ -385,7 +411,7 @@ const styles = StyleSheet.create({
     height: 20,
   },
 
-   spacer_1: {
+  spacer_1: {
     height: 20,
   },
 
