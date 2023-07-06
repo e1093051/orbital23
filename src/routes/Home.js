@@ -448,13 +448,13 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width - 32,
     fontSize: 16,
   },
-  buttomContainer: {
+  buttonContainer: {
     justifyContent: 'center',
     alignItems: 'center',
   },
   buttonContainer: {
     height: 40,
-    width: Dimensions.get('window').width - 20,
+    width: Dimensions.get('window').width - 50,
     position: 'absolute',
     bottom: 15,
     borderRadius: 2,

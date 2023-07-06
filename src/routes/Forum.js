@@ -16,6 +16,10 @@ import firebase from 'firebase/app';
 import 'firebase/storage';
 import { photoFeatureAPI } from '../../api/photoFeature';
 
+import { db, auth } from '../../api/fireConfig';
+import { addDoc, collection, setDoc, doc, updateDoc, getDoc, onSnapshot, Timestamp } from "firebase/firestore";
+
+
 
 import {
   StyleSheet,
@@ -36,6 +40,7 @@ export default function Forum() {
   const [uploading, setUploading] = useState(false);
 
   const [lastPostTimestamp, setLastPostTimestamp] = useState(null);
+  const [lastPostDate, setLastPostDate] = useState(null);
   const [currentPostTimestamp, setCurrentPostTimestamp] = useState(null);
 
   const [showFriendsPosts, setShowFriendsPosts] = useState(false);
@@ -46,22 +51,24 @@ export default function Forum() {
 
   const getData = async () => {
     onSnapshot(doc(db, "NUS/users", "profile", auth.currentUser.uid), (doc) => {
-      setProfileData(doc.data());
-    })
-  }
-
-
-  const getLastPostTimestamp = async () => {
-    try {
-      setLastPostTimestamp(profileData.lastPostTimestamp);
-    } catch (error) {
-      console.log('Error retrieving last post timestamp:', error);
-    }
+    setProfileData(doc.data());
+    });
   };
 
-  useEffect(() => {
-    getData()
-  }, []);
+  const getLastPostTimestamp = async () => {
+  try {
+    if (profileData && profileData.lastPostTimestamp) {
+      setLastPostTimestamp(profileData.lastPostTimestamp);
+      setLastPostDate(new Date(profileData.lastPostTimestamp));
+    }
+  } catch (error) {
+    console.log('Error retrieving last post timestamp:', error);
+  }
+};
+
+useEffect(() => {
+  getLastPostTimestamp();
+}, [profileData]);
 
   const takePhoto = async () => {
     let result = await launchCameraAsync({
@@ -71,8 +78,8 @@ export default function Forum() {
       quality: 1,
     });
 
-    if (!result.cancelled) {
-      setImage(result.uri);
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
       setHasChangedPicture(true);
       setShowFriendsPosts(false);
     }
@@ -86,6 +93,7 @@ export default function Forum() {
           async() => {
             console.log('uploaded!');
             setCurrentPostTimestamp(Date.now());
+            const timestamp = Timestamp.fromMillis(currentPostTimestamp);
             await setDoc(doc(db, "NUS", "users", "profile",`${auth.currentUser.uid}`), {
               lastPostTimestamp: currentPostTimestamp
             },
@@ -110,17 +118,19 @@ export default function Forum() {
   };
 
   const isWithin24Hours = () => {
-    setLastPostTimestamp(profileData.lastPostTimestamp);
+
+    if (!profileData || !profileData.lastPostTimestamp) {
+    return true;
+  }
+
+  setLastPostTimestamp(profileData.lastPostTimestamp);
+
+  const currentTime = Date.now();
+  const elapsedTime = currentTime - lastPostTimestamp;
+  const hoursPassed = elapsedTime / (1000 * 60 * 60);
+
+  return hoursPassed >= 24;
     
-    if (!lastPostTimestamp) {
-      return true;
-    }
-
-    const currentTime = Date.now();
-    const elapsedTime = currentTime - lastPostTimestamp;
-    const hoursPassed = elapsedTime / (1000 * 60 * 60);
-
-    return hoursPassed >= 24;
   };
 
   const fetchFriendsPosts = () => {
