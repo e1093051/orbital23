@@ -327,9 +327,9 @@ export async function filter(filterGender, filterMajor, filterModule, filterCoun
   }
   if (filterModule !== "") {
     querySnapshot = querySnapshot.filter(doc => {
-      const course = doc.data().course || "";
+      const course = doc.data().course || [];
       const show = doc.data().showCourse || false;
-      return course == filterModule && show;
+      return course.includes(filterModule) && show;
     });
     console.log("Hehe");
   }
@@ -349,9 +349,9 @@ export async function filter(filterGender, filterMajor, filterModule, filterCoun
   }
   if (filterHobby !== '') {
     querySnapshot = querySnapshot.filter(doc => {
-      const hobby = doc.data().hobby || "";
+      const hobby = doc.data().hobby || [];
       const show = doc.data().showHobby || false;
-      return hobby == filterHobby && show;
+      return hobby.includes(filterHobby) && show;
     });
   }
   return querySnapshot;
@@ -362,8 +362,8 @@ export async function filterMatch(filterGender, filterMajor, filterCourse, filte
   await filter(filterGender, filterMajor, filterCourse, filterCountryAndRegion, filterYear, filterHobby)
     .then(async (querySnapshot) => {
       const filteredUsers = querySnapshot.filter(doc => {
-        const avoidList = doc.data().avoid || [];
-        return !avoidList.includes(auth.currentUser.uid);
+        const reacted = doc.data().reacted || [];
+        return !reacted.includes(auth.currentUser.uid);
       });
       if (filteredUsers.length != 0) {
         const selectedUser = filteredUsers[Math.floor(Math.random() * filteredUsers.length)];

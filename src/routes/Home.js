@@ -107,7 +107,7 @@ export function HomePage({ navigation, route }) {
       await skip(id1, profileData.recommend, profileData.point);
     }
     else {
-      filterSkip(id1);
+      await filterSkip(id1);
     }
     setRender(!render);
   }

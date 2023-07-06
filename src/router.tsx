@@ -25,7 +25,7 @@ import Request from './routes/Request';
 import Setting from './routes/Setting';
 import Chat from './routes/Chat';
 import Forum from './routes/Forum';
-import Forum2 from './routes/Forum2';
+//import Forum2 from './routes/Forum2';
 import Edit from './routes/Edit';
 import EditName from './routes/EditName';
 import EditBio from './routes/EditBio';
@@ -137,7 +137,6 @@ const StackNavigator = () => (
     <Stack.Screen name='Request' component={Request} />
     <Stack.Screen name='Chat' component={Chat} />
     <Stack.Screen name='Forum' component={Forum} />
-    <Stack.Screen name='Forum2' component={Forum2} />
     <Stack.Screen name='Setting' component={Setting} />
     <Stack.Screen name='Edit' component={Edit} />
     <Stack.Screen name='EditPhoto' component={EditPhoto} 

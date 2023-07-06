@@ -105,7 +105,7 @@ export const setBio = async ({ bio }, onSuccess, onError) => {
       rejected: [],  //在推薦頁上對使用者按下略過者
       accepted: [], //在推薦頁上對使用者按下connect者
       waiting: [],  //who the user is waiting for reply
-      reacted: [], //在推薦頁上對使用者檔案進行過判斷者：skip/connect
+      reacted: [auth.currentUser.uid], //在推薦頁上對使用者檔案進行過判斷者：skip/connect
       recommend: [],  //who the user is waiting to be recommended
       point: [],
       invite: [], //the invitation the user received, shown in request page
