@@ -558,7 +558,7 @@ const styles = StyleSheet.create({
   button: {
     height: 30,
     width: Dimensions.get("window").width - 60,
-    backgroundColor: '#e5e5e5',
+    backgroundColor: '#2de0ff',
     justifyContent: "center",
     alignItems: "center",
     marginTop: -10,
@@ -567,6 +567,10 @@ const styles = StyleSheet.create({
     borderColor: '#c7c7c7'
   },
   buttonText: {
+
+    color: 'white',
+    fontWeight: 'bold',
+
     fontSize: 14,
   },
 

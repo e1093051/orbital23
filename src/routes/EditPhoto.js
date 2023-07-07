@@ -13,7 +13,6 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Authentication from "../../api/auth";
 import { addDoc, collection, setDoc, doc, updateDoc, getDoc } from "firebase/firestore";
 
-
 import {
   StyleSheet,
   Text,
@@ -86,25 +85,26 @@ export default () => {
         <Text style={styles.usual}>Share a picture that best represents you! </Text>
       </View>
       <View style={styles.imageContainer}>
-        <TouchableOpacity onPress={pickImage} style={[styles.circle, { marginTop: -300 }]} activityOpacity={0.8}>
-          <Image
-            source={image ? { uri: image } : { uri: profileData.photoURL }}
-
-            style={styles.image}
-          />
+        <TouchableOpacity onPress={pickImage} style={[styles.circle, { marginTop: -300 }]} activeOpacity={0.8}>
+          {profileData && profileData.photoURL ? (
+            <Image
+              style={{
+                width: 150,
+                height: 150,
+                borderRadius: 75,
+                marginBottom: 10,
+              }}
+              source={{ uri: profileData.photoURL }}
+            />
+          ) : (
+            <View style={styles.placeholder} />
+          )}
         </TouchableOpacity>
         <TouchableOpacity onPress={pickImage} style={styles.changeImageContainer}>
-          <Text style={styles.changeImageText}>
-
-            {hasChangedPicture ? "Change profile picture" : "Add profile picture"}
-
-          </Text>
+          <Text style={styles.changeImageText}>Change Profile Picture</Text>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity
-        activeOpacity={0.75}
-        style={styles.buttonContainer}
-        onPress={() => setProfilePicture()}>
+      <TouchableOpacity activeOpacity={0.75} style={styles.buttonContainer} onPress={() => setProfilePicture()}>
         <Text style={styles.registerText}>Next</Text>
       </TouchableOpacity>
     </View>
@@ -118,11 +118,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   container: {
-    paddingTop: 10,
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    backgroundColor: '#FFFFFF',
-  },
+  paddingTop: 70, 
+  justifyContent: 'flex-start',
+  alignItems: 'center',
+  backgroundColor: '#FFFFFF',
+},
+
   mainText: {
     color: 'black',
     fontWeight: 'bold',
