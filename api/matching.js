@@ -13,6 +13,11 @@ import React, { Component, useState, useRef } from 'react';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, sendEmailVerification, signOut, sendPasswordResetEmail } from 'firebase/auth';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
 import { addDoc, collection, setDoc, doc, updateDoc, getDoc, query, where, getDocs, arrayUnion, onSnapshot, arrayRemove } from "firebase/firestore";
+import { LogBox } from 'react-native';
+
+LogBox.ignoreLogs([
+  'Non-serializable values were found in the navigation state',
+]);
 
 const getData = (uid) => {
   getDoc(doc(db, "NUS/users", uid, "profile"))
@@ -224,8 +229,8 @@ export async function showRecommendation() {
   console.log("before");
   if (recommendList.length !== 0) {
     const recommendationId = recommendList[0];
-    const recommendationData =  await getDoc(doc(db, "NUS/users", "profile", recommendationId))
-    .then(docSnap => docSnap.data());
+    const recommendationData = await getDoc(doc(db, "NUS/users", "profile", recommendationId))
+      .then(docSnap => docSnap.data());
     const reacted = recommendationData.reacted || [];
     if (!reacted.includes(auth.currentUser.uid)) {
       return recommendationId;
@@ -242,11 +247,17 @@ export async function showRecommendation() {
 
 
 
-export async function connect(recommend, recommendList, pointList) {
-  await updateDoc(doc(db, "NUS", "users", "profile", recommend), {
-    invite: arrayUnion(auth.currentUser.uid),
-    reacted: arrayUnion(auth.currentUser.uid),
-  });
+export async function connect(recommend, recommendList, pointList, profileData) {
+  if (profileData.invite.includes(recommend)) {
+    await acceptRequest(recommend);
+    Alert.alert('Connected', ('You are friends now!'));
+  }
+  else {
+    await updateDoc(doc(db, "NUS", "users", "profile", recommend), {
+      invite: arrayUnion(auth.currentUser.uid),
+      reacted: arrayUnion(auth.currentUser.uid),
+    });
+  }
   if (pointList.lengh > 1) {
     pointList[1] = 100;
   }
@@ -265,12 +276,18 @@ export async function filterSkip(recommend) {
   });
 }
 
-export async function filterConnect(recommend) {
-  await updateDoc(doc(db, "NUS", "users", "profile", recommend), {
-    invite: arrayUnion(auth.currentUser.uid),
-    reacted: arrayUnion(auth.currentUser.uid),
-  });
-  await updateAvoid(recommend);
+export async function filterConnect(recommend, profileData) {
+  if (profileData.invite.includes(recommend)) {
+    await acceptRequest(recommend);
+    //Alert.alert('Connected', ('You are friends now!'));
+  }
+  else {
+    await updateDoc(doc(db, "NUS", "users", "profile", recommend), {
+      invite: arrayUnion(auth.currentUser.uid),
+      reacted: arrayUnion(auth.currentUser.uid),
+    });
+    await updateAvoid(recommend);
+  }
 }
 
 export async function skip(recommend, recommendList, pointList) {

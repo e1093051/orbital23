@@ -18,7 +18,7 @@ import Form5 from './routes/Form5';
 import Form6 from './routes/Form6';
 import Form7 from './routes/Form7';
 import Photo from './services/Photo';
-
+import FriendProfile from './routes/FriendProfile';
 import Home from './routes/Home';
 import StudyBuddy from './routes/StudyBuddy';
 import Request from './routes/Request';
@@ -40,6 +40,7 @@ import EditShowHobby from './routes/EditShowHobby';
 import EditShowCountryAndRegion from './routes/EditShowCountryAndRegion';
 import EditShowYear from './routes/EditShowYear';
 import Filter from './routes/Filter';
+import Friend from './routes/Friend';
 
 import {
   StyleSheet,
@@ -135,6 +136,7 @@ const StackNavigator = () => (
     <Stack.Screen name='StudyBuddy' component={StudyBuddy}
       options={{ headerShown: true, headerTitle: ' ', headerBackTitle: ' ', headerTintColor: '#2de0ff' }} />
     <Stack.Screen name='Request' component={Request} />
+    <Stack.Screen name='Friends' component={Friend} />
     <Stack.Screen name='Chat' component={Chat} />
     <Stack.Screen name='Forum' component={Forum} />
     <Stack.Screen name='Setting' component={Setting} />
@@ -158,6 +160,7 @@ const StackNavigator = () => (
     <Stack.Screen name="EditShowCountryAndRegion" component={EditShowCountryAndRegion} />
     <Stack.Screen name="EditShowYear" component={EditShowYear} />
     <Stack.Screen name="EditShowHobby" component={EditShowHobby} />
+    <Stack.Screen name="FriendProfile" component={FriendProfile} />
     <Stack.Screen name="Filter" component={Filter} 
     options={{headerShown: true}}/>
   </Stack.Navigator>

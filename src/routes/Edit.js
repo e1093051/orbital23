@@ -70,22 +70,7 @@ export default () => {
 
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-start', backgroundColor: 'white', paddingTop: 20 }}>
-
-    <TouchableOpacity onPress={() => navigation.navigate('EditPhoto')}>
-        {profileData && (
-          <Image
-            style={{
-              width: 150,
-              height: 150,
-              borderRadius: 75,
-              marginBottom: 10,
-            }}
-            source={{ uri: profileData.photoURL }}
-          />
-        )}
-      </TouchableOpacity>
-
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-start', backgroundColor: 'white', paddingTop: 5 }}>
       <TouchableOpacity onPress={() => navigation.navigate('EditName', {name})}>
         <View style={{ width: Dimensions.get('window').width - 60, borderBottomWidth: 1, flexDirection: "row", borderBottomColor: '#DEDEDE' }}>
           <Text style={{ width: 80, marginBottom: 5, marginTop: 5 }}>Name</Text>
