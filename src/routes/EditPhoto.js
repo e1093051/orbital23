@@ -1,68 +1,62 @@
-import React, { useState, useEffect, Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Alert } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { StatusBar } from 'expo-status-bar';
-import { ActivityIndicator } from 'react-native';
-import { Dropdown } from 'react-native-element-dropdown';
-import { MultiSelect } from 'react-native-element-dropdown';
-import AntDesign from '@expo/vector-icons/AntDesign';
-
-
+import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 
 import * as Authentication from "../../api/auth";
-import { addDoc, collection, setDoc, doc, updateDoc, getDoc } from "firebase/firestore";
-
+import { updateDoc, doc, onSnapshot } from "firebase/firestore";
+import { db, auth } from '../../api/fireConfig';
 
 import {
   StyleSheet,
   Text,
   View,
   Image,
-  Button,
-  TextInput,
   TouchableOpacity,
   Dimensions
 } from 'react-native';
-import { updatePhoto } from '../../api/setProfile';
-import { db, auth } from '../../api/fireConfig';
-
 
 export default () => {
-  
   const navigation = useNavigation();
-
   const [hasChangedPicture, setHasChangedPicture] = useState(false);
-
   const [image, setImage] = useState(null);
-
   const [profileData, setProfileData] = useState(null);
 
   useEffect(() => {
-  if (profileData) {
-    setPhoto(profileData.photo);
-  }
-}, [profileData]);
+    if (profileData) {
+      setImage(profileData.photo);
+    }
+  }, [profileData]);
 
+  useEffect(() => {
+    getData0();
+  }, [])
 
-  const setProfilePicture = () => {
+  const setProfilePicture = async () => {
     if (hasChangedPicture) {
-      Authentication.setProfilePicture(
-        { image },
-        async() => {
-          await updateDoc(doc(db, "NUS", "users", "profile",`${auth.currentUser.uid}`), {
-            photoURL: image,
-          });
-          navigation.navigate('Edit')},
-        (error) => Alert.alert('error', (error.message || 'Something went wrong, try again later'))
-      )
+      try {
+        await Authentication.setProfilePicture({ image });
+        await updateDoc(doc(db, "NUS/users/profile", auth.currentUser.uid), {
+          photoURL: image,
+        });
+        navigation.navigate('Edit');
+      } catch (error) {
+        Alert.alert('Error', error.message || 'Something went wrong, try again later');
+      }
+    } else {
+      try {
+        await Authentication.setDefaultProfilePicture();
+        navigation.navigate('Edit');
+      } catch (error) {
+        Alert.alert('Error', error.message || 'Something went wrong, try again later');
+      }
     }
-    else {
-      Authentication.setDefaultProfilePicture(
-        () => navigation.navigate('Edit'),
-        (error) => Alert.alert('error', (error.message || 'Something went wrong, try again later'))
-      )
-    }
+  };
+
+  const getData0 = async () => {
+    onSnapshot(doc(db, "NUS/users", "profile", auth.currentUser.uid), (doc) => {
+      setProfileData(doc.data());
+    })
   }
 
   const pickImage = async () => {
@@ -87,29 +81,27 @@ export default () => {
       </View>
       <View style={styles.imageContainer}>
         <TouchableOpacity onPress={pickImage} style={[styles.circle, { marginTop: -300 }]} activityOpacity={0.8}>
-          <Image
-            source={image ? { uri: image } : { uri: profileData.photoURL }}
-
+          {profileData && <Image
+            source={hasChangedPicture ? { uri: image } : { uri: profileData.photoURL }}
             style={styles.image}
-          />
+          />}
         </TouchableOpacity>
         <TouchableOpacity onPress={pickImage} style={styles.changeImageContainer}>
           <Text style={styles.changeImageText}>
-
             {hasChangedPicture ? "Change profile picture" : "Add profile picture"}
-
           </Text>
         </TouchableOpacity>
       </View>
       <TouchableOpacity
         activeOpacity={0.75}
         style={styles.buttonContainer}
-        onPress={() => setProfilePicture()}>
+        onPress={setProfilePicture}
+      >
         <Text style={styles.registerText}>Next</Text>
       </TouchableOpacity>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   bigContainer: {
