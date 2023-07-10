@@ -13,6 +13,7 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Authentication from "../../api/auth";
 import { addDoc, collection, setDoc, doc, updateDoc, getDoc } from "firebase/firestore";
 
+
 import {
   StyleSheet,
   Text,
@@ -28,21 +29,12 @@ import { db, auth } from '../../api/fireConfig';
 
 
 export default () => {
-  
+
   const navigation = useNavigation();
 
   const [hasChangedPicture, setHasChangedPicture] = useState(false);
 
   const [image, setImage] = useState(null);
-
-  const [profileData, setProfileData] = useState(null);
-
-  useEffect(() => {
-  if (profileData) {
-    setPhoto(profileData.photo);
-  }
-}, [profileData]);
-
 
   const setProfilePicture = () => {
     if (hasChangedPicture) {
@@ -85,26 +77,24 @@ export default () => {
         <Text style={styles.usual}>Share a picture that best represents you! </Text>
       </View>
       <View style={styles.imageContainer}>
-        <TouchableOpacity onPress={pickImage} style={[styles.circle, { marginTop: -300 }]} activeOpacity={0.8}>
-          {profileData && profileData.photoURL ? (
-            <Image
-              style={{
-                width: 150,
-                height: 150,
-                borderRadius: 75,
-                marginBottom: 10,
-              }}
-              source={{ uri: profileData.photoURL }}
-            />
-          ) : (
-            <View style={styles.placeholder} />
-          )}
+        <TouchableOpacity onPress={pickImage} style={[styles.circle, { marginTop: -300 }]} activityOpacity={0.8}>
+          <Image
+            source={image ? { uri: image } : require('./Standard_Profile.png')}
+            style={styles.image}
+          />
         </TouchableOpacity>
         <TouchableOpacity onPress={pickImage} style={styles.changeImageContainer}>
-          <Text style={styles.changeImageText}>Change Profile Picture</Text>
+          <Text style={styles.changeImageText}>
+
+            {hasChangedPicture ? "Change profile picture" : "Add profile picture"}
+
+          </Text>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity activeOpacity={0.75} style={styles.buttonContainer} onPress={() => setProfilePicture()}>
+      <TouchableOpacity
+        activeOpacity={0.75}
+        style={styles.buttonContainer}
+        onPress={() => setProfilePicture()}>
         <Text style={styles.registerText}>Next</Text>
       </TouchableOpacity>
     </View>
@@ -118,12 +108,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   container: {
-  paddingTop: 70, 
-  justifyContent: 'flex-start',
-  alignItems: 'center',
-  backgroundColor: '#FFFFFF',
-},
-
+    paddingTop: 70,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    backgroundColor: '#FFFFFF',
+  },
   mainText: {
     color: 'black',
     fontWeight: 'bold',
@@ -160,7 +149,7 @@ const styles = StyleSheet.create({
     height: 40,
     width: Dimensions.get('window').width - 20,
     position: 'absolute',
-    bottom: 15,
+    bottom: 25,
     borderRadius: 2,
     justifyContent: 'center',
     alignItems: 'center',
