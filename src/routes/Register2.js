@@ -20,37 +20,46 @@ export default () => {
   const [email, setEmail] = useState("");
 
   const handleNext = () => {
-    navigation.navigate('Register3', { name, email })
-  }
+    const isValidEmail = email.endsWith('@u.nus.edu');
+    if (isValidEmail) {
+      navigation.navigate('Register3', { name, email });
+    } else {
+      alert("Please enter a valid NUS email (ends with @u.nus.edu).");
+    }
+  };
  
   return (
-    <View style = {styles.bigContainer}>
-      <View style = {styles.container}>
-      <Text style = {styles.mainText}>What's your NUS email?</Text>
-      <Text style = {styles.usual}>Enter your NUS webmail (ends with @u.nus.edu) to receive the verification code. 
-        We will not show this to other users.</Text>
-      <TextInput
-          style={{ height: 40, width: Dimensions.get('window').width - 20, borderWidth: 1, margin: 10}}
-          //placeholder = " NUS email (@u.nus.edu)"
+    <View style={styles.bigContainer}>
+      <View style={styles.container}>
+        <Text style={styles.mainText}>What's your NUS email?</Text>
+        <Text style={styles.usual}>
+          Enter your NUS webmail (ends with @u.nus.edu) to receive the verification code.
+          We will not show this to other users.
+        </Text>
+        <TextInput
+          style={{ height: 40, width: Dimensions.get('window').width - 20, borderWidth: 1, margin: 10 }}
           value={email}
           onChangeText={setEmail}
-      />
-      <TouchableOpacity
+        />
+        <TouchableOpacity
           activeOpacity={0.75}
           style={styles.signUpButton}
-          onPress={() => handleNext()}>
-          <Text style={styles.signUpText}>Next</Text>        
-      </TouchableOpacity>
+          onPress={handleNext}
+        >
+          <Text style={styles.signUpText}>Next</Text>
+        </TouchableOpacity>
       </View>
       <TouchableOpacity
-          activeOpacity={0.75}
-          style={styles.buttonContainer}
-          onPress={() => navigation.navigate('Login')} >
-          <Text style={styles.registerText}>Log in</Text>
-        </TouchableOpacity>
+        activeOpacity={0.75}
+        style={styles.buttonContainer}
+        onPress={() => navigation.navigate('Login')}
+      >
+        <Text style={styles.registerText}>Log in</Text>
+      </TouchableOpacity>
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   bigContainer: {
@@ -96,7 +105,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  buttomContainer:{
+  buttonContainer:{
     justifyContent: 'center',
     alignItems: 'center',
   },
