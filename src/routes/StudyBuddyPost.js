@@ -1,20 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, Button, Image, Dimensions, TouchableOpacity} from 'react-native';
-import { query, collection, orderBy, limit, getDocs, onSnapshot, doc, getDoc, subcollection } from 'firebase/firestore';
+import { View, Text, FlatList } from 'react-native';
+import { collectionGroup, query, orderBy, where, getDocs } from 'firebase/firestore';
 import { db } from '../../api/fireConfig';
-
-
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import { useNavigation } from '@react-navigation/native';
 import { useRoute } from '@react-navigation/native';
 
-
-export default () => {
+export default function PostComments() {
+  const [comments, setComments] = useState([]);
   const route = useRoute();
   const { id } = route.params;
-  const [comments, setComments] = useState([]);
 
   useEffect(() => {
     fetchComments();
@@ -22,7 +15,8 @@ export default () => {
 
   const fetchComments = async () => {
     const commentsQuery = query(
-      collection(db, 'NUS', 'studybuddy', 'post', id, 'comment'),
+      collectionGroup(db, 'comment'),
+      where('postId', '==', id),
       orderBy('timestamp')
     );
 
@@ -33,7 +27,7 @@ export default () => {
   };
 
   const renderCommentItem = ({ item }) => (
-    <View key = {item.id}>
+    <View key={item.id}>
       <Text>{item.content}</Text>
     </View>
   );
