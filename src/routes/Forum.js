@@ -67,27 +67,17 @@ export default function Forum() {
   }, [profileData]);
 
   const takePhoto = async () => {
-
-    const{status} = await Permissions.askAsync(Permissions.CAMERA);
-    if (status === 'granted'){
-
-      let result = await launchCameraAsync({
+    let result = await launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
     });
 
-    }
-
     if (!result.canceled) {
       setImage(result.assets[0].uri);
       setHasChangedPicture(true);
       setShowFriendsPosts(false);
-    }
-
-    else{
-      Alert.alert('Error', 'Camera permission denied. Please enable camera access in your device settings.');
     }
   };
 
@@ -203,11 +193,12 @@ const handleLike = (item) => {
         <TouchableOpacity style={styles.postButton} onPress={() => handleComment(item)}>
           <AntDesign name="message1" size={20} color="white" />
         </TouchableOpacity>
-        <Text style={[styles.postTime, styles.buttonSpacing] }>{postTime}</Text>
+        <Text style={[styles.postTime, styles.buttonSpacing]}>{postTime}</Text>
       </View>
     </View>
   );
 };
+
 
   return (
 <View style={styles.container}>
