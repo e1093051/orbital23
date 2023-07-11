@@ -33,7 +33,7 @@ export default () => {
       <View style={styles.container}>
         <Text style={styles.mainText}>What's your NUS email?</Text>
         <Text style={styles.usual}>
-          Enter your NUS webmail (ends with @u.nus.edu) to receive the verification code.
+          Enter your NUS email address (ends with @u.nus.edu) to receive the verification code.
           We will not show this to other users.
         </Text>
         <TextInput
