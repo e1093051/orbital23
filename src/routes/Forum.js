@@ -135,26 +135,32 @@ export default function Forum() {
   };
 
   const fetchFriendsPosts = async () => {
-    if (profileData && profileData.friend) {
-      const formattedFriend = profileData.friend.map(async (uid) => {
-        const friendDocRef = doc(db, "NUS/users", "profile", uid);
-        const friendDocSnap = await getDoc(friendDocRef);
-        const friendData = friendDocSnap.data();
+  if (profileData && profileData.friend) {
+    const formattedFriend = profileData.friend.map(async (uid) => {
+      const friendDocRef = doc(db, "NUS/users", "profile", uid);
+      const friendDocSnap = await getDoc(friendDocRef);
+      const friendData = friendDocSnap.data();
 
-        if (friendData.photoFeatureURL) {
-          return { photoFeatureURL: friendData.photoFeatureURL, name: friendData.name, profilePicture: friendData.profilePicture };
-        } else {
-          return null;
-        }
-      });
+      if (friendData.photoFeatureURL) {
+        return {
+          photoFeatureURL: friendData.photoFeatureURL,
+          name: friendData.name,
+          profilePicture: friendData.profilePicture,
+          lastPostTimestamp: friendData.lastPostTimestamp 
+        };
+      } else {
+        return null;
+      }
+    });
 
-      Promise.all(formattedFriend).then((formattedData) => {
-        const filteredData = formattedData.filter((item) => item !== null);
-        setFriendData(filteredData);
-        console.log(filteredData);
-      });
-    }
-  };
+    Promise.all(formattedFriend).then((formattedData) => {
+      const filteredData = formattedData.filter((item) => item !== null);
+      setFriendData(filteredData);
+      console.log(filteredData);
+    });
+  }
+};
+
 
   useEffect(() => {
     getData();
