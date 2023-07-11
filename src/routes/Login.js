@@ -57,12 +57,14 @@ export default () => {
           placeholder = " NUS email (@u.nus.edu)"
           value={email}
           onChangeText={setEmail}
+          keyboardType="email-address"
         />
         <TextInput
           style={{ height: 40, width: 220, borderWidth: 1, margin: 10 }}
           placeholder = " Password"
           value={password}
           onChangeText={setPassword}
+          secureTextEntry={true}
         />
         <TouchableOpacity
           activeOpacity={0.75}
