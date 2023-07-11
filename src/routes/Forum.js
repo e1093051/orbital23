@@ -183,7 +183,14 @@ const handleLike = (item) => {
 
 
   const renderFriendPost = ({ item }) => {
-  const postTime = new Date(item.lastPostTimestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    const postTime = item.lastPostTimestamp
+    ? item.lastPostTimestamp.toDate().toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: true, 
+      })
+    : '';
 
   return (
     <View style={styles.postContainer}>
