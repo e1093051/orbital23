@@ -193,11 +193,12 @@ const handleLike = (item) => {
         <TouchableOpacity style={styles.postButton} onPress={() => handleComment(item)}>
           <AntDesign name="message1" size={20} color="white" />
         </TouchableOpacity>
-        <Text style={[styles.postTime, styles.buttonSpacing] }>{postTime}</Text>
+        <Text style={[styles.postTime, styles.buttonSpacing]}>{postTime}</Text>
       </View>
     </View>
   );
 };
+
 
   return (
 <View style={styles.container}>
