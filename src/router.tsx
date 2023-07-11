@@ -41,6 +41,7 @@ import EditShowCountryAndRegion from './routes/EditShowCountryAndRegion';
 import EditShowYear from './routes/EditShowYear';
 import Filter from './routes/Filter';
 import Friend from './routes/Friend';
+import StudyBuddyPost from './routes/StudyBuddyPost';
 
 import {
   StyleSheet,
@@ -147,6 +148,7 @@ const StackNavigator = () => (
     <Stack.Screen name="EditBio" component={EditBio} />
     <Stack.Screen name="EditMajor" component={EditMajor} />
     <Stack.Screen name="EditCourse" component={EditCourse} />
+    <Stack.Screen name="StudyBuddyPost" component={StudyBuddyPost} />
     <Stack.Screen name="EditHobby" component={EditHobby}
       options={{
         headerShown: true,
