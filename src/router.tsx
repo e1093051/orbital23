@@ -42,6 +42,8 @@ import EditShowYear from './routes/EditShowYear';
 import Filter from './routes/Filter';
 import Friend from './routes/Friend';
 import StudyBuddyPost from './routes/StudyBuddyPost';
+import StudyBuddyFilter from './routes/StudyBuddyFilter';
+import StudyBuddyAddNewPost from './routes/StudyBuddyAddNewPost';
 
 import {
   StyleSheet,
@@ -164,6 +166,10 @@ const StackNavigator = () => (
     <Stack.Screen name="EditShowHobby" component={EditShowHobby} />
     <Stack.Screen name="FriendProfile" component={FriendProfile} />
     <Stack.Screen name="Filter" component={Filter} 
+    options={{headerShown: true}}/>
+    <Stack.Screen name="StudyBuddyFilter" component={StudyBuddyFilter} 
+    options={{headerShown: true}}/>
+    <Stack.Screen name="StudyBuddyAddNewPost" component={StudyBuddyAddNewPost} 
     options={{headerShown: true}}/>
   </Stack.Navigator>
 );
