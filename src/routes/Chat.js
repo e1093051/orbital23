@@ -18,6 +18,9 @@ import {
   ScrollView
 } from 'react-native';
 
+import { db, auth } from '../../api/fireConfig';
+import { collectionGroup, collection, doc } from 'firebase/firestore';
+
 
 export default () => {
   return (

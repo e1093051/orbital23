@@ -509,7 +509,7 @@ export default function Home(route) {
         component={Chat}
         options={{
           tabBarLabel: 'Chat',
-          headerShown: false,
+          headerShown: true,
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="chat" color={color} size={size} />
           ),
