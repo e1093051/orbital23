@@ -13,7 +13,7 @@ export const photoFeatureAPI = async ( {image}, onSuccess, onError ) => {
     const reference = ref(user, 'picture.jpg');
     await uploadBytesResumable(reference, blob);
     const url = await getDownloadURL(reference);
-    await setDoc(doc(db, "NUS", "users", "profile",`${auth.currentUser.uid}`), {
+    await setDoc(doc(db, "NUS", "users", "Forum",`${auth.currentUser.uid}`), {
        photoFeatureURL: url 
       }, { merge: true }
     )
@@ -22,7 +22,6 @@ export const photoFeatureAPI = async ( {image}, onSuccess, onError ) => {
     return onError(error);
   }
 }
-
 
 
 
