@@ -45,6 +45,7 @@ export default () => {
           activeOpacity={0.75}
           style={styles.signUpButton}
           onPress={handleNext}
+          testID="nextButton"
         >
           <Text style={styles.signUpText}>Next</Text>
         </TouchableOpacity>
