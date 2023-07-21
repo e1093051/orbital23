@@ -114,7 +114,7 @@ export default function Forum() {
 
   const takePhoto = async () => {
     let result = await launchCameraAsync({
-      mediaTypes: MediaTypeOptions.All,
+      mediaTypes: ImagePickerMediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,

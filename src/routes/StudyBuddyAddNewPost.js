@@ -11,6 +11,8 @@ import { Alert } from 'react-native';
 import { auth } from '../../api/fireConfig';
 import { db } from '../../api/fireConfig';
 import { addDoc, collection, updateDoc, doc, increment } from 'firebase/firestore';
+import {KeyboardAvoidingView} from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 
@@ -103,7 +105,9 @@ export default function StudyBuddyAddNewPost() {
 
 
   return (
-    <View style={{ flex: 1 }}>
+    <ScrollView contentContainerStyle={{flexGrow: 1}}
+  keyboardShouldPersistTaps='handled'
+>
       <View style={{ flex: 1, paddingTop: 10, backgroundColor: 'white', paddingHorizontal: 10 }}>
         <View>
           <Text style={{ fontSize: 16, color: 'gray', alignItems: 'flex-start', paddingTop: 10, paddingBottom: 3 }}>Title</Text>
@@ -166,7 +170,7 @@ export default function StudyBuddyAddNewPost() {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
