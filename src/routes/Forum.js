@@ -63,10 +63,13 @@ export default function Forum() {
   }, []);
 
   useEffect(() => {
-    if (profileData) {
-      setLikedPosts(profileData.likes || []);
-    }
-  }, [profileData]);
+  if (profileData) {
+    setLikedPosts(profileData.likes || []);
+    getLastPostTimestamp();
+    setCanPost(isWithin24Hours(lastPostTimestamp));
+  }
+}, [profileData, lastPostTimestamp]);
+
 
   const storeLastPostTimestamp = async (timestamp) => {
     try {
@@ -88,13 +91,6 @@ export default function Forum() {
     }
   };
 
-  useEffect(() => {
-    getData();
-    getLastPostTimestamp();
-    setCanPost(isWithin24Hours());
-  }, [profileData]);
-
-
   const isWithin24Hours = () => {
     if (!lastPostTimestamp) {
       return true;
@@ -114,7 +110,7 @@ export default function Forum() {
 
   const takePhoto = async () => {
     let result = await launchCameraAsync({
-      mediaTypes: ImagePickerMediaTypeOptions.All,
+      mediaTypes: MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
@@ -222,13 +218,6 @@ export default function Forum() {
       });
     }
   };
-
-  useEffect(() => {
-    if (!canPost) {
-      fetchFriendsPosts();
-    }
-  }, [canPost]);
-
 
   const handleLike = async (item) => {
   try {
