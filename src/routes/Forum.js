@@ -105,13 +105,13 @@ export default function Forum() {
 
   const takePhoto = async () => {
     let result = await launchCameraAsync({
-      mediaTypes: ImagePickerMediaTypeOptions.All,
+      mediaTypes:  MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
     });
 
-    if (!result.cancelled) {
+    if (!result.canceled) {
       setImage(result.assets[0].uri);
       setHasChangedPicture(true);
       setFriendData([]); // Clear friendData when taking a new photo
