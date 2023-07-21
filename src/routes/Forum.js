@@ -1,7 +1,7 @@
 //some parts referenced from Chat GPT and stack overflow
 
 import React, { useState, useEffect, Component } from 'react';
-import { Alert, FlatList } from 'react-native';
+import { Alert, FlatList, ScrollView } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { MultiSelect } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -14,10 +14,12 @@ import * as ImagePicker from 'expo-image-picker';
 
 import firebase from 'firebase/app';
 import 'firebase/storage';
-import { photoFeatureAPI } from '../../api/photoFeature';
+import { photoFeatureAPI, lastPostTimestampAPI, likesAPI } from '../../api/photoFeature';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { db, auth } from '../../api/fireConfig';
-import { addDoc, collection, setDoc, doc, updateDoc, getDoc, onSnapshot, Timestamp } from "firebase/firestore";
+import { addDoc, collection, setDoc, doc, updateDoc, getDoc, onSnapshot, Timestamp, serverTimestamp } from "firebase/firestore";
 
 
 
@@ -33,16 +35,13 @@ import {
 } from 'react-native';
 
 export default function Forum() {
+  const [profileData, setProfileData] = useState(null);
   const [image, setImage] = useState(null);
   const [hasChangedPicture, setHasChangedPicture] = useState(false);
   const [lastPostTimestamp, setLastPostTimestamp] = useState(null);
-  const [lastPostDate, setLastPostDate] = useState(null);
-  const [currentPostTimestamp, setCurrentPostTimestamp] = useState(null);
-  const [showFriendsPosts, setShowFriendsPosts] = useState(false);
-  const [profileData, setProfileData] = useState(null);
-  const [friendData, setFriendData] = useState([]);
   const [canPost, setCanPost] = useState(true);
   const [likedPosts, setLikedPosts] = useState([]);
+  const [friendData, setFriendData] = useState([]);
 
   const navigation = useNavigation();
 
@@ -62,11 +61,20 @@ export default function Forum() {
     }
   }, [profileData]);
 
+  const storeLastPostTimestamp = async (timestamp) => {
+    try {
+      await AsyncStorage.setItem('@lastPostTimestamp', timestamp.toString());
+    } catch (error) {
+      console.log('Error storing last post timestamp:', error);
+    }
+  };
+
   const getLastPostTimestamp = async () => {
     try {
-      if (profileData && profileData.lastPostTimestamp) {
-        setLastPostTimestamp(profileData.lastPostTimestamp);
-        setLastPostDate(new Date(profileData.lastPostTimestamp));
+      const timestampString = await AsyncStorage.getItem('@lastPostTimestamp');
+      if (timestampString) {
+        const timestamp = parseInt(timestampString, 10);
+        setLastPostTimestamp(timestamp);
       }
     } catch (error) {
       console.log('Error retrieving last post timestamp:', error);
@@ -75,11 +83,29 @@ export default function Forum() {
 
   useEffect(() => {
     getLastPostTimestamp();
+    setCanPost(isWithin24Hours());
   }, [profileData]);
+
+  const isWithin24Hours = () => {
+    if (!lastPostTimestamp) {
+      return true;
+    }
+
+    const currentTime = Date.now();
+    const elapsedTime = currentTime - lastPostTimestamp;
+    const hoursPassed = elapsedTime / (1000 * 60 * 60);
+
+    console.log('lastPostTimestamp:', lastPostTimestamp);
+    console.log('currentTime:', currentTime);
+    console.log('elapsedTime:', elapsedTime);
+    console.log('hoursPassed:', hoursPassed);
+
+    return hoursPassed >= 24;
+  };
 
   const takePhoto = async () => {
     let result = await launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes:  MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
@@ -88,7 +114,11 @@ export default function Forum() {
     if (!result.canceled) {
       setImage(result.assets[0].uri);
       setHasChangedPicture(true);
-      setShowFriendsPosts(false);
+      setFriendData([]); // Clear friendData when taking a new photo
+
+      const newPostTimestamp = Date.now();
+      setLastPostTimestamp(newPostTimestamp);
+      await storeLastPostTimestamp(newPostTimestamp);
     }
   };
 
@@ -96,24 +126,30 @@ export default function Forum() {
     if (hasChangedPicture) {
       if (isWithin24Hours()) {
         const newPostTimestamp = Date.now();
-        setCurrentPostTimestamp(newPostTimestamp);
+        setLastPostTimestamp(newPostTimestamp);
 
         photoFeatureAPI(
           { image },
           async () => {
             console.log('uploaded!');
-            const timestamp = Timestamp.fromMillis(newPostTimestamp);
-            await setDoc(
-              doc(db, 'NUS', 'users', 'Forum', `${auth.currentUser.uid}`),
-              {
-                lastPostTimestamp: timestamp,
+            lastPostTimestampAPI(
+              () => {
+                likesAPI(
+                  () => {
+                    setShowFriendsPosts(true);
+                    setCanPost(false);
+                  },
+                  (error) => {
+                    console.log('Error liking post:', error);
+                  }
+                );
               },
-              {
-                merge: true,
-              }
+              (error) =>
+                Alert.alert(
+                  'Error',
+                  error.message || 'Something went wrong, try again later'
+                )
             );
-            setShowFriendsPosts(true);
-            setCanPost(false);
           },
           (error) =>
             Alert.alert(
@@ -129,72 +165,52 @@ export default function Forum() {
     }
   };
 
-  const isWithin24Hours = () => {
-    if (!profileData || !profileData.lastPostTimestamp) {
-      return true;
+  const fetchFriendsPosts = async () => {
+    if (profileData && profileData.friend) {
+      const formattedFriend = profileData.friend.map(async (uid) => {
+        const friendDocRef = doc(db, 'NUS/users', 'Forum', uid);
+        const friendDocSnap = await getDoc(friendDocRef);
+        const friendData = friendDocSnap.data();
+
+        const friendProfileDocRef = doc(db, 'NUS/users', 'profile', uid);
+        const friendProfileDocSnap = await getDoc(friendProfileDocRef);
+        const friendProfileData = friendProfileDocSnap.data();
+
+        if (friendData && friendProfileData && friendData.photoFeatureURL) {
+          return {
+            friendUid: uid,
+            photoFeatureURL: friendData.photoFeatureURL,
+            name: friendProfileData.name,
+            profilePicture: friendProfileData.photoURL,
+            lastPostTimestamp: friendData.lastPostTimestamp,
+          };
+        } else {
+          return null;
+        }
+      });
+
+      Promise.all(formattedFriend).then((formattedData) => {
+        const filteredData = formattedData.filter((item) => item !== null);
+        setFriendData(filteredData);
+        console.log(filteredData);
+      });
     }
-
-    const currentTime = Date.now();
-    const elapsedTime = currentTime - profileData.lastPostTimestamp;
-    const hoursPassed = elapsedTime / (1000 * 60 * 60);
-
-    return hoursPassed >= 24;
   };
 
-const fetchFriendsPosts = async () => {
-  if (profileData && profileData.friend) {
-    const formattedFriend = profileData.friend.map(async (uid) => {
-      const friendDocRef = doc(db, 'NUS/users', 'Forum', uid);
-      const friendDocSnap = await getDoc(friendDocRef);
-      const friendData = friendDocSnap.data();
-
-      const friendProfileDocRef = doc(db, 'NUS/users', 'profile', uid);
-      const friendProfileDocSnap = await getDoc(friendProfileDocRef);
-      const friendProfileData = friendProfileDocSnap.data();
-
-      if (friendData && friendProfileData && friendData.photoFeatureURL) {
-        return {
-          friendUid: uid, // Add friendUid property with the friend's UID
-          photoFeatureURL: friendData.photoFeatureURL,
-          name: friendProfileData.name,
-          profilePicture: friendProfileData.photoURL,
-          lastPostTimestamp: friendData.lastPostTimestamp,
-        };
-      } else {
-        return null;
-      }
-    });
-
-    Promise.all(formattedFriend).then((formattedData) => {
-      const filteredData = formattedData.filter((item) => item !== null);
-      setFriendData(filteredData);
-      console.log(filteredData);
-    });
-  }
-};
-
-
   useEffect(() => {
-    getData();
-  }, []);
-
-  useEffect(() => {
-    if (showFriendsPosts) {
+    if (!canPost) {
       fetchFriendsPosts();
-      getLastPostTimestamp();
     }
-  }, [showFriendsPosts]);
+  }, [canPost]);
 
-const handleLike = async (item) => {
+
+  const handleLike = async (item) => {
   try {
     const friendUid = item.friendUid;
 
     const friendDocRef = doc(db, 'NUS/users', 'Forum', friendUid);
     const friendDocSnap = await getDoc(friendDocRef);
     const friendData = friendDocSnap.data();
-
-    console.log('friendData:', friendData);
-    console.log('friendData.likes:', friendData.likes);
 
     let updatedLikes = [];
 
@@ -207,6 +223,7 @@ const handleLike = async (item) => {
         updatedLikes = [...friendData.likes, auth.currentUser.uid];
       }
 
+      // Update the document in Firestore with the updatedLikes array
       await updateDoc(friendDocRef, {
         likes: updatedLikes,
       });
@@ -220,13 +237,8 @@ const handleLike = async (item) => {
 };
 
 
-  const handleComment = (item) => {
-    console.log('Comment clicked', item);
-  };
-
- const renderFriendPost = ({ item }) => {
-  // Check if the current user has liked the post
-  const isPostLiked = likedPosts.includes(item.friendUid);
+  const renderFriendPost = ({ item }) => {
+  const isPostLiked = item.likes && item.likes.includes(auth.currentUser.uid);
 
   const postTime = item.lastPostTimestamp
     ? item.lastPostTimestamp.toDate().toLocaleTimeString('en-US', {
@@ -250,17 +262,14 @@ const handleLike = async (item) => {
         <TouchableOpacity
           style={[
             styles.likeButton,
-            { backgroundColor: isPostLiked ? '#2de0ff' : 'gray' },
+            { backgroundColor: isPostLiked ? '#2de0ff' : 'grey' },
           ]}
-          onPress={() => handleLike(item)}
+          onPress={() => {
+            console.log('Like button pressed');
+            handleLike(item);
+          }}
         >
           <AntDesign name="like1" size={20} color="white" />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.postButton}
-          onPress={() => handleComment(item)}
-        >
-          <AntDesign name="message1" size={20} color="white" />
         </TouchableOpacity>
         <Text style={[styles.postTime, styles.buttonSpacing]}>{postTime}</Text>
       </View>
@@ -269,9 +278,10 @@ const handleLike = async (item) => {
 };
 
 
+
   return (
     <View style={styles.container}>
-      {showFriendsPosts && !canPost ? (
+      {!canPost ? (
         <View style={styles.friendsPostsContainer}>
           <Text style={styles.friendsPostsText}>Friends' Posts</Text>
           <View style={styles.postsContainer}>
@@ -284,41 +294,41 @@ const handleLike = async (item) => {
         </View>
       ) : (
         <>
-          {hasChangedPicture ? (
+          {!image && (
+            <View style={styles.emptyContainer}>
+              <Text style={styles.emptyText}>
+                You have not taken a photo for today.
+                Please take a photo to see your friends' photos.
+              </Text>
+              <TouchableOpacity style={styles.selectButton} onPress={takePhoto}>
+                <Text style={styles.buttonText}>
+                  {hasChangedPicture
+                    ? 'Retake Photo; Open Camera'
+                    : 'Open Camera'}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
+
+          {image && (
             <View style={styles.imageContainer}>
               <Image source={{ uri: image }} style={styles.image} />
               <TouchableOpacity
-                style={[
-                  styles.uploadButton,
-                  !hasChangedPicture && styles.disabledButton,
-                ]}
+                style={[styles.uploadButton, !hasChangedPicture && styles.disabledButton]}
                 onPress={setPhotoFeature}
                 disabled={!hasChangedPicture}
               >
                 <Text style={styles.buttonText}>Post</Text>
               </TouchableOpacity>
             </View>
-          ) : (
-            <View style={styles.emptyContainer}>
-              <Text style={styles.emptyText}>
-                You have not taken a photo for today.
-                Please take a photo to see your friends' photos.
-              </Text>
-            </View>
-          )}
-
-          {!showFriendsPosts && canPost && (
-            <TouchableOpacity style={styles.selectButton} onPress={takePhoto}>
-              <Text style={styles.buttonText}>
-                {hasChangedPicture ? 'Retake Photo; Open Camera' : 'Open Camera'}
-              </Text>
-            </TouchableOpacity>
           )}
         </>
       )}
     </View>
   );
 }
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

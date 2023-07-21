@@ -509,7 +509,7 @@ export default function Home(route) {
         component={Chat}
         options={{
           tabBarLabel: 'Chat',
-          headerShown: false,
+          headerShown: true,
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="chat" color={color} size={size} />
           ),
@@ -563,8 +563,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: -10,
     marginBottom: 10,
-    borderWidth: 1,
-    borderColor: '#c7c7c7'
+    //borderWidth: 1,
+    //borderColor: '#c7c7c7'
   },
   buttonText: {
 
