@@ -1,4 +1,7 @@
-import React, { useState, useEffect, Component } from 'react';
+//reference to ChatGPT (Lots of code written by it)
+//reference to StackOverflow: https://stackoverflow.com/questions/52805879/re-render-component-when-navigating-the-stack-with-react-navigation
+
+import React, { useState, useEffect, Component, useContext } from 'react';
 import { Alert } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { MultiSelect } from 'react-native-element-dropdown';
@@ -6,6 +9,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { CheckBox, Icon } from '@rneui/themed';
 import Stack from '@mui/material/Stack';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { useIsFocused } from '@react-navigation/native';
 
 
 
@@ -31,7 +35,10 @@ export default function Chat() {
   const [transformedKey, setTransformedKey] = useState("");
   const [transformedValue, setTransformedValue] = useState("");
   const [image, setImage] = useState(null);
+  const [render, setRender] = useState(false);
   const navigation = useNavigation();
+
+  const isFocus = useIsFocused();
 
 
   const getData = async () => {
@@ -43,19 +50,18 @@ export default function Chat() {
     getData();
   }, [])
 
-  const fetchImage = async (uri) => {
-    try {
-      const response = await fetch(uri);
-      const imageBlob = await response.blob();
+  useEffect(() => {
+    loadChat();
+  }, [profileData])
 
-      // Create a local URL for the image blob
-      const localUri = URL.createObjectURL(imageBlob);
-
-      // Set the image state with the local URL
-      setImage(localUri);
-    } catch (error) {
-      console.error('Error fetching image:', error);
+  useEffect(() => {
+    if (isFocus) {
+      loadChat();
     }
+  }, [isFocus])
+
+  const updateVariables = (render) => {
+    setFilterModule(render);
   };
 
   async function loadChat() {
@@ -67,6 +73,7 @@ export default function Chat() {
         const valueSnapshot = await getDoc(doc(db, 'NUS/chat', 'chat', value));
       
         return {
+          frinedId: key, 
           id: value,
           key: keySnapshot.data(),
           value: valueSnapshot.data()
@@ -132,7 +139,7 @@ export default function Chat() {
 
     return (
       <View>
-        <TouchableOpacity onPress={() => {fetchImage(item.key.photoURL);navigation.navigate("ChatPage", {image: image, name: item.key.name, id: item.id, firstMessage: item.value.firstMessage})}}>
+        <TouchableOpacity onPress={() => {navigation.navigate("ChatPage", { updateVariables, name: item.key.name, id: item.id, firstMessage: item.value.firstMessage, friend: item.frinedId, render: render})}}>
       <View style={{ borderBottomWidth: 1, width: Dimensions.get('window').width - 4, marginLeft: 1, paddingLeft: 8, paddingRight: 8, flexDirection: 'row', paddingVertical: 6, borderBottomColor: '#e5e5e5', justifyContent: 'space-between', paddingRight: 20 }}>
         <View style={{ flexDirection: 'row' }}>
           <Image
@@ -169,9 +176,6 @@ export default function Chat() {
 
 
 
-  useEffect(() => {
-    loadChat();
-  }, [profileData])
   return (
     <View style={{ flex: 1, alignItems: 'flex-start', backgroundColor: 'white' }}>
       <FlatList

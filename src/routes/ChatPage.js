@@ -8,6 +8,16 @@ import { auth } from '../../api/fireConfig';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
+
+export const updateMyCountToChatCount = async(id) => {
+  const snapshot = await getDoc(doc(db, "NUS", 'chat', 'chat', id));
+  const chatDoc = snapshot.data();
+  const count = chatDoc.count;
+  await updateDoc(doc(db, "NUS", 'chat', 'chat', id), {
+    [auth.currentUser.uid]: count
+  });
+}
+
 export default function ChatPage() {
   const [message, setMessage] = useState([]);
   const [text, setText] = useState('');
@@ -20,10 +30,10 @@ export default function ChatPage() {
 
 
   const route = useRoute();
-  const { image } = route.params;
   const { name } = route.params;
   const { id } = route.params;
   const { firstMessage } = route.params;
+  const {friend} = route.params;
   const [profileData, setProfileData] = useState(null);
 
 
@@ -38,7 +48,7 @@ export default function ChatPage() {
     })
   }
 
-  const setCount = async() => {
+  const updateMyCount = async() => {
     const snapshot = await getDoc(doc(db, "NUS", 'chat', 'chat', id));
     const chatDoc = snapshot.data();
     const count = chatDoc.count;
@@ -47,6 +57,31 @@ export default function ChatPage() {
     });
   }
 
+  const updateMyChat = async() => {
+    await updateDoc(doc(db, "NUS", 'users', 'profile', auth.currentUser.uid), {
+      updateChat: increment(1)
+    });
+  }
+
+  const updateOthersChat = async() => {
+    await updateDoc(doc(db, "NUS", 'users', 'profile', friend), {
+      updateChat: increment(1)
+    });
+  }
+
+  const updateChatCount = async() => {
+    await updateDoc(doc(db, "NUS", 'chat', 'chat', id), {
+      count: increment(1)
+    });
+  }
+
+  const updateChatDoc = async(sendText) => {
+    await updateDoc(doc(db, "NUS", 'chat', 'chat', id), {
+      lastMessage: sendText.text,
+      timestamp: sendText.time
+    });
+  }
+  
   useEffect(() => {
     getData0();
   }, [])
@@ -56,8 +91,8 @@ export default function ChatPage() {
   }, [])
 
   useEffect(() => {
-    setCount();
-  }, [])
+    updateMyCount();
+  }, [profileData])
   
 
 
@@ -90,9 +125,11 @@ export default function ChatPage() {
 
     try {
       await addDoc(collection(db, 'NUS', 'chat', 'chat', id, 'text'), sendText);
-      await updateDoc(doc(db, "NUS", "users", "profile", auth.currentUser.uid), {
-        chatNumber: increment(1)
-      });
+      await updateChatCount();
+      //await updateMyCount();
+      await updateChatDoc(sendText);
+      await updateMyChat();
+      await updateOthersChat();
       setText("");
     } catch (error) {
       console.error('Error adding reply:', error);
