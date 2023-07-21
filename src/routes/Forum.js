@@ -95,6 +95,11 @@ export default function Forum() {
     const elapsedTime = currentTime - lastPostTimestamp;
     const hoursPassed = elapsedTime / (1000 * 60 * 60);
 
+    console.log('lastPostTimestamp:', lastPostTimestamp);
+    console.log('currentTime:', currentTime);
+    console.log('elapsedTime:', elapsedTime);
+    console.log('hoursPassed:', hoursPassed);
+
     return hoursPassed >= 24;
   };
 
@@ -107,7 +112,7 @@ export default function Forum() {
     });
 
     if (!result.cancelled) {
-      setImage(result.uri);
+      setImage(result.assets[0].uri);
       setHasChangedPicture(true);
       setFriendData([]); // Clear friendData when taking a new photo
 
@@ -198,83 +203,81 @@ export default function Forum() {
     }
   }, [canPost]);
 
+
   const handleLike = async (item) => {
-    try {
-      const friendUid = item.friendUid;
+  try {
+    const friendUid = item.friendUid;
 
-      const friendDocRef = doc(db, 'NUS/users', 'Forum', friendUid);
-      const friendDocSnap = await getDoc(friendDocRef);
-      const friendData = friendDocSnap.data();
+    const friendDocRef = doc(db, 'NUS/users', 'Forum', friendUid);
+    const friendDocSnap = await getDoc(friendDocRef);
+    const friendData = friendDocSnap.data();
 
-      let updatedLikes = [];
+    let updatedLikes = [];
 
-      if (friendData && friendData.likes) {
-        if (friendData.likes.includes(auth.currentUser.uid)) {
-          // Unlike the post
-          updatedLikes = friendData.likes.filter((id) => id !== auth.currentUser.uid);
-        } else {
-          // Like the post
-          updatedLikes = [...friendData.likes, auth.currentUser.uid];
-        }
-
-        await updateDoc(friendDocRef, {
-          likes: updatedLikes,
-        });
-
-        // Update the likedPosts state with the updatedLikes array
-        setLikedPosts(updatedLikes);
+    if (friendData && friendData.likes) {
+      if (friendData.likes.includes(auth.currentUser.uid)) {
+        // Unlike the post
+        updatedLikes = friendData.likes.filter((id) => id !== auth.currentUser.uid);
+      } else {
+        // Like the post
+        updatedLikes = [...friendData.likes, auth.currentUser.uid];
       }
-    } catch (error) {
-      console.log('Error liking post:', error);
-    }
-  };
 
-  const handleComment = (item) => {
-    console.log('Comment clicked', item);
-  };
+      // Update the document in Firestore with the updatedLikes array
+      await updateDoc(friendDocRef, {
+        likes: updatedLikes,
+      });
+
+      // Update the likedPosts state with the updatedLikes array
+      setLikedPosts(updatedLikes);
+    }
+  } catch (error) {
+    console.log('Error liking post:', error);
+  }
+};
+
 
   const renderFriendPost = ({ item }) => {
-    const isPostLiked = likedPosts.includes(item.friendUid);
+  const isPostLiked = item.likes && item.likes.includes(auth.currentUser.uid);
 
-    const postTime = item.lastPostTimestamp
-      ? item.lastPostTimestamp.toDate().toLocaleTimeString('en-US', {
-          hour: 'numeric',
-          minute: 'numeric',
-          hour12: true,
-        })
-      : '';
+  const postTime = item.lastPostTimestamp
+    ? item.lastPostTimestamp.toDate().toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: true,
+      })
+    : '';
 
-    return (
-      <View style={styles.postContainer}>
-        <View style={styles.friendInfoContainer}>
-          <Image
-            style={styles.friendProfilePicture}
-            source={{ uri: item.profilePicture }}
-          />
-          <Text style={styles.friendName}>{item.name}</Text>
-        </View>
-        <Image style={styles.postImage} source={{ uri: item.photoFeatureURL }} />
-        <View style={styles.postButtonsContainer}>
-          <TouchableOpacity
-            style={[
-              styles.likeButton,
-              { backgroundColor: isPostLiked ? '#2de0ff' : 'grey' },
-            ]}
-            onPress={() => handleLike(item)}
-          >
-            <AntDesign name="like1" size={20} color="white" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.postButton}
-            onPress={() => handleComment(item)}
-          >
-            <AntDesign name="message1" size={20} color="white" />
-          </TouchableOpacity>
-          <Text style={[styles.postTime, styles.buttonSpacing]}>{postTime}</Text>
-        </View>
+  return (
+    <View style={styles.postContainer}>
+      <View style={styles.friendInfoContainer}>
+        <Image
+          style={styles.friendProfilePicture}
+          source={{ uri: item.profilePicture }}
+        />
+        <Text style={styles.friendName}>{item.name}</Text>
       </View>
-    );
-  };
+      <Image style={styles.postImage} source={{ uri: item.photoFeatureURL }} />
+      <View style={styles.postButtonsContainer}>
+        <TouchableOpacity
+          style={[
+            styles.likeButton,
+            { backgroundColor: isPostLiked ? '#2de0ff' : 'grey' },
+          ]}
+          onPress={() => {
+            console.log('Like button pressed');
+            handleLike(item);
+          }}
+        >
+          <AntDesign name="like1" size={20} color="white" />
+        </TouchableOpacity>
+        <Text style={[styles.postTime, styles.buttonSpacing]}>{postTime}</Text>
+      </View>
+    </View>
+  );
+};
+
+
 
   return (
     <View style={styles.container}>
