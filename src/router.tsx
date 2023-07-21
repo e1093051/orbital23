@@ -44,6 +44,7 @@ import Friend from './routes/Friend';
 import StudyBuddyPost from './routes/StudyBuddyPost';
 import StudyBuddyFilter from './routes/StudyBuddyFilter';
 import StudyBuddyAddNewPost from './routes/StudyBuddyAddNewPost';
+import ChatPage from './routes/ChatPage';
 
 import {
   StyleSheet,
@@ -141,6 +142,7 @@ const StackNavigator = () => (
     <Stack.Screen name='Request' component={Request} />
     <Stack.Screen name='Friends' component={Friend} />
     <Stack.Screen name='Chat' component={Chat} />
+    <Stack.Screen name='ChatPage' component={ChatPage} options={({ route }) => ({ title: route.params.name })}/>
     <Stack.Screen name='Forum' component={Forum} />
     <Stack.Screen name='Setting' component={Setting} />
     <Stack.Screen name='Edit' component={Edit} />

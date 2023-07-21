@@ -137,6 +137,7 @@ const setPhotoFeature = async () => {
 
 
   const isWithin24Hours = () => {
+    console.log("awesome");
     if (!profileData || !profileData.lastPostTimestamp) {
       return true;
     }
@@ -144,7 +145,7 @@ const setPhotoFeature = async () => {
     const currentTime = Date.now();
     const elapsedTime = currentTime - profileData.lastPostTimestamp;
     const hoursPassed = elapsedTime / (1000 * 60 * 60);
-
+    
     return hoursPassed >= 24;
   };
 
