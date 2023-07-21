@@ -9,6 +9,8 @@ import { CheckBox, Icon } from '@rneui/themed';
 import Stack from '@mui/material/Stack';
 
 import { launchCameraAsync, MediaTypeOptions } from 'expo-image-picker';
+
+
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
 
@@ -35,6 +37,7 @@ import {
 } from 'react-native';
 
 export default function Forum() {
+
   const [profileData, setProfileData] = useState(null);
   const [image, setImage] = useState(null);
   const [hasChangedPicture, setHasChangedPicture] = useState(false);
@@ -42,6 +45,10 @@ export default function Forum() {
   const [canPost, setCanPost] = useState(true);
   const [likedPosts, setLikedPosts] = useState([]);
   const [friendData, setFriendData] = useState([]);
+  const [showFriendsPosts, setShowFriendsPosts] = useState(false);
+  const [showCamera, setShowCamera] = useState(false);
+  const [hasFriendsPostedWithin24Hours, setHasFriendsPostedWithin24Hours] = useState(false);
+
 
   const navigation = useNavigation();
 
@@ -82,9 +89,11 @@ export default function Forum() {
   };
 
   useEffect(() => {
+    getData();
     getLastPostTimestamp();
     setCanPost(isWithin24Hours());
   }, [profileData]);
+
 
   const isWithin24Hours = () => {
     if (!lastPostTimestamp) {
@@ -105,65 +114,79 @@ export default function Forum() {
 
   const takePhoto = async () => {
     let result = await launchCameraAsync({
-      mediaTypes: ImagePickerMediaTypeOptions.All,
+      mediaTypes: MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
     });
 
-    if (!result.cancelled) {
+    if (!result.canceled) {
       setImage(result.assets[0].uri);
       setHasChangedPicture(true);
       setFriendData([]); // Clear friendData when taking a new photo
 
-      const newPostTimestamp = Date.now();
-      setLastPostTimestamp(newPostTimestamp);
-      await storeLastPostTimestamp(newPostTimestamp);
+
+      setShowCamera(false);
     }
+  };
+
+  const retakePhoto = () => {
+    setImage(null);
+    setHasChangedPicture(false);
+    setShowCamera(true); // Show the camera again
   };
 
   const setPhotoFeature = async () => {
-    if (hasChangedPicture) {
-      if (isWithin24Hours()) {
-        const newPostTimestamp = Date.now();
-        setLastPostTimestamp(newPostTimestamp);
+  if (hasChangedPicture) {
+    if (isWithin24Hours()) {
+      photoFeatureAPI(
+        { image },
+        async () => {
+          console.log('uploaded!');
 
-        photoFeatureAPI(
-          { image },
-          async () => {
-            console.log('uploaded!');
-            lastPostTimestampAPI(
-              () => {
-                likesAPI(
-                  () => {
-                    setShowFriendsPosts(true);
-                    setCanPost(false);
-                  },
-                  (error) => {
-                    console.log('Error liking post:', error);
-                  }
-                );
-              },
-              (error) =>
-                Alert.alert(
-                  'Error',
-                  error.message || 'Something went wrong, try again later'
-                )
-            );
-          },
-          (error) =>
-            Alert.alert(
-              'Error',
-              error.message || 'Something went wrong, try again later'
-            )
-        );
-      } else {
-        Alert.alert('Error', 'You can only post a photo once every 24 hours.');
-      }
+          // Get the current timestamp from Firebase server
+          const serverTimestampRef = serverTimestamp();
+
+          // Update the 'lastPostTimestamp' field in the user's profile document
+          await updateDoc(doc(db, 'NUS/users', 'profile', auth.currentUser.uid), {
+            lastPostTimestamp: serverTimestampRef,
+          });
+
+          lastPostTimestampAPI(
+            () => {
+              likesAPI(
+                () => {
+                  setShowFriendsPosts(true);
+                  setCanPost(false);
+                  // Move the lastPostTimestamp update inside the success callback
+                },
+                (error) => {
+                  console.log('Error liking post:', error);
+                }
+              );
+            },
+            (error) =>
+              Alert.alert(
+                'Error',
+                error.message || 'Something went wrong, try again later'
+              )
+          );
+        },
+        (error) =>
+          Alert.alert(
+            'Error',
+            error.message || 'Something went wrong, try again later'
+          )
+      );
     } else {
-      Alert.alert('Warning', 'Please take a photo');
+      Alert.alert('Error', 'You can only post a photo once every 24 hours.');
     }
-  };
+  } else {
+    Alert.alert('Warning', 'Please take a photo');
+  }
+};
+
+
 
   const fetchFriendsPosts = async () => {
     if (profileData && profileData.friend) {
@@ -193,6 +216,9 @@ export default function Forum() {
         const filteredData = formattedData.filter((item) => item !== null);
         setFriendData(filteredData);
         console.log(filteredData);
+
+        const hasPostedWithin24Hours = filteredData.some((item) => isFriendPostWithin24Hours(item));
+        setHasFriendsPostedWithin24Hours(hasPostedWithin24Hours);
       });
     }
   };
@@ -223,7 +249,8 @@ export default function Forum() {
         updatedLikes = [...friendData.likes, auth.currentUser.uid];
       }
 
-      // Update the document in Firestore with the updatedLikes array
+      // Update the document in Fire store with the updatedLikes array
+
       await updateDoc(friendDocRef, {
         likes: updatedLikes,
       });
@@ -236,6 +263,20 @@ export default function Forum() {
   }
 };
 
+// Check if the friend's post is also more than 24 hours old
+  const isFriendPostWithin24Hours = (item) => {
+    if (!item.lastPostTimestamp) {
+      return false;
+    }
+
+    const currentTime = Date.now();
+    const elapsedTime = currentTime - item.lastPostTimestamp.toMillis();
+    const hoursPassed = elapsedTime / (1000 * 60 * 60);
+
+    return hoursPassed < 24;
+  };
+
+
 
   const renderFriendPost = ({ item }) => {
   const isPostLiked = item.likes && item.likes.includes(auth.currentUser.uid);
@@ -247,6 +288,11 @@ export default function Forum() {
         hour12: true,
       })
     : '';
+
+  // Skip rendering the friend's post if it's more than 24 hours old
+  if (!isFriendPostWithin24Hours()) {
+    return null;
+  }
 
   return (
     <View style={styles.postContainer}>
@@ -277,24 +323,33 @@ export default function Forum() {
   );
 };
 
+useEffect(() => {
+    if (!canPost) {
+      fetchFriendsPosts();
+    }
+  }, [canPost]); // Add the useEffect here
 
 
-  return (
+ return (
     <View style={styles.container}>
-      {!canPost ? (
+      {!canPost ? ( // If canPost is false, show Friend's posts directly
         <View style={styles.friendsPostsContainer}>
           <Text style={styles.friendsPostsText}>Friends' Posts</Text>
-          <View style={styles.postsContainer}>
-            <FlatList
-              data={friendData}
-              renderItem={renderFriendPost}
-              keyExtractor={(item, index) => index.toString()}
-            />
-          </View>
+          {!hasFriendsPostedWithin24Hours ? (
+            <Text style={styles.noPostsText}>Sorry! None of your friends have posted yet.</Text>
+          ) : (
+            <View style={styles.postsContainer}>
+              <FlatList
+                data={friendData}
+                renderItem={renderFriendPost}
+                keyExtractor={(item) => item.friendUid}
+              />
+            </View>
+          )}
         </View>
       ) : (
         <>
-          {!image && (
+          {!image && ( // Render the "take photo" section if no image
             <View style={styles.emptyContainer}>
               <Text style={styles.emptyText}>
                 You have not taken a photo for today.
@@ -302,15 +357,13 @@ export default function Forum() {
               </Text>
               <TouchableOpacity style={styles.selectButton} onPress={takePhoto}>
                 <Text style={styles.buttonText}>
-                  {hasChangedPicture
-                    ? 'Retake Photo; Open Camera'
-                    : 'Open Camera'}
+                  {hasChangedPicture ? 'Retake Photo; Open Camera' : 'Open Camera'}
                 </Text>
               </TouchableOpacity>
             </View>
           )}
 
-          {image && (
+          {image && ( // Render the "post photo" section if there's an image
             <View style={styles.imageContainer}>
               <Image source={{ uri: image }} style={styles.image} />
               <TouchableOpacity
@@ -327,7 +380,6 @@ export default function Forum() {
     </View>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -444,5 +496,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'gray',
     padding: 10,
     borderRadius: 5,
+  },
+
+  noPostsText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#2de0ff',
+    textAlign: 'center',
+    marginTop: 250,
   },
 }); 
