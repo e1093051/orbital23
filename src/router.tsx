@@ -151,7 +151,7 @@ const StackNavigator = () => (
     <Stack.Screen name='Setting' component={Setting} />
     <Stack.Screen name='Edit' component={Edit} />
     <Stack.Screen name='EditPhoto' component={EditPhoto} 
-    options={{ headerShown: false, headerTitle: ' ', headerBackTitle: ' ', headerTintColor: '#2de0ff' }} />
+    options={{ headerShown: true, headerTitle: ' ', headerBackTitle: ' ' }} />
     <Stack.Screen name="EditName" component={EditName} />
     <Stack.Screen name="EditBio" component={EditBio} />
     <Stack.Screen name="EditMajor" component={EditMajor} />

@@ -44,15 +44,12 @@ export default () => {
           await updateDoc(doc(db, "NUS", "users", "profile",`${auth.currentUser.uid}`), {
             photoURL: image,
           });
-          navigation.navigate('Edit')},
+          navigation.goBack()},
         (error) => Alert.alert('error', (error.message || 'Something went wrong, try again later'))
       )
     }
     else {
-      Authentication.setDefaultProfilePicture(
-        () => navigation.navigate('Edit'),
-        (error) => Alert.alert('error', (error.message || 'Something went wrong, try again later'))
-      )
+      navigation.goBack();
     }
   }
 
@@ -79,7 +76,7 @@ export default () => {
       <View style={styles.imageContainer}>
         <TouchableOpacity onPress={pickImage} style={[styles.circle, { marginTop: -300 }]} activityOpacity={0.8}>
           <Image
-            source={image ? { uri: image } : require('./Standard_Profile.png')}
+            source={image ? { uri: image } : {uri: auth.currentUser.photoURL}}
             style={styles.image}
           />
         </TouchableOpacity>
@@ -95,7 +92,7 @@ export default () => {
         activeOpacity={0.75}
         style={styles.buttonContainer}
         onPress={() => setProfilePicture()}>
-        <Text style={styles.registerText}>Next</Text>
+        <Text style={styles.registerText}>Save</Text>
       </TouchableOpacity>
     </View>
   );
@@ -108,7 +105,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   container: {
-    paddingTop: 70,
+    paddingTop: 10,
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     backgroundColor: '#FFFFFF',
@@ -149,7 +146,7 @@ const styles = StyleSheet.create({
     height: 40,
     width: Dimensions.get('window').width - 20,
     position: 'absolute',
-    bottom: 25,
+    bottom: 15,
     borderRadius: 2,
     justifyContent: 'center',
     alignItems: 'center',

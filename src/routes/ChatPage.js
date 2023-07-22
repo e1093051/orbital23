@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, KeyboardAvoidingView, Platform, Keyboard } from 'react-native';
 import { View, Text, TouchableOpacity, TextInput, Dimensions, Image, FlatList } from 'react-native';
 import { collection, query, orderBy, where, getDocs, addDoc, doc, getDoc, onSnapshot, limit, increment, updateDoc } from 'firebase/firestore';
 import { db } from '../../api/fireConfig';
@@ -7,9 +7,10 @@ import { useRoute } from '@react-navigation/native';
 import { auth } from '../../api/fireConfig';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 
-export const updateMyCountToChatCount = async(id) => {
+export const updateMyCountToChatCount = async (id) => {
   const snapshot = await getDoc(doc(db, "NUS", 'chat', 'chat', id));
   const chatDoc = snapshot.data();
   const count = chatDoc.count;
@@ -20,7 +21,7 @@ export const updateMyCountToChatCount = async(id) => {
 
 export default function ChatPage() {
   const [message, setMessage] = useState([]);
-  const [text, setText] = useState('');
+  const [text, setText] = useState("");
   const [shouldRender, setShouldRender] = useState(true);
   const [batchSize, setBatchSize] = useState(30);
   const [latest, setLatest] = useState(true);
@@ -32,15 +33,11 @@ export default function ChatPage() {
   const route = useRoute();
   const { name } = route.params;
   const { id } = route.params;
-  const { firstMessage } = route.params;
-  const {friend} = route.params;
+  const { friend } = route.params;
+  //const { lastMessageTimestamp } = route.params;
   const [profileData, setProfileData] = useState(null);
 
 
-  const getData0 = () => {onSnapshot(doc(db, 'NUS', 'chat', 'chat', id, 'text', firstMessage), (doc) => {
-    setEarliestDoc(doc.data());
-  })
-}
 
   const getData = () => {
     onSnapshot(doc(db, "NUS/users", "profile", auth.currentUser.uid), (doc) => {
@@ -48,7 +45,7 @@ export default function ChatPage() {
     })
   }
 
-  const updateMyCount = async() => {
+  const updateMyCount = async () => {
     const snapshot = await getDoc(doc(db, "NUS", 'chat', 'chat', id));
     const chatDoc = snapshot.data();
     const count = chatDoc.count;
@@ -57,60 +54,75 @@ export default function ChatPage() {
     });
   }
 
-  const updateMyChat = async() => {
+  const updateMyChat = async () => {
     await updateDoc(doc(db, "NUS", 'users', 'profile', auth.currentUser.uid), {
       updateChat: increment(1)
     });
   }
 
-  const updateOthersChat = async() => {
+  const updateOthersChat = async () => {
     await updateDoc(doc(db, "NUS", 'users', 'profile', friend), {
       updateChat: increment(1)
     });
   }
 
-  const updateChatCount = async() => {
+  const updateChatCount = async () => {
     await updateDoc(doc(db, "NUS", 'chat', 'chat', id), {
       count: increment(1)
     });
   }
 
-  const updateChatDoc = async(sendText) => {
+  const updateChatDoc = async (sendText) => {
     await updateDoc(doc(db, "NUS", 'chat', 'chat', id), {
       lastMessage: sendText.text,
       timestamp: sendText.time
     });
   }
-  
+
+  const [keyboardStatus, setKeyboardStatus] = useState(false);
+
   useEffect(() => {
-    getData0();
-  }, [])
+    const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
+      setKeyboardStatus(true);
+    });
+    const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
+      setKeyboardStatus(false);
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
+
 
   useEffect(() => {
     getData();
   }, [])
-
-  useEffect(() => {
-    updateMyCount();
-  }, [profileData])
-  
 
 
   useEffect(() => {
     fetchText();
   }, [profileData]);
 
+
+  useEffect(() => {
+    updateMyCount();
+  }, [profileData])
+
+
+
+
   const fetchText = async () => {
     const textQuery = query(
       collection(db, 'NUS', 'chat', 'chat', id, 'text'),
-      orderBy('time', 'desc'),
-      limit(batchSize)
+      orderBy('time', 'desc')
     );
     const textSnapshot = await getDocs(textQuery);
     const textData = textSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-    console.log(textData)
     setMessage(textData);
   }
+
 
 
 
@@ -136,10 +148,6 @@ export default function ChatPage() {
     }
   };
 
-
-
-  let prevDate = null;
-  let prevTime = null;
 
 
   const renderItem = ({ item }) => {
@@ -176,120 +184,52 @@ export default function ChatPage() {
       }
     };
 
-    if (prevDate === null) {
-      prevDate = currentDate;
-      prevTime = time;
-    }
+
 
     const showTime = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    if (item.id === firstMessage) {
-      const showCurrentDate = formatTimestamp(item.time.toDate());
-      if (currentDate !== prevDate) {
-        prevDate = currentDate;
-        const showPrevDate = formatTimestamp(prevTime);
-        prevTime = time;
-        return (
-          <View>
-            <View style={{ alignItems: 'center', marginVertical: 8 }}>
-              <Text style={{ color: '#a0a0a0', fontSize: 13.5 }}>{showCurrentDate}</Text>
-            </View>
-            <View style={item.who === auth.currentUser.uid ? styles.sentTime : styles.receivedTime}>
-              <View style={item.who === auth.currentUser.uid ? styles.sentMessage : styles.receivedMessage}>
-                <View style={item.who === auth.currentUser.uid ? styles.sentBox : styles.receivedBox}>
-                  <Text multiline>{item.text}</Text>
-                </View>
-              </View>
-              <View style={{ justifyContent: 'flex-end' }}>
-                <Text style={{ paddingHorizontal: 5, fontSize: 10, marginBottom: 6, color: '#b3b3b3' }}>{showTime}</Text>
-              </View>
-            </View>
-            {earliestDoc.time && prevTime && prevTime != earliestDoc.time && <View style={{ alignItems: 'center', marginVertical: 8 }}>
-              <Text style={{ color: '#a0a0a0', fontSize: 13.5 }}>{showPrevDate}</Text>
-            </View>}
-          </View>
-        )
-      }
-      else {
-        return (
-          <View>
-            <View style={{ alignItems: 'center', marginVertical: 8 }}>
-              <Text style={{ color: '#a0a0a0', fontSize: 13.5 }}>{showCurrentDate}</Text>
-            </View>
-            <View style={item.who === auth.currentUser.uid ? styles.sentTime : styles.receivedTime}>
-              <View style={item.who === auth.currentUser.uid ? styles.sentMessage : styles.receivedMessage}>
-                <View style={item.who === auth.currentUser.uid ? styles.sentBox : styles.receivedBox}>
-                  <Text multiline>{item.text}</Text>
-                </View>
-              </View>
-              <View style={{ justifyContent: 'flex-end' }}>
-                <Text style={{ paddingHorizontal: 5, fontSize: 10, marginBottom: 6, color: '#b3b3b3' }}>{showTime}</Text>
-              </View>
+    const showDate = formatTimestamp(time);
+
+    return (
+      <View>
+        <View style={item.who === auth.currentUser.uid ? styles.sentTime : styles.receivedTime}>
+          <View style={item.who === auth.currentUser.uid ? styles.sentMessage : styles.receivedMessage}>
+            <View style={item.who === auth.currentUser.uid ? styles.sentBox : styles.receivedBox}>
+              <Text multiline>{item.text}</Text>
             </View>
           </View>
-        )
-      }
-    }
-    else {
-      if (currentDate !== prevDate) {
-        prevDate = currentDate;
-        const showPrevDate = formatTimestamp(prevTime);
-        prevTime = time;
-        return (
-          <View>
-            <View style={item.who === auth.currentUser.uid ? styles.sentTime : styles.receivedTime}>
-              <View style={item.who === auth.currentUser.uid ? styles.sentMessage : styles.receivedMessage}>
-                <View style={item.who === auth.currentUser.uid ? styles.sentBox : styles.receivedBox}>
-                  <Text multiline>{item.text}</Text>
-                </View>
-              </View>
-              <View style={{ justifyContent: 'flex-end' }}>
-                <Text style={{ paddingHorizontal: 5, fontSize: 10, marginBottom: 6, color: '#b3b3b3' }}>{showTime}</Text>
-              </View>
-            </View>
-            {formatTimestamp(earliestDoc.time.toDate()) !== showPrevDate && <View style={{ alignItems: 'center', marginVertical: 8 }}>
-              <Text style={{ color: '#a0a0a0', fontSize: 13.5 }}>{showPrevDate}</Text>
-            </View>}
-          </View>
-        )
-      }
-      else {
-        return (
-          <View style={item.who === auth.currentUser.uid ? styles.sentTime : styles.receivedTime}>
-            <View style={item.who === auth.currentUser.uid ? styles.sentMessage : styles.receivedMessage}>
-              <View style={item.who === auth.currentUser.uid ? styles.sentBox : styles.receivedBox}>
-                <Text multiline>{item.text}</Text>
-              </View>
-            </View>
-            <View style={{ justifyContent: 'flex-end' }}>
-              <Text style={{ paddingHorizontal: 5, fontSize: 10, marginBottom: 6, color: '#b3b3b3' }}>{showTime}</Text>
+          <View style={{ justifyContent: 'flex-end', paddingBottom: 8, paddingRight: 3, paddingLeft: 3 }}>
+            <View style = {{flexDirection: 'row-reverse'}}>
+            <Text style={{ fontSize: 10, color: '#b3b3b3' }}>{showTime}</Text>
+            <Text style={{ fontSize: 10, color: '#b3b3b3' }}>, </Text>
+            <Text style={{ color: '#a0a0a0', fontSize: 10 }}>{showDate}</Text>
             </View>
           </View>
-        )
-      }
-    }
+        </View>
+      </View>
+    )
   };
 
+
   return (
-    <View style={{ flex: 1 }}>
+    <KeyboardAvoidingView style = {keyboardStatus ? styles.Keyboardshown : styles.KeyboardNotShown} behavior={Platform.OS === 'ios' ? 'padding' : 'height' }> 
+
       <View style={{ backgroundColor: 'white', flex: 1 }}>
         <FlatList
-          nestedScrollEnabled
           data={message}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
           inverted
         />
-        <View style={{ paddingBottom: 10, paddingTop: 5, borderTopWidth: 1, marginTop: 5 }}>
+        <View style={{ paddingBottom: 30, paddingTop: 5, borderTopWidth: 1, marginTop: 5 }}>
           <View style={{ width: Dimensions.get('window').width - 2, margin: 1, borderRadius: 2, paddingLeft: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingBottom: 10, paddingTop: 3 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-              <View style={{ paddingLeft: 3, maxWidth: Dimensions.get('window').width - 60 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center',  }}>
                 <TextInput
-                  placeholder="Say something..."
+                  editable
+                  placeholder={"Say something..."}
                   value={text}
-                  onChangeText={setText}
+                  onChangeText={(text) => {setText(text)}}
                   multiline={true}
                 />
-              </View>
             </View>
             <View style={{ paddingRight: 8 }}>
               <Ionicons name="send" size={20} onPress={() => { addText() }} />
@@ -297,8 +237,10 @@ export default function ChatPage() {
           </View>
         </View>
       </View>
-    </View>
+
+    </KeyboardAvoidingView>
   );
+
 }
 
 const styles = StyleSheet.create({
@@ -306,13 +248,15 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     paddingRight: 5,
     borderWidth: 0,
-    marginBottom: 5
+    marginBottom: 8,
+    marginTop: 4
   },
   receivedMessage: {
     alignItems: 'flex-start',
     paddingLeft: 5,
     borderWidth: 0,
-    marginBottom: 5
+    marginBottom: 8,
+    marginTop: 4
   },
   sentTime: {
     flexDirection: 'row-reverse'
@@ -321,19 +265,28 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   sentBox: {
-    borderWidth: 1, 
+    borderWidth: 1,
     borderColor: '#77c3e6',
-    maxWidth: Dimensions.get('window').width / 2 - 10, 
-    paddingVertical: 3, 
-    paddingHorizontal: 2, 
-    borderRadius: 5, 
+    maxWidth: Dimensions.get('window').width / 2 - 10,
+    paddingVertical: 3,
+    paddingHorizontal: 2,
+    borderRadius: 5,
     backgroundColor: '#77c3e6'
   },
-  receivedBox:{
-    borderWidth: 1, 
-    maxWidth: Dimensions.get('window').width / 2 - 10, 
-    paddingVertical: 3, 
-    paddingHorizontal: 2, 
-    borderRadius: 5, 
+  receivedBox: {
+    borderWidth: 1,
+    maxWidth: Dimensions.get('window').width / 2 - 10,
+    paddingVertical: 3,
+    paddingHorizontal: 2,
+    borderRadius: 5,
+  },
+  Keyboardshown: {
+    flex:1,
+    marginBottom: 95,
+    backgroundColor: 'white'
+  },
+  KeyboardNotShown: {
+    flex:1,
+    backgroundColor: 'white'
   }
 });
