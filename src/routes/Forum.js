@@ -202,7 +202,7 @@ export default function Forum() {
 
   useEffect(() => {
     fetchFriendsPosts();
-    
+
     if (!canPost) {
       fetchFriendsPosts();
     }
