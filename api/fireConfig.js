@@ -2,6 +2,8 @@ import React from 'react';
 import { initializeApp } from 'firebase/app';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword} from "firebase/auth";
 import { FirebaseError } from 'firebase/app';
+import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 // Optionally import the services that you want to use
 // import {...} from "firebase/database";
@@ -17,7 +19,8 @@ const firebaseConfig = {
   storageBucket: "nusocialize.appspot.com",
   messagingSenderId: "262204232571",
   appId: "1:262204232571:web:2312a5bd34c62c68fba3de",
-  measurementId: "G-JQ86584KJQ"
+  measurementId: "G-JQ86584KJQ",
+  storageBucket: "nusocialize.appspot.com"
 };
 
 export const app = initializeApp(firebaseConfig);
@@ -26,3 +29,7 @@ export const app = initializeApp(firebaseConfig);
 
 // Initialize Firebase Authentication and get a reference to the service
 export const auth = getAuth(app);
+
+export const storage = getStorage(app);
+
+export const db = getFirestore(app);

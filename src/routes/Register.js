@@ -29,7 +29,7 @@ export default () => {
       You can always change it later. </Text>
       <TextInput
           style={{ height: 40, width: Dimensions.get('window').width - 20, borderWidth: 1, margin: 10, marginTop: -3}}
-          //placeholder = " Name"
+          placeholder = " Name"
           value={name}
           onChangeText={setName}
       />

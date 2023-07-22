@@ -1,8 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, Component } from 'react';
 import { Alert } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-
+import { StatusBar } from 'expo-status-bar';
+import { ActivityIndicator } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
+import { MultiSelect } from 'react-native-element-dropdown';
+import AntDesign from '@expo/vector-icons/AntDesign';
+
+
+import * as ImagePicker from 'expo-image-picker';
+
+import * as Authentication from "../../api/auth";
 
 
 import {
@@ -13,162 +21,151 @@ import {
   Button,
   TextInput,
   TouchableOpacity,
-  Dimensions,
+  Dimensions
 } from 'react-native';
+
 
 export default () => {
   const navigation = useNavigation();
 
-  const [gender, setGender] = useState("");
-  const [major, setMajor] = useState("");
-  const [course, setCourse] = useState("");
+  const [hasChangedPicture, setHasChangedPicture] = useState(false);
+  const [image, setImage] = useState(null);
 
-  const genderData = [
-    { label: 'Female'},
-    { label: 'Male'},
-    { label: 'Others'},
-  ]
+  const setProfilePicture = () => {
+    if (hasChangedPicture) {
+      Authentication.setProfilePicture(
+        { image },
+        () => navigation.navigate('Form1'),
+        (error) =>
+          Alert.alert(
+            'Error',
+            error.message || 'Something went wrong, try again later'
+          )
+      );
+    } else {
+      Alert.alert('Warning', 'Please add a profile picture first or press "skip" to set profile picture as default');
+    }
+  };
 
-  const majorData = [
-      { label: 'Pharmacy' },
-      { label: 'Nursing' },
-      { label: 'Medicine' },
-      { label: 'Architecture' },
-      { label: 'Computer Engineering' },
-      { label: 'Industrial Design' },
-      { label: 'Landscape Architecture' },
-      { label: 'Engineering' },
-      { label: 'Biomedical Engineering' },
-      { label: 'Chemical Engineering' },
-      { label: 'Civil Engineering' },
-      { label: 'Electrical Engineering' },
-      { label: 'Engineering Science' },
-      { label: 'Environmental Engineering' },
-      { label: 'Industrial Design' },
-      { label: 'Industrial & Systems Engineering' },
-      { label: 'Infrastructure & Project Management' },
-      { label: 'Material Science & Engineering' },
-      { label: 'Mechanical Engineering' },
-      { label: 'Dentistry' },
-      { label: 'Business Analytics' },
-      { label: 'Computer Engineering' },
-      { label: 'Computer Science' },
-      { label: 'Information Systems' },
-      { label: 'Information Security' },
-      { label: 'Business Administration (Accounting)' },
-      { label: 'Business Administration' },
-      { label: 'Real Estate' },
-      { label: 'Anthropology' },
-      { label: 'Chinese Language' },
-      { label: 'Chinese Studies' },
-      { label: 'Communications and New Media' },
-      { label: 'Economics' },
-      { label: 'English Language' },
-      { label: 'English Literature' },
-      { label: 'Geography' },
-      { label: 'Global Studies' },
-      { label: 'History' },
-      { label: 'Japanese Studies' },
-      { label: 'Malay Studies' },
-      { label: 'Philosophy' },
-      { label: 'Political Science' },
-      { label: 'Psychology' },
-      { label: 'Social Work' },
-      { label: 'Sociology' },
-      { label: 'South Asian Studies' },
-      { label: 'Southeast Asian Studies' },
-      { label: 'Theatre Studies' },
-      { label: 'Chemistry' },
-      { label: 'Data Science and Analytics' },
-      { label: 'Life Sciences' },
-      { label: 'Mathematics' },
-      { label: 'Physics' },
-      { label: 'Quantitative Finance' },
-      { label: 'Statistics' },
-  ]
-    
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+      setHasChangedPicture(true);
+    }
+  };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.usual}>Gender</Text>
-      <Dropdown
-         style={styles.dropdown}
-         placeholderStyle={styles.placeholderStyle}
-         selectedTextStyle={styles.selectedTextStyle}
-         inputSearchStyle={styles.inputSearchStyle}
-         maxHeight={300}
-         labelField="label"
-        data={genderData}
-        onChange={item => setGender(item.label)}
-        value={gender}
-        placeholder= " "
-      />
-      <Text style={styles.usual}>Bio</Text>
-      <TextInput 
-        style = {styles.textInput}
-      />
-      <Text style={styles.usual}>Major</Text>
-      <Dropdown
-         style={styles.dropdown}
-         placeholderStyle={styles.placeholderStyle}
-         selectedTextStyle={styles.selectedTextStyle}
-         inputSearchStyle={styles.inputSearchStyle}
-         maxHeight={300}
-         labelField="label"
-        data={majorData}
-        onChange={item => setMajor(item.label)}
-        value={major}
-        placeholder= " "
-      />
+    <View style={styles.bigContainer}>
+      <View style={styles.container}>
+        <Text style={styles.mainText}>Add your profile picture</Text>
+        <Text style={styles.usual}>
+          Share a picture that best represents you!{' '}
+        </Text>
+      </View>
+      <View style={styles.imageContainer}>
+        <TouchableOpacity
+          onPress={pickImage}
+          style={[styles.circle, { marginTop: -300 }]}
+          activityOpacity={0.8}
+        >
+          <Image
+            source={image ? { uri: image } : require('./Standard_Profile.png')}
+            style={styles.image}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={pickImage} style={styles.changeImageContainer}>
+          <Text style={styles.changeImageText}>
+            {hasChangedPicture ? 'Change profile picture' : 'Add profile picture'}
+          </Text>
+        </TouchableOpacity>
+      </View>
+      <TouchableOpacity
+        activeOpacity={0.75}
+        style={[
+          styles.buttonContainer,
+          { backgroundColor: hasChangedPicture ? '#2de0ff' : '#808080' },
+        ]}
+        onPress={setProfilePicture}
+        disabled={!hasChangedPicture}
+      >
+        <Text style={styles.registerText}>Next</Text>
+      </TouchableOpacity>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  container: {
+  bigContainer: {
     flex: 1,
+    backgroundColor: '#FFFFFF',
+  },
+  container: {
     paddingTop: 10,
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     backgroundColor: '#FFFFFF',
   },
+  mainText: {
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 26,
+    margin: 10,
+  },
   usual: {
-    color: 'gray',
-    fontSize: 16,
-    margin: 3,
-    left: 12
+    color: 'black',
+    fontSize: 14,
+    margin: 10,
+    marginTop: -5,
   },
-  list: {
-    fontSize: 14
-  },
-  dropdown: {
-    margin: 16,
-    marginTop: -8,
-    height: 50,
-    borderBottomColor: 'gray',
-    borderBottomWidth: 0.5,
-    width: Dimensions.get('window').width - 32,
-  },
-  icon: {
-    marginRight: 5,
-  },
-  placeholderStyle: {
-    fontSize: 16,
-  },
-  selectedTextStyle: {
-    fontSize: 16,
-  },
-  inputSearchStyle: {
+  buttonContainer: {
     height: 40,
+    width: Dimensions.get('window').width - 20,
+    position: 'absolute',
+    bottom: 15,
+    borderRadius: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 10,
+  },
+  registerText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  imageContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  circle: {
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    backgroundColor: '#808080',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  image: {
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+  },
+  changeImageContainer: {
+    marginTop: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  changeImageText: {
+    color: '#2de0ff',
     fontSize: 16,
   },
-  textInput: {
-    margin: 16,
-    marginTop: -8,
-    height: 50,
-    borderBottomColor: 'gray',
-    borderBottomWidth: 0.5,
-    width: Dimensions.get('window').width - 32,
-    fontSize: 16,
-  }
 });
+
+  

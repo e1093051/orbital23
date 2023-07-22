@@ -24,13 +24,25 @@ export default () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+
   const handleLogin = () => {
     Authentication.logIn(
       { email, password },
-      (user) => navigation.navigate('Form'),
+      (user) =>  navigation.navigate('Home'),
+      (user) =>  navigation.navigate('Home'),
       (error) => Alert.alert('error',(error.message || 'Something went wrong, try again later'))
     );
   }
+
+  const handleFirstTimeLogin = () => {
+    Authentication.logIn(
+      { email, password },
+      (user) =>  navigation.navigate('Form'),
+      (user) =>  navigation.navigate('Form'),
+      (error) => Alert.alert('error',(error.message || 'Something went wrong, try again later'))
+    );
+  }
+
 
 
   return (
@@ -41,16 +53,18 @@ export default () => {
           source={require('./Logo.png')}
         />
         <TextInput
-          style={{ height: 40, width: 220, borderWidth: 1, margin: 10 }}
+          style={{ height: 40, width: 220, borderWidth: 1, margin: 10 }} d
           placeholder = " NUS email (@u.nus.edu)"
           value={email}
           onChangeText={setEmail}
+          keyboardType="email-address"
         />
         <TextInput
           style={{ height: 40, width: 220, borderWidth: 1, margin: 10 }}
           placeholder = " Password"
           value={password}
           onChangeText={setPassword}
+          secureTextEntry={true}
         />
         <TouchableOpacity
           activeOpacity={0.75}
@@ -60,7 +74,14 @@ export default () => {
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.75}
-          style={styles.forgetPasswordButton}>
+          style={styles.loginButton}
+          onPress={() => handleFirstTimeLogin()}>
+          <Text style={styles.loginText}>First Time Log In</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={0.75}
+          style={styles.forgetPasswordButton}
+          onPress={() => navigation.navigate('forgetPassword')}>
           <View style={styles.line}>
             <Text style={styles.forgetPasswordText}>Forgot Password</Text>
           </View>
