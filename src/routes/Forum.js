@@ -35,6 +35,7 @@ import {
 } from 'react-native';
 
 export default function Forum() {
+
   const [profileData, setProfileData] = useState(null);
   const [image, setImage] = useState(null);
   const [hasChangedPicture, setHasChangedPicture] = useState(false);
@@ -42,6 +43,7 @@ export default function Forum() {
   const [canPost, setCanPost] = useState(true);
   const [likedPosts, setLikedPosts] = useState([]);
   const [friendData, setFriendData] = useState([]);
+  const [showFriendsPosts, setShowFriendsPosts] = useState(false);
 
   const navigation = useNavigation();
 
@@ -105,7 +107,7 @@ export default function Forum() {
 
   const takePhoto = async () => {
     let result = await launchCameraAsync({
-      mediaTypes:  MediaTypeOptions.All,
+      mediaTypes: MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
@@ -115,16 +117,13 @@ export default function Forum() {
       setImage(result.assets[0].uri);
       setHasChangedPicture(true);
       setFriendData([]); // Clear friendData when taking a new photo
-
-      const newPostTimestamp = Date.now();
-      setLastPostTimestamp(newPostTimestamp);
-      await storeLastPostTimestamp(newPostTimestamp);
     }
   };
 
   const setPhotoFeature = async () => {
     if (hasChangedPicture) {
       if (isWithin24Hours()) {
+
         const newPostTimestamp = Date.now();
         setLastPostTimestamp(newPostTimestamp);
 
@@ -157,6 +156,10 @@ export default function Forum() {
               error.message || 'Something went wrong, try again later'
             )
         );
+
+        setLastPostTimestamp(newPostTimestamp);
+        await storeLastPostTimestamp(newPostTimestamp);
+
       } else {
         Alert.alert('Error', 'You can only post a photo once every 24 hours.');
       }
@@ -198,6 +201,8 @@ export default function Forum() {
   };
 
   useEffect(() => {
+    fetchFriendsPosts();
+
     if (!canPost) {
       fetchFriendsPosts();
     }
@@ -262,7 +267,7 @@ export default function Forum() {
         <TouchableOpacity
           style={[
             styles.likeButton,
-            { backgroundColor: isPostLiked ? '#2de0ff' : 'grey' },
+            { backgroundColor: '#2de0ff' },
           ]}
           onPress={() => {
             console.log('Like button pressed');
@@ -279,53 +284,56 @@ export default function Forum() {
 
 
 
-  return (
-    <View style={styles.container}>
-      {!canPost ? (
-        <View style={styles.friendsPostsContainer}>
-          <Text style={styles.friendsPostsText}>Friends' Posts</Text>
-          <View style={styles.postsContainer}>
-            <FlatList
-              data={friendData}
-              renderItem={renderFriendPost}
-              keyExtractor={(item, index) => index.toString()}
-            />
-          </View>
-        </View>
-      ) : (
-        <>
-          {!image && (
-            <View style={styles.emptyContainer}>
-              <Text style={styles.emptyText}>
-                You have not taken a photo for today.
-                Please take a photo to see your friends' photos.
+ return (
+  <View style={styles.container}>
+    {canPost ? (
+      <>
+        {!image && (
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>
+              You have not taken a photo for today.
+              Please take a photo to see your friends' photos.
+            </Text>
+            <TouchableOpacity style={styles.selectButton} onPress={takePhoto}>
+              <Text style={styles.buttonText}>
+                {hasChangedPicture
+                  ? 'Retake Photo; Open Camera'
+                  : 'Open Camera'}
               </Text>
-              <TouchableOpacity style={styles.selectButton} onPress={takePhoto}>
-                <Text style={styles.buttonText}>
-                  {hasChangedPicture
-                    ? 'Retake Photo; Open Camera'
-                    : 'Open Camera'}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          )}
+            </TouchableOpacity>
+          </View>
+        )}
 
-          {image && (
-            <View style={styles.imageContainer}>
-              <Image source={{ uri: image }} style={styles.image} />
-              <TouchableOpacity
-                style={[styles.uploadButton, !hasChangedPicture && styles.disabledButton]}
-                onPress={setPhotoFeature}
-                disabled={!hasChangedPicture}
-              >
-                <Text style={styles.buttonText}>Post</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-        </>
-      )}
-    </View>
-  );
+        {image && (
+          <View style={styles.imageContainer}>
+            <Image source={{ uri: image }} style={styles.image} />
+            <TouchableOpacity
+              style={[
+                styles.uploadButton,
+                !hasChangedPicture && styles.disabledButton,
+              ]}
+              onPress={setPhotoFeature}
+              disabled={!hasChangedPicture}
+            >
+              <Text style={styles.buttonText}>Post</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      </>
+    ) : (
+      <View style={styles.friendsPostsContainer}>
+        <Text style={styles.friendsPostsText}>Friends' Posts</Text>
+        <View style={styles.postsContainer}>
+          <FlatList
+            data={friendData}
+            renderItem={renderFriendPost}
+            keyExtractor={(item, index) => index.toString()}
+          />
+        </View>
+      </View>
+    )}
+  </View>
+);
 }
 
 

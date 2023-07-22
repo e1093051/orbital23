@@ -40,6 +40,7 @@ export default () => {
           style={{ height: 40, width: Dimensions.get('window').width - 20, borderWidth: 1, margin: 10 }}
           value={email}
           onChangeText={setEmail}
+          placeholder="Enter your NUS email address..."
         />
         <TouchableOpacity
           activeOpacity={0.75}
@@ -103,10 +104,6 @@ const styles = StyleSheet.create({
   signUpText: {
     color: 'white',
     fontWeight: 'bold',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  buttonContainer:{
     justifyContent: 'center',
     alignItems: 'center',
   },
