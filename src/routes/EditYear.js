@@ -54,11 +54,11 @@ export default function EditYear() {
   
   const route = useRoute();
   const { year } = route.params;
+  const {showYear} = route.params;
   const [editYear, setEditYear] = useState(year);
   const navigation = useNavigation();
   const handleUpdateYear = () => {
-    setYear({year: editYear, showYear: true});
-    navigation.navigate('Edit');
+    setYear({year: editYear, showYear: showYear}, () => navigation.goBack(), (error) => console.log(error.message));
   }
 
 

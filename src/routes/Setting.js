@@ -59,24 +59,25 @@ export default () => {
   }, [profileData]);
 
   return (
-  <View style={{ flex: 1, alignItems: 'flex-start', backgroundColor: 'white' }}>
-     <Text style={{ fontSize: 15,marginLeft: 10, marginTop: 10, marginBottom:10, color: "#939799"}}>Account Settings</Text>
+    <View style = {{flex: 1, backgroundColor: 'white'}}>
+  <View style={{ flex: 1, alignItems: 'flex-start', backgroundColor: 'white', marginLeft: 15 }}>
+     <Text style={{ fontSize: 15,marginLeft: -5, marginTop: 10, marginBottom:10, color: "#939799"}}>Account Settings</Text>
 
      <View style={{ width: Dimensions.get('window').width - 60, borderBottomWidth: 1, flexDirection: "row", borderBottomColor: '#DEDEDE' }}>
-          <Text style={{ width: 80, marginBottom: 5, marginTop: 5, marginLeft: 10}}>Email</Text>
+          <Text style={{ width: 82, marginBottom: 5, marginTop: 5, marginLeft: 10}}>Email</Text>
           {<Text style={{ color: '#808080', marginBottom: 5, marginTop: 5 }}>{auth.currentUser.email}</Text>}
      </View>
 
      <TouchableOpacity onPress={() => navigation.navigate('ChangePassword')}>
 
      <View style={{ width: Dimensions.get('window').width - 60, borderBottomWidth: 1, flexDirection: "row", borderBottomColor: '#DEDEDE' }}>
-          <Text style={{ width: 80, marginBottom: 5, marginTop: 5, marginLeft:10 }}>Password</Text>
-          {<Text style={{ color: '#2de0ff', marginBottom: 5, marginTop: 5 }}>Click here to change your password</Text>}
+          <Text style={{ width: 82, marginBottom: 5, marginTop: 5, marginLeft:10, fontSize: 13.5 }}>Password</Text>
+          {<Text style={{ color: '#2de0ff', marginBottom: 5, marginTop: 5, fontSize: 14}}>Click here to change password</Text>}
      </View>
 
      </TouchableOpacity>
 
-     <Text style={{ fontSize: 15,marginLeft: 10, marginTop: 10,marginBottom:10, color: "#939799"}}>Profile Privacy Settings</Text>
+     <Text style={{ fontSize: 15,marginLeft: -5, marginTop: 10,marginBottom:10, color: "#939799"}}>Profile Privacy Settings</Text>
 
     <TouchableOpacity onPress={() => navigation.navigate('EditShowMajor', {showMajor})}>
 
@@ -145,6 +146,7 @@ export default () => {
 
     </TouchableOpacity>
 
+  </View>
   </View>
 
   );

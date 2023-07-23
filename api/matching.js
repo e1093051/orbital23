@@ -6,18 +6,19 @@
 
 
 
-import { auth, firebase, storage, db } from './fireConfig'
+import { auth, db } from './fireConfig'
 import { Alert } from 'react-native';
-import React, { Component, useState, useRef } from 'react';
 
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, sendEmailVerification, signOut, sendPasswordResetEmail } from 'firebase/auth';
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
-import { addDoc, collection, setDoc, doc, updateDoc, getDoc, query, where, getDocs, arrayUnion, onSnapshot, arrayRemove } from "firebase/firestore";
+import { collection, setDoc, doc, updateDoc, getDoc, query, where, getDocs, arrayUnion, arrayRemove } from "firebase/firestore";
 import { LogBox } from 'react-native';
+
+
+
 
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
 ]);
+
 
 const getData = (uid) => {
   getDoc(doc(db, "NUS/users", uid, "profile"))
@@ -25,15 +26,6 @@ const getData = (uid) => {
 }
 
 
-export async function initializeMatch() {
-  profileRef = collection(db, "NUS", "users", "profile");
-  const querySnapshot = await getDocs(collection(db, "NUS", "users", "profile"));
-  querySnapshot.forEach(async (doc) => {
-    await updateDoc(doc.ref, {
-      match: true
-    });
-  });
-}
 
 
 
@@ -58,7 +50,7 @@ export async function updateAvoid(uid) {
   })
 }
 
-async function score(profileData1, profileData2) {
+export async function score(profileData1, profileData2) {
   let point = 0;
   if (profileData1.major == profileData2.major) {
     point += 1;
@@ -232,12 +224,13 @@ export async function showRecommendation() {
     const recommendationData = await getDoc(doc(db, "NUS/users", "profile", recommendationId))
       .then(docSnap => docSnap.data());
     const reacted = recommendationData.reacted || [];
-    if (!reacted.includes(auth.currentUser.uid)) {
+    const friend = recommendationData.friend || [];
+    if (!reacted.includes(auth.currentUser.uid) && !friend.includes(auth.currentUser.uid)) {
       return recommendationId;
     } else {
       await skip(recommendationId, recommendList, pointList);
       console.log("skip");
-      return showRecommendation();
+      return await showRecommendation();
     }
   }
   if (recommendList.length === 0) {

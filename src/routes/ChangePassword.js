@@ -1,8 +1,9 @@
-import React, { Component, useState, useRef, Alert } from 'react';
+import React, { Component, useState, useRef} from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
 import auth from '../../api/fireConfig'
 import * as Authentication from "../../api/auth";
+import { Alert } from 'react-native';
 
 import {
   StyleSheet,
@@ -25,8 +26,8 @@ export default () => {
     await Authentication.resetPassword(
       { email },
       () => {
-        Alert.alert("Password reset email sent");
-        navigation.navigate('Login');
+        Alert.alert("Email sent","Password reset email sent");
+        navigation.goBack();
       },
       (error) => {
         Alert.alert("Error resetting password", error.message);
@@ -54,12 +55,6 @@ export default () => {
           <Text style={styles.signUpText}>Send me an email</Text>        
       </TouchableOpacity>
       </View>
-      <TouchableOpacity
-          activeOpacity={0.75}
-          style={styles.buttonContainer}
-          onPress={() => navigation.navigate('Setting')} >
-          <Text style={styles.registerText}>Back to Setting</Text>
-        </TouchableOpacity>
     </View>
   );
 }

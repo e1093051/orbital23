@@ -3,7 +3,7 @@ import { Alert } from 'react-native';
 
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, sendEmailVerification, signOut, sendPasswordResetEmail } from 'firebase/auth';
 import { ref, uploadBytes, getDownloadURL, uploadBytesResumable } from "firebase/storage";
-import { addDoc, collection, setDoc, doc, updateDoc, getDoc, serverTimestamp } from "firebase/firestore";
+import {  setDoc, doc, updateDoc, arrayUnion } from "firebase/firestore";
 
 
 
@@ -16,7 +16,9 @@ export const photoFeatureAPI = async ( {image}, onSuccess, onError ) => {
     await uploadBytesResumable(reference, blob);
     const url = await getDownloadURL(reference);
     await setDoc(doc(db, "NUS", "users", "Forum",`${auth.currentUser.uid}`), {
-       photoFeatureURL: url 
+       photoFeatureURL: url,
+       lastPostTimestamp: new Date(),
+       likes: [],
       }, { merge: true }
     )
     onSuccess();
@@ -25,35 +27,11 @@ export const photoFeatureAPI = async ( {image}, onSuccess, onError ) => {
   }
 }
 
-export const lastPostTimestampAPI = async (onSuccess, onError) => {
-  try {
-    await setDoc(
-      doc(db, "NUS", "users", "Forum", `${auth.currentUser.uid}`),
-      {
-        lastPostTimestamp: serverTimestamp(),
-      },
-      { merge: true }
-    );
-    onSuccess();
-  } catch (error) {
-    onError(error);
-  }
-};
-
-export const likesAPI = async (onSuccess, onError) => {
-  try {
-    await setDoc(
-      doc(db, "NUS", "users", "Forum", `${auth.currentUser.uid}`),
-      {
-        likes: [],
-      },
-      { merge: true }
-    );
-    onSuccess();
-  } catch (error) {
-    onError(error);
-  }
-};
+export const likePost = async (uid) => {
+  await updateDoc(doc(db, "NUS", "users", "Forum", uid), {
+    likes: arrayUnion(auth.currentUser.uid),
+  });
+}
 
 
 

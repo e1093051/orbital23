@@ -119,6 +119,17 @@ export const setBio = async ({ bio }, onSuccess, onError) => {
   }
 }
 
+export const updateBio = async ({bio}, onSuccess, onError) => {
+  try {
+    await updateDoc(doc(db, "NUS", "users", "profile",`${auth.currentUser.uid}`), {
+      bio: bio,
+    });
+    return onSuccess();
+  } catch (error) {
+    return onError(error);
+  }
+}
+
 export const setGender = async ({ gender }, onSuccess, onError) => {
   try {
     await setDoc(doc(db, "NUS", "users", "profile",`${auth.currentUser.uid}`), {

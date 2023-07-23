@@ -33,7 +33,7 @@ import { Dropdown } from 'react-native-element-dropdown';
 
 
 import {
-  setCountryAndRegion
+  setCountryAndRegion, showCountryAndRegionAPI
 } from '../../api/setProfile';
 
 
@@ -240,11 +240,11 @@ export default function EditCountryAndRegion() {
 
   const route = useRoute();
   const { countryAndRegion } = route.params;
+  const {showCountryAndRegion} = route.params;
   const [editCountryAndRegion, setEditCountryAndRegion] = useState(countryAndRegion);
   const navigation = useNavigation();
   const handleUpdateCountry = () => {
-    setCountryAndRegion({countryAndRegion: editCountryAndRegion, showCountryAndRegion: true});
-    navigation.navigate('Edit');
+    setCountryAndRegion({countryAndRegion: editCountryAndRegion, showCountryAndRegion: showCountryAndRegion}, () => {navigation.goBack()}, (error) => console.log(error.message));
   }
 
 
