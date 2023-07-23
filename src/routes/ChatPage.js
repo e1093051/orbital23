@@ -7,7 +7,6 @@ import { useRoute } from '@react-navigation/native';
 import { auth } from '../../api/fireConfig';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 
 export const updateMyCountToChatCount = async (id) => {
@@ -211,7 +210,10 @@ export default function ChatPage() {
 
 
   return (
-    <KeyboardAvoidingView style = {keyboardStatus ? styles.Keyboardshown : styles.KeyboardNotShown} behavior={Platform.OS === 'ios' ? 'padding' : 'height' }> 
+    <KeyboardAvoidingView style = {[
+      keyboardStatus ? styles.Keyboardshown : styles.KeyboardNotShown,
+      Platform.OS === 'ios' ? styles.iosBackground: styles.androidBackground,
+    ]} behavior={Platform.OS === 'ios' ? 'padding' : 'height' }> 
 
       <View style={{ backgroundColor: 'white', flex: 1 }}>
         <FlatList
@@ -220,9 +222,9 @@ export default function ChatPage() {
           keyExtractor={(item) => item.id}
           inverted
         />
-        <View style={{ paddingBottom: 30, paddingTop: 5, borderTopWidth: 1, marginTop: 5 }}>
-          <View style={{ width: Dimensions.get('window').width - 2, margin: 1, borderRadius: 2, paddingLeft: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingBottom: 10, paddingTop: 3 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center',  }}>
+        <View style={Platform.OS === 'ios' ? styles.iosInput: styles.androidInput}>
+          <View style={Platform.OS === 'ios' ? styles.iosTextInput : styles.androidTextInput}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', maxWidth: Dimensions.get('window').width - 40}}>
                 <TextInput
                   editable
                   placeholder={"Say something..."}
@@ -282,11 +284,33 @@ const styles = StyleSheet.create({
   },
   Keyboardshown: {
     flex:1,
-    marginBottom: 95,
+    marginBottom: 55,
     backgroundColor: 'white'
   },
   KeyboardNotShown: {
+    marginBottom: -15,
     flex:1,
     backgroundColor: 'white'
-  }
+  },
+  iosBackground: {
+    backgroundColor: 'white',
+     flex: 1,
+  },
+  androidBackground: {
+    backgroundColor: 'white',
+     flex: 1,
+     paddingBottom: 60
+  },
+  iosInput: {
+    paddingBottom: 30, paddingTop: 5, borderTopWidth: 1, marginTop: 5
+  },
+  androidInput: {
+    paddingBottom: 0, paddingTop: 5, borderTopWidth: 1, marginTop: 5, marginBottom: 0
+  },
+  iosTextInput: 
+    { width: Dimensions.get('window').width - 2, margin: 1, borderRadius: 2, paddingLeft: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingBottom: 10, paddingTop: 3 },
+
+  androidTextInput: 
+    { width: Dimensions.get('window').width - 2, margin: 1, borderRadius: 2, paddingLeft: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingBottom: 25, paddingTop: 3 },
+
 });

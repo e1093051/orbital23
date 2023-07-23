@@ -1,25 +1,20 @@
 //some parts referenced from Chat GPT and stack overflow
 
-import React, { useState, useEffect, Component } from 'react';
-import { Alert, FlatList, ScrollView } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { MultiSelect } from 'react-native-element-dropdown';
+import React, { useState, useEffect } from 'react';
+import { Alert, Dimensions, FlatList } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { CheckBox, Icon } from '@rneui/themed';
-import Stack from '@mui/material/Stack';
+
 
 import { launchCameraAsync, MediaTypeOptions } from 'expo-image-picker';
-import * as Permissions from 'expo-permissions';
-import * as ImagePicker from 'expo-image-picker';
 
-import firebase from 'firebase/app';
+
 import 'firebase/storage';
-import { photoFeatureAPI, lastPostTimestampAPI, likesAPI } from '../../api/photoFeature';
+import { photoFeatureAPI, likePost } from '../../api/photoFeature';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { db, auth } from '../../api/fireConfig';
-import { addDoc, collection, setDoc, doc, updateDoc, getDoc, onSnapshot, Timestamp, serverTimestamp } from "firebase/firestore";
+import { doc, getDoc, onSnapshot } from "firebase/firestore";
 
 
 
@@ -28,15 +23,13 @@ import {
   Text,
   View,
   Image,
-  Button,
-  TextInput,
   TouchableOpacity,
-  Dimensions
 } from 'react-native';
 
 export default function Forum() {
 
   const [profileData, setProfileData] = useState(null);
+  const [photoData, setPhotoData] = useState(null);
   const [image, setImage] = useState(null);
   const [hasChangedPicture, setHasChangedPicture] = useState(false);
   const [lastPostTimestamp, setLastPostTimestamp] = useState(null);
@@ -44,6 +37,8 @@ export default function Forum() {
   const [likedPosts, setLikedPosts] = useState([]);
   const [friendData, setFriendData] = useState([]);
   const [showFriendsPosts, setShowFriendsPosts] = useState(false);
+  const [within24Hrs, setWithin24Hrs] = useState(true);
+  const [render, setRender] = useState(false);
 
   const navigation = useNavigation();
 
@@ -53,56 +48,42 @@ export default function Forum() {
     });
   };
 
+  const getPhotoData = async () => {
+    onSnapshot(doc(db, 'NUS/users', 'Forum', auth.currentUser.uid), (doc) => {
+      setPhotoData(doc.data());
+    });
+  }
+
   useEffect(() => {
     getData();
   }, []);
 
   useEffect(() => {
-    if (profileData) {
-      setLikedPosts(profileData.likes || []);
-    }
-  }, [profileData]);
+    getPhotoData();
+  }, [])
 
-  const storeLastPostTimestamp = async (timestamp) => {
-    try {
-      await AsyncStorage.setItem('@lastPostTimestamp', timestamp.toString());
-    } catch (error) {
-      console.log('Error storing last post timestamp:', error);
-    }
-  };
-
-  const getLastPostTimestamp = async () => {
-    try {
-      const timestampString = await AsyncStorage.getItem('@lastPostTimestamp');
-      if (timestampString) {
-        const timestamp = parseInt(timestampString, 10);
-        setLastPostTimestamp(timestamp);
-      }
-    } catch (error) {
-      console.log('Error retrieving last post timestamp:', error);
-    }
-  };
 
   useEffect(() => {
-    getLastPostTimestamp();
-    setCanPost(isWithin24Hours());
-  }, [profileData]);
+    setWithin24Hrs(isWithin24Hours());
+  }, [photoData])
+
+  //第一次登入就設定好檔案
 
   const isWithin24Hours = () => {
-    if (!lastPostTimestamp) {
-      return true;
+    if (photoData && !photoData.lastPostTimestamp) {
+      return false;
     }
 
-    const currentTime = Date.now();
-    const elapsedTime = currentTime - lastPostTimestamp;
-    const hoursPassed = elapsedTime / (1000 * 60 * 60);
-
-    console.log('lastPostTimestamp:', lastPostTimestamp);
-    console.log('currentTime:', currentTime);
-    console.log('elapsedTime:', elapsedTime);
-    console.log('hoursPassed:', hoursPassed);
-
-    return hoursPassed >= 24;
+    if (photoData !== null) {
+      const now = new Date();
+      const timestampDate = photoData.lastPostTimestamp.toDate();
+      console.log(now);
+      console.log(timestampDate)
+      const timeDiffInMs = now.getTime() - timestampDate.getTime();
+      const hoursDiff = timeDiffInMs / (1000 * 60 * 60);
+      console.log(hoursDiff);
+      return hoursDiff <= 24;
+    }
   };
 
   const takePhoto = async () => {
@@ -121,51 +102,17 @@ export default function Forum() {
   };
 
   const setPhotoFeature = async () => {
-    if (hasChangedPicture) {
-      if (isWithin24Hours()) {
-
-        const newPostTimestamp = Date.now();
-        setLastPostTimestamp(newPostTimestamp);
-
-        photoFeatureAPI(
-          { image },
-          async () => {
-            console.log('uploaded!');
-            lastPostTimestampAPI(
-              () => {
-                likesAPI(
-                  () => {
-                    setShowFriendsPosts(true);
-                    setCanPost(false);
-                  },
-                  (error) => {
-                    console.log('Error liking post:', error);
-                  }
-                );
-              },
-              (error) =>
-                Alert.alert(
-                  'Error',
-                  error.message || 'Something went wrong, try again later'
-                )
-            );
-          },
-          (error) =>
-            Alert.alert(
-              'Error',
-              error.message || 'Something went wrong, try again later'
-            )
-        );
-
-        setLastPostTimestamp(newPostTimestamp);
-        await storeLastPostTimestamp(newPostTimestamp);
-
-      } else {
-        Alert.alert('Error', 'You can only post a photo once every 24 hours.');
-      }
-    } else {
-      Alert.alert('Warning', 'Please take a photo');
-    }
+    photoFeatureAPI(
+      { image },
+      async () => {
+        console.log('uploaded!');
+      },
+      (error) =>
+        Alert.alert(
+          'Error',
+          error.message || 'Something went wrong, try again later'
+        )
+    );
   };
 
   const fetchFriendsPosts = async () => {
@@ -186,6 +133,7 @@ export default function Forum() {
             name: friendProfileData.name,
             profilePicture: friendProfileData.photoURL,
             lastPostTimestamp: friendData.lastPostTimestamp,
+            likes: friendData.likes
           };
         } else {
           return null;
@@ -202,93 +150,97 @@ export default function Forum() {
 
   useEffect(() => {
     fetchFriendsPosts();
-
-    if (!canPost) {
-      fetchFriendsPosts();
-    }
-  }, [canPost]);
+  }, [photoData, render]);
 
 
-  const handleLike = async (item) => {
-  try {
-    const friendUid = item.friendUid;
-
-    const friendDocRef = doc(db, 'NUS/users', 'Forum', friendUid);
-    const friendDocSnap = await getDoc(friendDocRef);
-    const friendData = friendDocSnap.data();
-
-    let updatedLikes = [];
-
-    if (friendData && friendData.likes) {
-      if (friendData.likes.includes(auth.currentUser.uid)) {
-        // Unlike the post
-        updatedLikes = friendData.likes.filter((id) => id !== auth.currentUser.uid);
-      } else {
-        // Like the post
-        updatedLikes = [...friendData.likes, auth.currentUser.uid];
-      }
-
-      // Update the document in Firestore with the updatedLikes array
-      await updateDoc(friendDocRef, {
-        likes: updatedLikes,
-      });
-
-      // Update the likedPosts state with the updatedLikes array
-      setLikedPosts(updatedLikes);
-    }
-  } catch (error) {
-    console.log('Error liking post:', error);
+  const handleLike = async(uid) => {
+    await likePost(uid);
   }
-};
-
 
   const renderFriendPost = ({ item }) => {
-  const isPostLiked = item.likes && item.likes.includes(auth.currentUser.uid);
+    const isPostLiked = item.likes && item.likes.includes(auth.currentUser.uid);
+    console.log(item.likes);
 
-  const postTime = item.lastPostTimestamp
-    ? item.lastPostTimestamp.toDate().toLocaleTimeString('en-US', {
-        hour: 'numeric',
-        minute: 'numeric',
-        hour12: true,
-      })
-    : '';
 
-  return (
-    <View style={styles.postContainer}>
-      <View style={styles.friendInfoContainer}>
-        <Image
-          style={styles.friendProfilePicture}
-          source={{ uri: item.profilePicture }}
-        />
-        <Text style={styles.friendName}>{item.name}</Text>
+    const isSameDay = (date1, date2) =>
+        date1.getDate() === date2.getDate() &&
+        date1.getMonth() === date2.getMonth() &&
+        date1.getFullYear() === date2.getFullYear();
+
+      const isSameYear = (date1, date2) => date1.getFullYear() === date2.getFullYear();
+
+      const formatTimestamp = (date) => {
+        const today = new Date();
+        const yesterday = new Date(today);
+        yesterday.setDate(yesterday.getDate() - 1);
+
+        if (isSameDay(date, today)) {
+          // If timestamp is today, show time only
+          return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        } else if (isSameDay(date, yesterday)) {
+          // If timestamp is yesterday, show "Yesterday"
+          return 'Yesterday ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });;
+        } else if (isSameYear(date, today)) {
+          // If timestamp is this year, show month and day
+          return date.toLocaleString('default', { month: 'short', day: 'numeric' });
+        } else {
+          // Otherwise, show year, month, and day
+          return date.toLocaleString('default', { year: 'numeric', month: 'short', day: 'numeric' });
+        }
+      };
+
+      const postTime = formatTimestamp(item.lastPostTimestamp.toDate())
+
+    return (
+      <View style={styles.postContainer}>
+        <View style = {{flexDirection: 'row', justifyContent: 'space-between'}}>
+        <View style={styles.friendInfoContainer}>
+          <Image
+            style={styles.friendProfilePicture}
+            source={{ uri: item.profilePicture }}
+          />
+          <Text style={styles.friendName}>{item.name}</Text>
+          </View>
+          <View style = {{justifyContent: 'flex-end', paddingBottom: 16, paddingRight: 10}}>
+          <Text>{postTime}</Text>
+          </View>
+        </View>
+        <Image style={styles.postImage} source={{ uri: item.photoFeatureURL }} />
+        <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingLeft: 15, paddingTop: 15}}>
+          <TouchableOpacity
+            onPress={() => {
+              console.log('Like button pressed');
+              handleLike(item.friendUid);
+              setRender(!render);
+            }}
+          >
+            {isPostLiked ? <AntDesign name="smile-circle" size={30} color='#2de0ff' /> : <AntDesign name="smileo" size={28} color='#2de0ff' />}
+          </TouchableOpacity>
+        </View>
       </View>
-      <Image style={styles.postImage} source={{ uri: item.photoFeatureURL }} />
-      <View style={styles.postButtonsContainer}>
-        <TouchableOpacity
-          style={[
-            styles.likeButton,
-            { backgroundColor: '#2de0ff' },
-          ]}
-          onPress={() => {
-            console.log('Like button pressed');
-            handleLike(item);
-          }}
-        >
-          <AntDesign name="like1" size={20} color="white" />
-        </TouchableOpacity>
-        <Text style={[styles.postTime, styles.buttonSpacing]}>{postTime}</Text>
+    );
+  };
+
+
+  if (within24Hrs) {
+    return (
+      <View style={{flex: 1,justifyContent: 'center',alignItems: 'center', paddingBottom: 80}}>
+        <View style={styles.friendsPostsContainer}>
+          <Text style={styles.friendsPostsText}>Friends' Posts</Text>
+          <View style={styles.postsContainer}>
+            <FlatList
+              data={friendData}
+              renderItem={renderFriendPost}
+              keyExtractor={(item, index) => index.toString()}
+            />
+          </View>
+        </View>
       </View>
-    </View>
-  );
-};
-
-
-
- return (
-  <View style={styles.container}>
-    {canPost ? (
-      <>
-        {!image && (
+    )
+  } else {
+    if (image === null) {
+      return (
+        <View style={styles.container}>
           <View style={styles.emptyContainer}>
             <Text style={styles.emptyText}>
               You have not taken a photo for today.
@@ -302,9 +254,11 @@ export default function Forum() {
               </Text>
             </TouchableOpacity>
           </View>
-        )}
-
-        {image && (
+        </View>
+      )
+    } else {
+      return (
+        <View style={styles.container}>
           <View style={styles.imageContainer}>
             <Image source={{ uri: image }} style={styles.image} />
             <TouchableOpacity
@@ -318,24 +272,10 @@ export default function Forum() {
               <Text style={styles.buttonText}>Post</Text>
             </TouchableOpacity>
           </View>
-        )}
-      </>
-    ) : (
-      <View style={styles.friendsPostsContainer}>
-        <Text style={styles.friendsPostsText}>Friends' Posts</Text>
-        <View style={styles.postsContainer}>
-          <FlatList
-            data={friendData}
-            renderItem={renderFriendPost}
-            keyExtractor={(item, index) => index.toString()}
-          />
-        </View>
-      </View>
-    )}
-  </View>
-);
+        </View>)
+    }
+  }
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -356,7 +296,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   imageContainer: {
-    alignItems:'center',
+    alignItems: 'center',
     marginBottom: 10,
   },
   image: {
@@ -364,7 +304,7 @@ const styles = StyleSheet.create({
     height: 300,
     marginBottom: 10,
   },
-  emptyContainer:{
+  emptyContainer: {
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 10,
@@ -401,9 +341,8 @@ const styles = StyleSheet.create({
   },
   postContainer: {
     justifyContent: 'center',
-    alignItems: 'center',
-    width: 400,
-    height: 450, 
+    width: Dimensions.get('window').width - 10,
+    height: 450,
     marginVertical: 10,
     borderWidth: 1,
     borderColor: 'white',
@@ -429,15 +368,16 @@ const styles = StyleSheet.create({
   },
   postImage: {
     width: '100%',
-    height: '70%', 
+    height: '70%',
     borderRadius: 10,
   },
   postButtonsContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
+    alignItems: 'flex-start',
     marginTop: 20,
   },
-   postButton: {
+  postButton: {
     backgroundColor: '#2de0ff',
     paddingVertical: 10,
     paddingHorizontal: 10,

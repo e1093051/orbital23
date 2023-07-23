@@ -32,7 +32,7 @@ import { Alert } from 'react-native';
 
 
 import {
-  setBio,
+  updateBio
 } from '../../api/setProfile';
 
 
@@ -43,8 +43,7 @@ export default function EditBio() {
   const [editBio, setEditBio] = useState(bio);
   const navigation = useNavigation();
   const handleUpdateBio = () => {
-    setBio({bio: editBio});
-    navigation.navigate('Edit');
+    updateBio({bio: editBio}, () => navigation.goBack(), (error) => console.log(error.message));
   }
 
 

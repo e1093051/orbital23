@@ -45,6 +45,7 @@ import StudyBuddyPost from './routes/StudyBuddyPost';
 import StudyBuddyFilter from './routes/StudyBuddyFilter';
 import StudyBuddyAddNewPost from './routes/StudyBuddyAddNewPost';
 import ChatPage from './routes/ChatPage';
+import ChangePassword from './routes/ChangePassword';
 
 import { HeaderBackButton } from '@react-navigation/elements';
 import { updateMyCountToChatCount } from './routes/ChatPage';
@@ -157,6 +158,10 @@ const StackNavigator = () => (
     <Stack.Screen name="EditMajor" component={EditMajor} />
     <Stack.Screen name="EditCourse" component={EditCourse} />
     <Stack.Screen name="StudyBuddyPost" component={StudyBuddyPost} />
+    <Stack.Screen name="ChangePassword" component={ChangePassword} options={{
+        headerShown: true,
+        headerTitle: 'Forget/Change Password',
+        headerBackTitle: ' ',}}/>
     <Stack.Screen name="EditHobby" component={EditHobby}
       options={{
         headerShown: true,

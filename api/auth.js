@@ -2,12 +2,11 @@
 //reference to: https://github.com/ProProgramming101/expo-firebase-image-upload
 
 
-import { auth, firebase, storage } from './fireConfig'
+import { auth, storage } from './fireConfig'
 import { Alert } from 'react-native';
 
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, sendEmailVerification, signOut, sendPasswordResetEmail } from 'firebase/auth';
-import { ref, uploadBytes, getDownloadURL, uploadBytesResumable } from "firebase/storage";
-import { addDoc, collection, setDoc, doc, updateDoc, getDoc } from "firebase/firestore";
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 
 
 export const logIn = async ( {email, password}, firstTimeUser, onSuccess, onError) => {
@@ -42,7 +41,6 @@ export const signUp = async ( {name, email, password}, onSuccess, onError) => {
 export const resetPassword = async ( {email}, onSuccess, onError) => {
   try {
     await sendPasswordResetEmail(auth, email);
-    Alert.alert("Password reset email sent");
     return onSuccess();
   } catch (error) {
     return onError(error);

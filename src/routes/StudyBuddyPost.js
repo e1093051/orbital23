@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, TextInput, Dimensions, Image, FlatList } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Dimensions, Image, FlatList, KeyboardAvoidingView, Platform, StyleSheet, Keyboard} from 'react-native';
 import { collection, query, orderBy, where, getDocs, addDoc, doc, getDoc } from 'firebase/firestore';
 import { db } from '../../api/fireConfig';
 import { useRoute } from '@react-navigation/native';
@@ -20,6 +20,22 @@ export default function PostComments() {
   const { id } = route.params;
   const { post } = route.params;
   const [profile, setProfileData] = useState(null);
+
+  const [keyboardStatus, setKeyboardStatus] = useState(false);
+
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
+      setKeyboardStatus(true);
+    });
+    const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
+      setKeyboardStatus(false);
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
 
   useEffect(() => {
     fetchComments();
@@ -154,7 +170,10 @@ export default function PostComments() {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <KeyboardAvoidingView style = {[
+      keyboardStatus ? styles.Keyboardshown : styles.KeyboardNotShown,
+      Platform.OS === 'ios' ? styles.iosBackground: styles.androidBackground,
+    ]} behavior={Platform.OS === 'ios' ? 'padding' : 'height' }> 
       <View style={{ backgroundColor: 'white', flex: 1 }}>
         <View style={{ width: Dimensions.get('window').width - 4, marginLeft: 1, paddingLeft: 8, marginBottom: 5, paddingBottom: 6, paddingRight: 8, paddingTop: 10 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -200,7 +219,7 @@ export default function PostComments() {
               }}
               source={{ uri: auth.currentUser.photoURL }}
             />
-            <View style={{ paddingLeft: 3, maxWidth: Dimensions.get('window').width - 60}}>
+            <View style={{ paddingLeft: 3, maxWidth: Dimensions.get('window').width - 60, paddingBottom: 10}}>
               <TextInput
                 placeholder="Add a comment"
                 value={replyText}
@@ -215,6 +234,77 @@ export default function PostComments() {
         </View>
       </View>
     </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
+
+
+const styles = StyleSheet.create({
+  sentMessage: {
+    alignItems: 'flex-end',
+    paddingRight: 5,
+    borderWidth: 0,
+    marginBottom: 8,
+    marginTop: 4
+  },
+  receivedMessage: {
+    alignItems: 'flex-start',
+    paddingLeft: 5,
+    borderWidth: 0,
+    marginBottom: 8,
+    marginTop: 4
+  },
+  sentTime: {
+    flexDirection: 'row-reverse'
+  },
+  receivedTime: {
+    flexDirection: 'row'
+  },
+  sentBox: {
+    borderWidth: 1,
+    borderColor: '#77c3e6',
+    maxWidth: Dimensions.get('window').width / 2 - 10,
+    paddingVertical: 3,
+    paddingHorizontal: 2,
+    borderRadius: 5,
+    backgroundColor: '#77c3e6'
+  },
+  receivedBox: {
+    borderWidth: 1,
+    maxWidth: Dimensions.get('window').width / 2 - 10,
+    paddingVertical: 3,
+    paddingHorizontal: 2,
+    borderRadius: 5,
+  },
+  Keyboardshown: {
+    flex:1,
+    marginBottom: 55,
+    backgroundColor: 'white'
+  },
+  KeyboardNotShown: {
+    marginBottom: -15,
+    flex:1,
+    backgroundColor: 'white'
+  },
+  iosBackground: {
+    backgroundColor: 'white',
+     flex: 1,
+  },
+  androidBackground: {
+    backgroundColor: 'white',
+     flex: 1,
+     paddingBottom: 60
+  },
+  iosInput: {
+    paddingBottom: 30, paddingTop: 5, borderTopWidth: 1, marginTop: 5
+  },
+  androidInput: {
+    paddingBottom: 0, paddingTop: 5, borderTopWidth: 1, marginTop: 5, marginBottom: 0
+  },
+  iosTextInput: 
+    { width: Dimensions.get('window').width - 2, margin: 1, borderRadius: 2, paddingLeft: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingBottom: 10, paddingTop: 3 },
+
+  androidTextInput: 
+    { width: Dimensions.get('window').width - 2, margin: 1, borderRadius: 2, paddingLeft: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingBottom: 25, paddingTop: 3 },
+
+});

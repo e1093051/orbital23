@@ -1,14 +1,8 @@
 //reference to ChatGPT (Lots of code written by it)
 //reference to StackOverflow: https://stackoverflow.com/questions/52805879/re-render-component-when-navigating-the-stack-with-react-navigation
 
-import React, { useState, useEffect, Component, useContext } from 'react';
-import { Alert } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { MultiSelect } from 'react-native-element-dropdown';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import { CheckBox, Icon } from '@rneui/themed';
-import Stack from '@mui/material/Stack';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import React, { useState, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { useIsFocused } from '@react-navigation/native';
 
 
@@ -19,13 +13,12 @@ import {
   View,
   TouchableOpacity,
   Dimensions,
-  ScrollView,
   FlatList,
   Image
 } from 'react-native';
 
 import { db, auth } from '../../api/fireConfig';
-import { collectionGroup, collection, doc, query, where, or, getDocs, docs, getDoc, onSnapshot } from 'firebase/firestore';
+import { doc, getDoc, onSnapshot } from 'firebase/firestore';
 
 
 export default function Chat() {
@@ -62,7 +55,7 @@ export default function Chat() {
 
 
   async function loadChat() {
-    if (profileData != null) {
+    if (profileData != null && profileData.chat != null) {
       const chatList = Object.entries(profileData.chat);
 
       const promises = chatList.map(async ([key, value]) => {
@@ -155,7 +148,7 @@ export default function Chat() {
                   <View>
                     <Text style={{ fontWeight: '600', fontSize: 14 }}>{item.key.name}</Text>
                   </View>
-                  <View style={{ paddingTop: 3 }}>
+                  <View style={{ paddingTop: 3 ,maxWidth: Dimensions.get('window').width - 150}}>
                     <Text>{item.value.lastMessage}</Text>
                   </View>
                 </View>

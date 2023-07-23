@@ -105,9 +105,7 @@ export default function StudyBuddyAddNewPost() {
 
 
   return (
-    <ScrollView contentContainerStyle={{flexGrow: 1}}
-  keyboardShouldPersistTaps='handled'
->
+    <View style = {{flex: 1}}>
       <View style={{ flex: 1, paddingTop: 10, backgroundColor: 'white', paddingHorizontal: 10 }}>
         <View>
           <Text style={{ fontSize: 16, color: 'gray', alignItems: 'flex-start', paddingTop: 10, paddingBottom: 3 }}>Title</Text>
@@ -170,7 +168,7 @@ export default function StudyBuddyAddNewPost() {
           </TouchableOpacity>
         </View>
       </View>
-    </ScrollView>
+      </View>
   );
 }
 
