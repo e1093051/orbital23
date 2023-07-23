@@ -1,69 +1,101 @@
-const {
-  logIn,
-  signUp,
-  resetPassword,
-  setProfilePicture,
-  setDefaultProfilePicture,
-} = require('../api/auth');
+import { logIn, resetPassword } from '../auth';
+import { auth, firebase, storage } from '../fireConfig';
+import { Alert } from 'react-native';
 
-// Mock firebase auth and storage functions
-jest.mock('../api/fireConfig', () => {
-  const auth = {
-    currentUser: null,
-  };
-
-  return {
-    auth,
-    firebase: {
-      auth,
-    },
-    storage: {
-      ref: jest.fn(),
-    },
-  };
-});
-
-// Mock the Alert component from 'react-native'
-jest.mock('react-native', () => ({
-  Alert: {
-    alert: jest.fn(),
-  },
+// Mock the Firebase app and initialization functions
+jest.mock('firebase/app', () => ({
+  initializeApp: jest.fn(),
 }));
 
-// Mock fetch function for image upload
-global.fetch = require('jest-fetch-mock');
+// Mock the Firebase authentication functions
+jest.mock('firebase/auth', () => ({
+  getAuth: jest.fn(() => ({
+    signInWithEmailAndPassword: jest.fn().mockReturnValue(Promise.resolve({ user: null })),
+    createUserWithEmailAndPassword: jest.fn().mockReturnValue(Promise.resolve({ user: null })),
+    updateProfile: jest.fn(),
+    sendEmailVerification: jest.fn().mockReturnValue(Promise.resolve()),
+    signOut: jest.fn().mockReturnValue(Promise.resolve()),
+    sendPasswordResetEmail: jest.fn().mockReturnValue(Promise.resolve()),
+  })),
+}));
 
-beforeEach(() => {
-  fetch.resetMocks();
-});
+// Mock the Firebase storage functions
+jest.mock('firebase/storage', () => ({
+  getStorage: jest.fn(() => ({
+    ref: jest.fn(),
+    uploadBytesResumable: jest.fn().mockReturnValue(Promise.resolve()),
+    getDownloadURL: jest.fn().mockReturnValue(Promise.resolve('mocked-url')),
+  })),
+}));
 
-// Add your tests here
-describe('Authentication API tests', () => {
-  // Test the logIn function
-  it('logIn should call onSuccess when email is verified and photoURL is not null', async () => {
-    // Mock necessary data for the test
-    const email = 'test@example.com';
-    const password = 'testpassword';
-    const user = { emailVerified: true, photoURL: 'example.com/profile.jpg' };
-    const firstTimeUser = jest.fn();
+// Mock the Firebase Firestore functions
+jest.mock('firebase/firestore', () => ({
+  getFirestore: jest.fn(() => ({
+    addDoc: jest.fn().mockReturnValue(Promise.resolve()),
+    collection: jest.fn().mockReturnThis(),
+    setDoc: jest.fn().mockReturnValue(Promise.resolve()),
+    doc: jest.fn().mockReturnValue(Promise.resolve()),
+    updateDoc: jest.fn().mockReturnValue(Promise.resolve()),
+    getDoc: jest.fn().mockReturnValue(Promise.resolve({ data: () => ({}) })),
+  })),
+}));
+
+describe('auth', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('logIn function should call signInWithEmailAndPassword and onSuccess for email verified user', async () => {
     const onSuccess = jest.fn();
     const onError = jest.fn();
 
-    // Mock the signInWithEmailAndPassword function from firebase auth
-    const mockSignInWithEmailAndPassword = jest.fn(async () => ({ user }));
-    require('../api/fireConfig').signInWithEmailAndPassword = mockSignInWithEmailAndPassword;
+    const credentials = {
+      email: 'test@u.nus.edu',
+      password: 'testpassword',
+    };
 
-    // Call the logIn function
-    await logIn({ email, password }, firstTimeUser, onSuccess, onError);
+    await logIn(credentials, null, onSuccess, onError); 
 
-    // Expect the mock functions to be called correctly
-    expect(mockSignInWithEmailAndPassword).toHaveBeenCalledWith(
-      require('../api/fireConfig').auth,
-      email,
-      password
-    );
-    expect(firstTimeUser).not.toHaveBeenCalled();
-    expect(onSuccess).toHaveBeenCalledWith(user);
+    console.log('After calling logIn:', credentials);
+
+    expect(auth.signInWithEmailAndPassword).toHaveBeenCalledWith(credentials.email, credentials.password);
+    expect(auth.currentUser.emailVerified).toBe(true);
+    expect(onSuccess).toHaveBeenCalled();
     expect(onError).not.toHaveBeenCalled();
+  });
+
+  it('resetPassword function should call sendPasswordResetEmail and onSuccess', async () => {
+    const onSuccess = jest.fn();
+    const onError = jest.fn();
+
+    const email = 'test@u.nus.edu';
+
+    await resetPassword({ email }, onSuccess, onError);
+
+
+    expect(auth.sendPasswordResetEmail).toHaveBeenCalledWith(email);
+
+    
+    expect(onSuccess).toHaveBeenCalled();
+    expect(onError).not.toHaveBeenCalled();
+  });
+
+  it('resetPassword function should call onError if sendPasswordResetEmail throws an error', async () => {
+    const onSuccess = jest.fn();
+    const onError = jest.fn();
+
+    
+    auth.sendPasswordResetEmail = jest.fn().mockRejectedValue(new Error('Mocked Error'));
+
+    const email = 'test@u.nus.edu';
+
+    await resetPassword({ email }, onSuccess, onError);
+
+    
+    expect(auth.sendPasswordResetEmail).toHaveBeenCalledWith(email);
+
+    
+    expect(onSuccess).not.toHaveBeenCalled();
+    expect(onError).toHaveBeenCalled();
   });
 });

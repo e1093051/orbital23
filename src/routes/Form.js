@@ -49,7 +49,7 @@ export default () => {
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: 'Images',
       allowsEditing: true,
       aspect: [1, 1],
       quality: 1,
@@ -74,10 +74,12 @@ export default () => {
           onPress={pickImage}
           style={[styles.circle, { marginTop: -300 }]}
           activityOpacity={0.8}
+          testID="image-picker-button" // testID for unit testing
         >
           <Image
             source={image ? { uri: image } : require('./Standard_Profile.png')}
             style={styles.image}
+            testID="profile-picture"
           />
         </TouchableOpacity>
         <TouchableOpacity onPress={pickImage} style={styles.changeImageContainer}>

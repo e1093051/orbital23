@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
@@ -268,10 +268,7 @@
 <a name='L203'></a><a href='#L203'>203</a>
 <a name='L204'></a><a href='#L204'>204</a>
 <a name='L205'></a><a href='#L205'>205</a>
-<a name='L206'></a><a href='#L206'>206</a>
-<a name='L207'></a><a href='#L207'>207</a>
-<a name='L208'></a><a href='#L208'>208</a>
-<a name='L209'></a><a href='#L209'>209</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L206'></a><a href='#L206'>206</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -323,9 +320,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -525,15 +519,12 @@ export default <span class="fstat-no" title="function not covered" >()</span> =&
 <span class="cstat-no" title="statement not covered" >          await updateDoc(doc(db, "NUS", "users", "profile",`${auth.currentUser.uid}`), {</span>
             photoURL: image,
           });
-<span class="cstat-no" title="statement not covered" >          navigation.navigate('Edit')}</span>,
+<span class="cstat-no" title="statement not covered" >          navigation.goBack()}</span>,
 <span class="fstat-no" title="function not covered" >        (e</span>rror) =&gt; <span class="cstat-no" title="statement not covered" >Alert.alert('error', (error.message || 'Something went wrong, try again later'))</span>
       )
     }
     else {
-<span class="cstat-no" title="statement not covered" >      Authentication.setDefaultProfilePicture(</span>
-<span class="fstat-no" title="function not covered" >        ()</span> =&gt; <span class="cstat-no" title="statement not covered" >navigation.navigate('Edit'),</span>
-<span class="fstat-no" title="function not covered" >        (e</span>rror) =&gt; <span class="cstat-no" title="statement not covered" >Alert.alert('error', (error.message || 'Something went wrong, try again later'))</span>
-      )
+<span class="cstat-no" title="statement not covered" >      navigation.goBack();</span>
     }
   }
 &nbsp;
@@ -560,7 +551,7 @@ export default <span class="fstat-no" title="function not covered" >()</span> =&
       &lt;View style={styles.imageContainer}&gt;
         &lt;TouchableOpacity onPress={pickImage} style={[styles.circle, { marginTop: -300 }]} activityOpacity={0.8}&gt;
           &lt;Image
-            source={image ? { uri: image } : require('./Standard_Profile.png')}
+            source={image ? { uri: image } : {uri: auth.currentUser.photoURL}}
             style={styles.image}
           /&gt;
         &lt;/TouchableOpacity&gt;
@@ -576,7 +567,7 @@ export default <span class="fstat-no" title="function not covered" >()</span> =&
         activeOpacity={0.75}
         style={styles.buttonContainer}
         onPress={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setProfilePicture()}</span>&gt;
-        &lt;Text style={styles.registerText}&gt;Next&lt;/Text&gt;
+        &lt;Text style={styles.registerText}&gt;Save&lt;/Text&gt;
       &lt;/TouchableOpacity&gt;
     &lt;/View&gt;
   );
@@ -589,7 +580,7 @@ const styles = <span class="cstat-no" title="statement not covered" >StyleSheet.
     backgroundColor: '#FFFFFF',
   },
   container: {
-    paddingTop: 70,
+    paddingTop: 10,
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     backgroundColor: '#FFFFFF',
@@ -630,7 +621,7 @@ const styles = <span class="cstat-no" title="statement not covered" >StyleSheet.
     height: 40,
     width: Dimensions.get('window').width - 20,
     position: 'absolute',
-    bottom: 25,
+    bottom: 15,
     borderRadius: 2,
     justifyContent: 'center',
     alignItems: 'center',
@@ -694,7 +685,7 @@ const styles = <span class="cstat-no" title="statement not covered" >StyleSheet.
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-07-22T08:37:39.881Z
+                at 2023-07-23T20:38:13.783Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
