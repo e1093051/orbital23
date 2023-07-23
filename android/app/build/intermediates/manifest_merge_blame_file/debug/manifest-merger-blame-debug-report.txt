@@ -1,0 +1,376 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.anonymous.orbital2023"
+4    android:versionCode="1"
+5    android:versionName="1.0.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="21"
+9        android:targetSdkVersion="33" />
+10
+11    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+11-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:4:3-75
+11-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:4:20-73
+12    <uses-permission android:name="android.permission.INTERNET" />
+12-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:2:3-64
+12-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:2:20-62
+13    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+13-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:3:3-77
+13-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:3:20-75
+14    <uses-permission android:name="android.permission.VIBRATE" />
+14-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:5:3-63
+14-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:5:20-61
+15    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+15-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:6:3-78
+15-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:6:20-76
+16
+17    <queries>
+17-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:7:3-13:13
+18        <intent>
+18-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:8:5-12:14
+19            <action android:name="android.intent.action.VIEW" />
+19-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:9:7-58
+19-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:9:15-56
+20
+21            <category android:name="android.intent.category.BROWSABLE" />
+21-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:10:7-67
+21-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:10:17-65
+22
+23            <data android:scheme="https" />
+23-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:11:7-37
+23-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:11:13-35
+24        </intent>
+25
+26        <package android:name="host.exp.exponent" /> <!-- Query open documents -->
+26-->[:expo-dev-launcher] C:\Users\hites\orbital23\node_modules\expo-dev-launcher\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:8:9-53
+26-->[:expo-dev-launcher] C:\Users\hites\orbital23\node_modules\expo-dev-launcher\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:8:18-50
+27        <intent>
+27-->[:expo-file-system] C:\Users\hites\orbital23\node_modules\expo-file-system\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:15:9-17:18
+28            <action android:name="android.intent.action.OPEN_DOCUMENT_TREE" />
+28-->[:expo-file-system] C:\Users\hites\orbital23\node_modules\expo-file-system\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:16:13-79
+28-->[:expo-file-system] C:\Users\hites\orbital23\node_modules\expo-file-system\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:16:21-76
+29        </intent>
+30    </queries>
+31
+32    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+32-->[com.facebook.flipper:flipper:0.125.0] C:\Users\hites\.gradle\caches\transforms-3\64c58737da98e83858b8ec8897088f78\transformed\jetified-flipper-0.125.0\AndroidManifest.xml:16:5-76
+32-->[com.facebook.flipper:flipper:0.125.0] C:\Users\hites\.gradle\caches\transforms-3\64c58737da98e83858b8ec8897088f78\transformed\jetified-flipper-0.125.0\AndroidManifest.xml:16:22-73
+33    <uses-permission android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE" />
+33-->[com.android.installreferrer:installreferrer:1.0] C:\Users\hites\.gradle\caches\transforms-3\3a351f2ab8b92b7d76f8cee46de147ae\transformed\jetified-installreferrer-1.0\AndroidManifest.xml:9:5-110
+33-->[com.android.installreferrer:installreferrer:1.0] C:\Users\hites\.gradle\caches\transforms-3\3a351f2ab8b92b7d76f8cee46de147ae\transformed\jetified-installreferrer-1.0\AndroidManifest.xml:9:22-107
+34
+35    <application
+35-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:14:3-34:17
+36        android:name="com.anonymous.orbital2023.MainApplication"
+36-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:14:16-47
+37        android:allowBackup="true"
+37-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:14:162-188
+38        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+38-->[androidx.core:core:1.7.0] C:\Users\hites\.gradle\caches\transforms-3\387fae90d64623cc9f5b1cf65660f3c4\transformed\core-1.7.0\AndroidManifest.xml:24:18-86
+39        android:debuggable="true"
+40        android:icon="@mipmap/ic_launcher"
+40-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:14:81-115
+41        android:label="@string/app_name"
+41-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:14:48-80
+42        android:roundIcon="@mipmap/ic_launcher_round"
+42-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:14:116-161
+43        android:theme="@style/AppTheme"
+43-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:14:189-220
+44        android:usesCleartextTraffic="true" >
+44-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:14:221-256
+45        <meta-data
+45-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:15:5-82
+46            android:name="expo.modules.updates.ENABLED"
+46-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:15:16-59
+47            android:value="true" />
+47-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:15:60-80
+48        <meta-data
+48-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:16:5-93
+49            android:name="expo.modules.updates.EXPO_SDK_VERSION"
+49-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:16:16-68
+50            android:value="48.0.0" />
+50-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:16:69-91
+51        <meta-data
+51-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:17:5-105
+52            android:name="expo.modules.updates.EXPO_UPDATES_CHECK_ON_LAUNCH"
+52-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:17:16-80
+53            android:value="ALWAYS" />
+53-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:17:81-103
+54        <meta-data
+54-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:18:5-99
+55            android:name="expo.modules.updates.EXPO_UPDATES_LAUNCH_WAIT_MS"
+55-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:18:16-79
+56            android:value="0" />
+56-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:18:80-97
+57        <meta-data
+57-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:19:5-125
+58            android:name="expo.modules.updates.EXPO_UPDATE_URL"
+58-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:19:16-67
+59            android:value="https://exp.host/@anonymous/orbital2023" />
+59-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:19:68-123
+60
+61        <activity
+61-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:20:5-32:16
+62            android:name="com.anonymous.orbital2023.MainActivity"
+62-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:20:15-43
+63            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
+63-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:20:77-154
+64            android:exported="true"
+64-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:20:276-299
+65            android:label="@string/app_name"
+65-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:20:44-76
+66            android:launchMode="singleTask"
+66-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:20:155-186
+67            android:screenOrientation="portrait"
+67-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:20:300-336
+68            android:theme="@style/Theme.App.SplashScreen"
+68-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:20:230-275
+69            android:windowSoftInputMode="adjustResize" >
+69-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:20:187-229
+70            <intent-filter>
+70-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:21:7-24:23
+71                <action android:name="android.intent.action.MAIN" />
+71-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:22:9-60
+71-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:22:17-58
+72
+73                <category android:name="android.intent.category.LAUNCHER" />
+73-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:23:9-68
+73-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:23:19-66
+74            </intent-filter>
+75            <intent-filter>
+75-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:25:7-31:23
+76                <action android:name="android.intent.action.VIEW" />
+76-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:9:7-58
+76-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:9:15-56
+77
+78                <category android:name="android.intent.category.DEFAULT" />
+78-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:27:9-67
+78-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:27:19-65
+79                <category android:name="android.intent.category.BROWSABLE" />
+79-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:10:7-67
+79-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:10:17-65
+80
+81                <data android:scheme="com.anonymous.orbital2023" />
+81-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:11:7-37
+81-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:11:13-35
+82                <data android:scheme="exp+orbital2023" />
+82-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:11:7-37
+82-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:11:13-35
+83            </intent-filter>
+84        </activity>
+85        <activity
+85-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:33:5-106
+86            android:name="com.facebook.react.devsupport.DevSettingsActivity"
+86-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:33:15-79
+87            android:exported="false" />
+87-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:33:80-104
+88
+89        <meta-data
+89-->[:react-native-firebase_app] C:\Users\hites\orbital23\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:9-11:36
+90            android:name="app_data_collection_default_enabled"
+90-->[:react-native-firebase_app] C:\Users\hites\orbital23\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:10:13-63
+91            android:value="true" />
+91-->[:react-native-firebase_app] C:\Users\hites\orbital23\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:11:13-33
+92
+93        <service
+93-->[:react-native-firebase_app] C:\Users\hites\orbital23\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:13:9-21:19
+94            android:name="com.google.firebase.components.ComponentDiscoveryService"
+94-->[:react-native-firebase_app] C:\Users\hites\orbital23\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:14:13-84
+95            android:directBootAware="true"
+95-->[:react-native-firebase_app] C:\Users\hites\orbital23\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:15:13-43
+96            android:exported="false" >
+96-->[:react-native-firebase_app] C:\Users\hites\orbital23\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:16:13-37
+97            <meta-data
+97-->[:react-native-firebase_app] C:\Users\hites\orbital23\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:18:13-20:85
+98                android:name="com.google.firebase.components:io.invertase.firebase.app.ReactNativeFirebaseAppRegistrar"
+98-->[:react-native-firebase_app] C:\Users\hites\orbital23\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:19:17-120
+99                android:value="com.google.firebase.components.ComponentRegistrar" />
+99-->[:react-native-firebase_app] C:\Users\hites\orbital23\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:20:17-82
+100        </service>
+101
+102        <provider
+102-->[:react-native-firebase_app] C:\Users\hites\orbital23\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:23:9-27:38
+103            android:name="io.invertase.firebase.app.ReactNativeFirebaseAppInitProvider"
+103-->[:react-native-firebase_app] C:\Users\hites\orbital23\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:24:13-88
+104            android:authorities="com.anonymous.orbital2023.reactnativefirebaseappinitprovider"
+104-->[:react-native-firebase_app] C:\Users\hites\orbital23\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:25:13-86
+105            android:exported="false"
+105-->[:react-native-firebase_app] C:\Users\hites\orbital23\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:26:13-37
+106            android:initOrder="99" />
+106-->[:react-native-firebase_app] C:\Users\hites\orbital23\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:27:13-35
+107
+108        <meta-data
+108-->[:expo-dev-launcher] C:\Users\hites\orbital23\node_modules\expo-dev-launcher\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:12:9-14:37
+109            android:name="expo.modules.updates.AUTO_SETUP"
+109-->[:expo-dev-launcher] C:\Users\hites\orbital23\node_modules\expo-dev-launcher\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:13:13-59
+110            android:value="false" />
+110-->[:expo-dev-launcher] C:\Users\hites\orbital23\node_modules\expo-dev-launcher\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:14:13-34
+111
+112        <activity
+112-->[:expo-dev-launcher] C:\Users\hites\orbital23\node_modules\expo-dev-launcher\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:16:9-29:20
+113            android:name="expo.modules.devlauncher.launcher.DevLauncherActivity"
+113-->[:expo-dev-launcher] C:\Users\hites\orbital23\node_modules\expo-dev-launcher\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:17:13-81
+114            android:exported="true"
+114-->[:expo-dev-launcher] C:\Users\hites\orbital23\node_modules\expo-dev-launcher\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:18:13-36
+115            android:launchMode="singleTask"
+115-->[:expo-dev-launcher] C:\Users\hites\orbital23\node_modules\expo-dev-launcher\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:19:13-44
+116            android:theme="@style/Theme.DevLauncher.LauncherActivity" >
+116-->[:expo-dev-launcher] C:\Users\hites\orbital23\node_modules\expo-dev-launcher\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:20:13-70
+117            <intent-filter>
+117-->[:expo-dev-launcher] C:\Users\hites\orbital23\node_modules\expo-dev-launcher\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:21:13-28:29
+118                <action android:name="android.intent.action.VIEW" />
+118-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:9:7-58
+118-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:9:15-56
+119
+120                <category android:name="android.intent.category.DEFAULT" />
+120-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:27:9-67
+120-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:27:19-65
+121                <category android:name="android.intent.category.BROWSABLE" />
+121-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:10:7-67
+121-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:10:17-65
+122
+123                <data android:scheme="expo-dev-launcher" />
+123-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:11:7-37
+123-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:11:13-35
+124            </intent-filter>
+125        </activity>
+126        <activity
+126-->[:expo-dev-launcher] C:\Users\hites\orbital23\node_modules\expo-dev-launcher\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:30:9-33:70
+127            android:name="expo.modules.devlauncher.launcher.errors.DevLauncherErrorActivity"
+127-->[:expo-dev-launcher] C:\Users\hites\orbital23\node_modules\expo-dev-launcher\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:31:13-93
+128            android:screenOrientation="portrait"
+128-->[:expo-dev-launcher] C:\Users\hites\orbital23\node_modules\expo-dev-launcher\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:32:13-49
+129            android:theme="@style/Theme.DevLauncher.ErrorActivity" />
+129-->[:expo-dev-launcher] C:\Users\hites\orbital23\node_modules\expo-dev-launcher\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:33:13-67
+130        <activity
+130-->[:expo-dev-menu] C:\Users\hites\orbital23\node_modules\expo-dev-menu\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:8:9-21:20
+131            android:name="expo.modules.devmenu.DevMenuActivity"
+131-->[:expo-dev-menu] C:\Users\hites\orbital23\node_modules\expo-dev-menu\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:13-64
+132            android:exported="true"
+132-->[:expo-dev-menu] C:\Users\hites\orbital23\node_modules\expo-dev-menu\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:10:13-36
+133            android:launchMode="singleTask"
+133-->[:expo-dev-menu] C:\Users\hites\orbital23\node_modules\expo-dev-menu\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:11:13-44
+134            android:theme="@style/Theme.AppCompat.Transparent.NoActionBar" >
+134-->[:expo-dev-menu] C:\Users\hites\orbital23\node_modules\expo-dev-menu\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:12:13-75
+135            <intent-filter>
+135-->[:expo-dev-menu] C:\Users\hites\orbital23\node_modules\expo-dev-menu\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:13:13-20:29
+136                <action android:name="android.intent.action.VIEW" />
+136-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:9:7-58
+136-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:9:15-56
+137
+138                <category android:name="android.intent.category.DEFAULT" />
+138-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:27:9-67
+138-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:27:19-65
+139                <category android:name="android.intent.category.BROWSABLE" />
+139-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:10:7-67
+139-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:10:17-65
+140
+141                <data android:scheme="expo-dev-menu" />
+141-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:11:7-37
+141-->C:\Users\hites\orbital23\android\app\src\main\AndroidManifest.xml:11:13-35
+142            </intent-filter>
+143        </activity>
+144
+145        <provider
+145-->[:expo-file-system] C:\Users\hites\orbital23\node_modules\expo-file-system\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:21:9-30:20
+146            android:name="expo.modules.filesystem.FileSystemFileProvider"
+146-->[:expo-file-system] C:\Users\hites\orbital23\node_modules\expo-file-system\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:22:13-74
+147            android:authorities="com.anonymous.orbital2023.FileSystemFileProvider"
+147-->[:expo-file-system] C:\Users\hites\orbital23\node_modules\expo-file-system\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:23:13-74
+148            android:exported="false"
+148-->[:expo-file-system] C:\Users\hites\orbital23\node_modules\expo-file-system\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:24:13-37
+149            android:grantUriPermissions="true" >
+149-->[:expo-file-system] C:\Users\hites\orbital23\node_modules\expo-file-system\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:25:13-47
+150            <meta-data
+150-->[:expo-file-system] C:\Users\hites\orbital23\node_modules\expo-file-system\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:27:13-29:70
+151                android:name="android.support.FILE_PROVIDER_PATHS"
+151-->[:expo-file-system] C:\Users\hites\orbital23\node_modules\expo-file-system\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:28:17-67
+152                android:resource="@xml/file_system_provider_paths" />
+152-->[:expo-file-system] C:\Users\hites\orbital23\node_modules\expo-file-system\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:29:17-67
+153        </provider>
+154
+155        <meta-data
+155-->[:expo-modules-core] C:\Users\hites\orbital23\node_modules\expo-modules-core\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:8:9-10:89
+156            android:name="org.unimodules.core.AppLoader#react-native-headless"
+156-->[:expo-modules-core] C:\Users\hites\orbital23\node_modules\expo-modules-core\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:13-79
+157            android:value="expo.modules.adapters.react.apploader.RNHeadlessAppLoader" />
+157-->[:expo-modules-core] C:\Users\hites\orbital23\node_modules\expo-modules-core\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:10:13-86
+158
+159        <provider
+159-->[androidx.emoji2:emoji2:1.0.0] C:\Users\hites\.gradle\caches\transforms-3\8ec93f1ac1426512aeefc2a9b210f684\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:26:9-34:20
+160            android:name="androidx.startup.InitializationProvider"
+160-->[androidx.emoji2:emoji2:1.0.0] C:\Users\hites\.gradle\caches\transforms-3\8ec93f1ac1426512aeefc2a9b210f684\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:27:13-67
+161            android:authorities="com.anonymous.orbital2023.androidx-startup"
+161-->[androidx.emoji2:emoji2:1.0.0] C:\Users\hites\.gradle\caches\transforms-3\8ec93f1ac1426512aeefc2a9b210f684\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:28:13-68
+162            android:exported="false" >
+162-->[androidx.emoji2:emoji2:1.0.0] C:\Users\hites\.gradle\caches\transforms-3\8ec93f1ac1426512aeefc2a9b210f684\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:29:13-37
+163            <meta-data
+163-->[androidx.emoji2:emoji2:1.0.0] C:\Users\hites\.gradle\caches\transforms-3\8ec93f1ac1426512aeefc2a9b210f684\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:31:13-33:52
+164                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+164-->[androidx.emoji2:emoji2:1.0.0] C:\Users\hites\.gradle\caches\transforms-3\8ec93f1ac1426512aeefc2a9b210f684\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:32:17-75
+165                android:value="androidx.startup" />
+165-->[androidx.emoji2:emoji2:1.0.0] C:\Users\hites\.gradle\caches\transforms-3\8ec93f1ac1426512aeefc2a9b210f684\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:33:17-49
+166            <meta-data
+166-->[androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\hites\.gradle\caches\transforms-3\3cfb038264d20ad02682f621c9359793\transformed\jetified-lifecycle-process-2.4.0\AndroidManifest.xml:31:13-33:52
+167                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+167-->[androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\hites\.gradle\caches\transforms-3\3cfb038264d20ad02682f621c9359793\transformed\jetified-lifecycle-process-2.4.0\AndroidManifest.xml:32:17-78
+168                android:value="androidx.startup" />
+168-->[androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\hites\.gradle\caches\transforms-3\3cfb038264d20ad02682f621c9359793\transformed\jetified-lifecycle-process-2.4.0\AndroidManifest.xml:33:17-49
+169        </provider>
+170
+171        <activity
+171-->[com.google.android.gms:play-services-auth:20.3.0] C:\Users\hites\.gradle\caches\transforms-3\59984cdc2e886b3b722e345d34c84766\transformed\jetified-play-services-auth-20.3.0\AndroidManifest.xml:23:9-27:75
+172            android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
+172-->[com.google.android.gms:play-services-auth:20.3.0] C:\Users\hites\.gradle\caches\transforms-3\59984cdc2e886b3b722e345d34c84766\transformed\jetified-play-services-auth-20.3.0\AndroidManifest.xml:24:13-93
+173            android:excludeFromRecents="true"
+173-->[com.google.android.gms:play-services-auth:20.3.0] C:\Users\hites\.gradle\caches\transforms-3\59984cdc2e886b3b722e345d34c84766\transformed\jetified-play-services-auth-20.3.0\AndroidManifest.xml:25:13-46
+174            android:exported="false"
+174-->[com.google.android.gms:play-services-auth:20.3.0] C:\Users\hites\.gradle\caches\transforms-3\59984cdc2e886b3b722e345d34c84766\transformed\jetified-play-services-auth-20.3.0\AndroidManifest.xml:26:13-37
+175            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+175-->[com.google.android.gms:play-services-auth:20.3.0] C:\Users\hites\.gradle\caches\transforms-3\59984cdc2e886b3b722e345d34c84766\transformed\jetified-play-services-auth-20.3.0\AndroidManifest.xml:27:13-72
+176        <!--
+177            Service handling Google Sign-In user revocation. For apps that do not integrate with
+178            Google Sign-In, this service will never be started.
+179        -->
+180        <service
+180-->[com.google.android.gms:play-services-auth:20.3.0] C:\Users\hites\.gradle\caches\transforms-3\59984cdc2e886b3b722e345d34c84766\transformed\jetified-play-services-auth-20.3.0\AndroidManifest.xml:33:9-37:51
+181            android:name="com.google.android.gms.auth.api.signin.RevocationBoundService"
+181-->[com.google.android.gms:play-services-auth:20.3.0] C:\Users\hites\.gradle\caches\transforms-3\59984cdc2e886b3b722e345d34c84766\transformed\jetified-play-services-auth-20.3.0\AndroidManifest.xml:34:13-89
+182            android:exported="true"
+182-->[com.google.android.gms:play-services-auth:20.3.0] C:\Users\hites\.gradle\caches\transforms-3\59984cdc2e886b3b722e345d34c84766\transformed\jetified-play-services-auth-20.3.0\AndroidManifest.xml:35:13-36
+183            android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION"
+183-->[com.google.android.gms:play-services-auth:20.3.0] C:\Users\hites\.gradle\caches\transforms-3\59984cdc2e886b3b722e345d34c84766\transformed\jetified-play-services-auth-20.3.0\AndroidManifest.xml:36:13-107
+184            android:visibleToInstantApps="true" />
+184-->[com.google.android.gms:play-services-auth:20.3.0] C:\Users\hites\.gradle\caches\transforms-3\59984cdc2e886b3b722e345d34c84766\transformed\jetified-play-services-auth-20.3.0\AndroidManifest.xml:37:13-48
+185
+186        <activity
+186-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\hites\.gradle\caches\transforms-3\ec3523b0135c73fed912b70b39e252e6\transformed\jetified-play-services-base-18.0.1\AndroidManifest.xml:20:9-22:45
+187            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+187-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\hites\.gradle\caches\transforms-3\ec3523b0135c73fed912b70b39e252e6\transformed\jetified-play-services-base-18.0.1\AndroidManifest.xml:20:19-85
+188            android:exported="false"
+188-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\hites\.gradle\caches\transforms-3\ec3523b0135c73fed912b70b39e252e6\transformed\jetified-play-services-base-18.0.1\AndroidManifest.xml:22:19-43
+189            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+189-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\hites\.gradle\caches\transforms-3\ec3523b0135c73fed912b70b39e252e6\transformed\jetified-play-services-base-18.0.1\AndroidManifest.xml:21:19-78
+190
+191        <provider
+191-->[com.google.firebase:firebase-common:20.3.2] C:\Users\hites\.gradle\caches\transforms-3\5cef7abf62adc259379a1c05dff5a2b0\transformed\jetified-firebase-common-20.3.2\AndroidManifest.xml:25:9-30:39
+192            android:name="com.google.firebase.provider.FirebaseInitProvider"
+192-->[com.google.firebase:firebase-common:20.3.2] C:\Users\hites\.gradle\caches\transforms-3\5cef7abf62adc259379a1c05dff5a2b0\transformed\jetified-firebase-common-20.3.2\AndroidManifest.xml:26:13-77
+193            android:authorities="com.anonymous.orbital2023.firebaseinitprovider"
+193-->[com.google.firebase:firebase-common:20.3.2] C:\Users\hites\.gradle\caches\transforms-3\5cef7abf62adc259379a1c05dff5a2b0\transformed\jetified-firebase-common-20.3.2\AndroidManifest.xml:27:13-72
+194            android:directBootAware="true"
+194-->[com.google.firebase:firebase-common:20.3.2] C:\Users\hites\.gradle\caches\transforms-3\5cef7abf62adc259379a1c05dff5a2b0\transformed\jetified-firebase-common-20.3.2\AndroidManifest.xml:28:13-43
+195            android:exported="false"
+195-->[com.google.firebase:firebase-common:20.3.2] C:\Users\hites\.gradle\caches\transforms-3\5cef7abf62adc259379a1c05dff5a2b0\transformed\jetified-firebase-common-20.3.2\AndroidManifest.xml:29:13-37
+196            android:initOrder="100" />
+196-->[com.google.firebase:firebase-common:20.3.2] C:\Users\hites\.gradle\caches\transforms-3\5cef7abf62adc259379a1c05dff5a2b0\transformed\jetified-firebase-common-20.3.2\AndroidManifest.xml:30:13-36
+197
+198        <meta-data
+198-->[com.google.android.gms:play-services-basement:18.1.0] C:\Users\hites\.gradle\caches\transforms-3\612bd7fb236de06aabc6f0aec3361a4d\transformed\jetified-play-services-basement-18.1.0\AndroidManifest.xml:21:9-23:69
+199            android:name="com.google.android.gms.version"
+199-->[com.google.android.gms:play-services-basement:18.1.0] C:\Users\hites\.gradle\caches\transforms-3\612bd7fb236de06aabc6f0aec3361a4d\transformed\jetified-play-services-basement-18.1.0\AndroidManifest.xml:22:13-58
+200            android:value="@integer/google_play_services_version" />
+200-->[com.google.android.gms:play-services-basement:18.1.0] C:\Users\hites\.gradle\caches\transforms-3\612bd7fb236de06aabc6f0aec3361a4d\transformed\jetified-play-services-basement-18.1.0\AndroidManifest.xml:23:13-66
+201    </application>
+202
+203</manifest>
