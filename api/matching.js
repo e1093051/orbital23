@@ -122,6 +122,7 @@ export async function generateMatchingPool() {
     .then(docSnap => docSnap.data());
   const recommendList = profileData.recommend;
   const pointList = profileData.point;
+  
   profileRef = collection(db, "NUS", "users", "profile");
 
   const q = query(profileRef, where("show", "!=", 6)); //change to show me on recommendation later

@@ -42,7 +42,6 @@ describe('auth', () => {
     jest.clearAllMocks();
   });
 
-
   it('logIn function should call signInWithEmailAndPassword and onSuccess for email verified user', async () => {
     const onSuccess = jest.fn();
     const onError = jest.fn();

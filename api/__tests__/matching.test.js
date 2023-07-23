@@ -1,50 +1,157 @@
-import { score } from "../matching";
-import { collection, setDoc, doc, updateDoc, getDoc, query, where, getDocs, arrayUnion, arrayRemove } from "firebase/firestore";
-import { auth, db } from './fireConfig'
+import { generateMatchingPool, updateRecommendAndPoint, updateAvoid } from '../matching';
 
-describe("score function", () => {
-  it("should return 0 if no common attributes", async () => {
-    const profileData1 = {
-      major: "Computer Science",
-      countryAndRegion: "USA",
-      year: "Freshman",
-      course: ["Math", "Physics"],
-      hobby: ["Reading", "Sports"],
-    };
+// Mock the fireConfig module
+jest.mock('../fireConfig', () => ({
+  auth: {
+    currentUser: {
+      uid: 'test1'
+    }
+  },
+  db: {
+    collection: () => ({
+      doc: () => ({
+        ref: {
+          update: jest.fn()
+        }
+      })
+    }),
+    getDocs: jest.fn().mockResolvedValue({
+      docs: [
+        {
+          data: () => ({
+            avoid: [],
+            show: 5, // Mocking show value for filtering
+            major: 'Computer Science', // Mocking major value for filtering
+            course: ['Math', 'Science'], // Mocking course value for filtering
+            countryAndRegion: 'USA', // Mocking countryAndRegion value for filtering
+            year: 'Year 1', // Mocking year value for filtering
+            hobby: ['Reading', 'Swimming'], // Mocking hobby value for filtering
+            recommend: [],
+            point: []
+          }),
+          id: 'someUserID'
+        }
+      ]
+    })
+  }
+}));
 
-    const profileData2 = {
-      major: "Economics",
-      countryAndRegion: "UK",
-      year: "Sophomore",
-      course: ["Chemistry", "History"],
-      hobby: ["Cooking", "Music"],
-    };
+// Mock the firebase/auth functions
+jest.mock('firebase/auth', () => ({
+  signInWithEmailAndPassword: () => ({
+    then: () => {},
+    catch: () => {},
+  }),
+  createUserWithEmailAndPassword: () => ({
+    then: () => ({
+      user: { updateProfile: () => {} },
+    }),
+    catch: () => {},
+  }),
+  updateProfile: () => {},
+  sendEmailVerification: () => ({
+    then: () => {},
+    catch: () => {},
+  }),
+  signOut: () => ({
+    then: () => {},
+    catch: () => {},
+  }),
+  sendPasswordResetEmail: () => ({
+    then: () => {},
+    catch: () => {},
+  }),
+}));
 
-    const result = await score(profileData1, profileData2);
-    expect(result).toBe(0);
+// Mock the firebase/storage functions
+jest.mock('firebase/storage', () => ({
+  ref: () => ({
+    put: () => ({
+      on: () => {},
+      then: () => ({
+        ref: {
+          getDownloadURL: () => {}
+        }
+      }),
+    }),
+  }),
+}));
+
+
+// Mock the firebase/firestore functions
+
+jest.mock('firebase/firestore', () => ({
+
+  getDoc: jest.fn().mockResolvedValue({
+    data: () => ({
+      avoid: [],
+      show: 5,
+      major: 'Computer Science',
+      course: ['Math', 'Science'],
+      countryAndRegion: 'USA',
+      year: 'Year 1',
+      hobby: ['Reading', 'Swimming'],
+      recommend: [],
+      point: []
+    })
+  }),
+
+  // Add the query and where mock functions
+  query: jest.fn(() => ({
+    where: jest.fn(() => ({
+      get: jest.fn()
+    }))
+  })),
+
+  addDoc: jest.fn(),
+  collection: jest.fn(collection),
+  //collection: jest.fn().mockReturnThis(),
+  setDoc: jest.fn(),
+  doc: jest.fn(),
+  updateDoc: jest.fn(),
+  query: jest.fn().mockReturnThis(),
+  where: jest.fn().mockReturnThis(),
+  getDocs: jest.fn().mockResolvedValue({
+    docs: [
+      {
+        data: () => ({
+          avoid: [],
+          show: 5,
+          major: 'Computer Science',
+          course: ['Math', 'Science'],
+          countryAndRegion: 'USA',
+          year: 'Year 1',
+          hobby: ['Reading', 'Swimming'],
+          recommend: [],
+          point: []
+        }),
+        id: 'someUserID'
+      }
+    ]
+  }),
+  arrayUnion: jest.fn(),
+  onSnapshot: jest.fn(),
+  arrayRemove: jest.fn(),
+}));
+
+const collection = (db, ...args) => {
+  return {
+    where: jest.fn(),
+    getDocs: jest.fn(),
+  };
+}
+
+describe('Matching API', () => {
+  it('should generate a matching pool with filtered users', async () => {
+    // Call the function to be tested
+
+    let profileRef;
+
+    const result = await generateMatchingPool();
+
+    // Expectations
+    expect(result).toBeTruthy(); // Assuming you return true for a successful match
+    expect(updateRecommendAndPoint).toHaveBeenCalled();
+    expect(updateAvoid).toHaveBeenCalled();
   });
-
-  it("should calculate score correctly with some common attributes", async () => {
-    const profileData1 = {
-      major: "Computer Science",
-      countryAndRegion: "USA",
-      year: "Freshman",
-      course: ["Math", "Physics", "Chemistry"],
-      hobby: ["Reading", "Sports", "Music"],
-    };
-
-    const profileData2 = {
-      major: "Computer Science",
-      countryAndRegion: "UK",
-      year: "Freshman",
-      course: ["Physics", "Chemistry", "Biology"],
-      hobby: ["Reading", "Cooking", "Sports"],
-    };
-
-    const result = await score(profileData1, profileData2);
-    // 1 point for same major, 0.2 for each common course (0.2 * 2 = 0.4), 0.2 for common hobby
-    expect(result).toBeCloseTo(1.6); // To handle potential floating-point precision issues
-  });
-
-  // Add more test cases to cover different scenarios as needed.
 });

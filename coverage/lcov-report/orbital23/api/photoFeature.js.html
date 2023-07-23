@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">14.28% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/21</span>
+                <span class='fraction'>3/21</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">14.28% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/21</span>
+                <span class='fraction'>3/21</span>
             </div>
         
             
@@ -131,7 +131,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -149,22 +149,22 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -190,7 +190,7 @@ import { addDoc, collection, setDoc, doc, updateDoc, getDoc, serverTimestamp } f
 &nbsp;
 &nbsp;
 &nbsp;
-export const photoFeatureAPI = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync ( {image}, onSuccess, onError ) =&gt; {</span>
+export const photoFeatureAPI = <span class="fstat-no" title="function not covered" >as</span>ync ( {image}, onSuccess, onError ) =&gt; {
 <span class="cstat-no" title="statement not covered" >  try {</span>
     const blob = <span class="cstat-no" title="statement not covered" >await ((fetch(image))</span>
     .then(<span class="fstat-no" title="function not covered" >(r</span>esponse)=&gt; <span class="cstat-no" title="statement not covered" >response.blob())</span>);
@@ -208,7 +208,7 @@ export const photoFeatureAPI = <span class="cstat-no" title="statement not cover
   }
 }
 &nbsp;
-export const lastPostTimestampAPI = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (onSuccess, onError) =&gt; {</span>
+export const lastPostTimestampAPI = <span class="fstat-no" title="function not covered" >as</span>ync (onSuccess, onError) =&gt; {
 <span class="cstat-no" title="statement not covered" >  try {</span>
 <span class="cstat-no" title="statement not covered" >    await setDoc(</span>
       doc(db, "NUS", "users", "Forum", `${auth.currentUser.uid}`),
@@ -223,7 +223,7 @@ export const lastPostTimestampAPI = <span class="cstat-no" title="statement not 
   }
 };
 &nbsp;
-export const likesAPI = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (onSuccess, onError) =&gt; {</span>
+export const likesAPI = <span class="fstat-no" title="function not covered" >as</span>ync (onSuccess, onError) =&gt; {
 <span class="cstat-no" title="statement not covered" >  try {</span>
 <span class="cstat-no" title="statement not covered" >    await setDoc(</span>
       doc(db, "NUS", "users", "Forum", `${auth.currentUser.uid}`),
@@ -247,7 +247,7 @@ export const likesAPI = <span class="cstat-no" title="statement not covered" ><s
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-07-22T08:37:39.881Z
+                at 2023-07-23T20:38:13.783Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
