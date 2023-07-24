@@ -34,12 +34,14 @@ import {
         (error) => Alert.alert('error',(error.message || 'Something went wrong, try again later'))
       )
     }
+
+     const isGenderSelected = !!gender;
   
 
     return (
-      <View style={styles.container_1}>
+    <View style={styles.container_1}>
       <View style={styles.container}>
-      <Text style = {styles.mainText}>What's your gender?</Text>
+        <Text style={styles.mainText}>What's your gender?</Text>
         <Text style={styles.usual}>Gender</Text>
         <Dropdown
           style={styles.dropdown}
@@ -57,13 +59,15 @@ import {
       </View>
       <TouchableOpacity
         activeOpacity={0.75}
-        style={styles.buttonContainer}
-        onPress={() => handleSetGender()} >
+        style={[styles.buttonContainer, { backgroundColor: isGenderSelected ? '#2de0ff' : '#808080' }]}
+        onPress={isGenderSelected ? handleSetGender : null}
+        disabled={!isGenderSelected} // Disable the button if an option is not selected
+      >
         <Text style={styles.registerText}>Next</Text>
       </TouchableOpacity>
     </View>
-    );
-  }
+  );
+}
   
   const styles = StyleSheet.create({
 
