@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">1.03% </span>
+                <span class="strong">0.98% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>1/97</span>
+                <span class='fraction'>1/102</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/40</span>
+                <span class='fraction'>0/44</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/25</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">1.05% </span>
+                <span class="strong">1% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>1/95</span>
+                <span class='fraction'>1/100</span>
             </div>
         
             
@@ -458,7 +458,17 @@
 <a name='L393'></a><a href='#L393'>393</a>
 <a name='L394'></a><a href='#L394'>394</a>
 <a name='L395'></a><a href='#L395'>395</a>
-<a name='L396'></a><a href='#L396'>396</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L396'></a><a href='#L396'>396</a>
+<a name='L397'></a><a href='#L397'>397</a>
+<a name='L398'></a><a href='#L398'>398</a>
+<a name='L399'></a><a href='#L399'>399</a>
+<a name='L400'></a><a href='#L400'>400</a>
+<a name='L401'></a><a href='#L401'>401</a>
+<a name='L402'></a><a href='#L402'>402</a>
+<a name='L403'></a><a href='#L403'>403</a>
+<a name='L404'></a><a href='#L404'>404</a>
+<a name='L405'></a><a href='#L405'>405</a>
+<a name='L406'></a><a href='#L406'>406</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -489,6 +499,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -529,6 +541,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -543,6 +556,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -604,12 +618,18 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -859,6 +879,7 @@ import React, { useState, useEffect } from 'react';
 import { Alert, Dimensions, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { useIsFocused } from '@react-navigation/native';
 &nbsp;
 &nbsp;
 import { launchCameraAsync, MediaTypeOptions } from 'expo-image-picker';
@@ -882,6 +903,7 @@ import {
 } from 'react-native';
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >Forum(</span>) {
+  const isFocus = <span class="cstat-no" title="statement not covered" >useIsFocused();</span>
 &nbsp;
   const [profileData, setProfileData] = <span class="cstat-no" title="statement not covered" >useState(null);</span>
   const [photoData, setPhotoData] = <span class="cstat-no" title="statement not covered" >useState(null);</span>
@@ -922,6 +944,7 @@ export default function <span class="fstat-no" title="function not covered" >For
 <span class="cstat-no" title="statement not covered" >    setWithin24Hrs(isWithin24Hours());</span>
   }, [photoData])
 &nbsp;
+&nbsp;
   //第一次登入就設定好檔案
 &nbsp;
   const isWithin24Hours = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -932,6 +955,7 @@ export default function <span class="fstat-no" title="function not covered" >For
 <span class="cstat-no" title="statement not covered" >    if (photoData !== null) {</span>
       const now = <span class="cstat-no" title="statement not covered" >new Date();</span>
       const timestampDate = <span class="cstat-no" title="statement not covered" >photoData.lastPostTimestamp.toDate();</span>
+<span class="cstat-no" title="statement not covered" >      if (photoData !== null) {}</span>
 <span class="cstat-no" title="statement not covered" >      console.log(now);</span>
 <span class="cstat-no" title="statement not covered" >      console.log(timestampDate)</span>
       const timeDiffInMs = <span class="cstat-no" title="statement not covered" >now.getTime() - timestampDate.getTime();</span>
@@ -1006,6 +1030,12 @@ export default function <span class="fstat-no" title="function not covered" >For
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    fetchFriendsPosts();</span>
   }, [photoData, render]);
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (isFocus) {</span>
+<span class="cstat-no" title="statement not covered" >      fetchFriendsPosts();</span>
+    }
+  }, [isFocus])
 &nbsp;
 &nbsp;
   const handleLike = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync(uid) =&gt; {</span>
@@ -1255,7 +1285,7 @@ const styles = StyleSheet.create({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-07-23T22:31:52.667Z
+                at 2023-07-24T03:32:36.898Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
