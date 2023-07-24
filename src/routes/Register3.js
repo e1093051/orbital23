@@ -23,11 +23,17 @@ export default () => {
   const [password, setPassword] = useState("");
 
   const handleSignUp = () => {
+    if (password.trim() === "") {
+      // If password is empty or contains only whitespace characters
+      Alert.alert("Error", "Please enter a password to sign up.");}
+
+      else{
     Authentication.signUp(
       { name, email, password },
       (user) => navigation.navigate('Login'),
       (error) => Alert.alert('error',(error.message || 'Something went wrong, try again later'))
     );
+      }
   }
 
  

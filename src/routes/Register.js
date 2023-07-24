@@ -18,7 +18,10 @@ export default () => {
   const navigation = useNavigation();
 
   const handleNext = () => {
-    navigation.navigate('Register2', { name })
+    if (name.trim() === "") {
+      alert("Please enter your name before proceeding.");
+    }
+    else {navigation.navigate('Register2', { name })}
   }
 
   return (
