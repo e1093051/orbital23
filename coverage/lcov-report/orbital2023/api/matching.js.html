@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">4.47% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/201</span>
+                <span class='fraction'>9/201</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">11.76% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/34</span>
+                <span class='fraction'>4/34</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">4.52% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/199</span>
+                <span class='fraction'>9/199</span>
             </div>
         
             
@@ -452,7 +452,8 @@
 <a name='L387'></a><a href='#L387'>387</a>
 <a name='L388'></a><a href='#L388'>388</a>
 <a name='L389'></a><a href='#L389'>389</a>
-<a name='L390'></a><a href='#L390'>390</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L390'></a><a href='#L390'>390</a>
+<a name='L391'></a><a href='#L391'>391</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -469,12 +470,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -572,12 +573,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -652,6 +654,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -659,7 +662,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -667,7 +669,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -858,12 +860,12 @@ import { LogBox } from 'react-native';
 &nbsp;
 &nbsp;
 &nbsp;
-<span class="cstat-no" title="statement not covered" >LogBox.ignoreLogs([</span>
+LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
 ]);
 &nbsp;
 &nbsp;
-const getData = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(u</span>id) =&gt; {</span>
+const getData = <span class="fstat-no" title="function not covered" >(u</span>id) =&gt; {
 <span class="cstat-no" title="statement not covered" >  getDoc(doc(db, "NUS/users", uid, "profile"))</span>
     .then(<span class="fstat-no" title="function not covered" >do</span>cSnap =&gt; <span class="cstat-no" title="statement not covered" >setProfileData(docSnap.data()))</span>;
 }
@@ -960,12 +962,13 @@ async function <span class="fstat-no" title="function not covered" >generateReco
   }
 }
 &nbsp;
-export async function <span class="fstat-no" title="function not covered" >generateMatchingPool(</span>) {
-  const profileData = <span class="cstat-no" title="statement not covered" >await getDoc(doc(db, "NUS/users", "profile", auth.currentUser.uid))</span>
-    .then(<span class="fstat-no" title="function not covered" >do</span>cSnap =&gt; <span class="cstat-no" title="statement not covered" >docSnap.data())</span>;
-  const recommendList = <span class="cstat-no" title="statement not covered" >profileData.recommend;</span>
-  const pointList = <span class="cstat-no" title="statement not covered" >profileData.point;</span>
-<span class="cstat-no" title="statement not covered" >  profileRef = collection(db, "NUS", "users", "profile");</span>
+export async function generateMatchingPool() {
+  const profileData = await getDoc(doc(db, "NUS/users", "profile", auth.currentUser.uid))
+    .then(docSnap =&gt; docSnap.data());
+  const recommendList = profileData.recommend;
+  const pointList = profileData.point;
+  
+  profileRef = collection(db, "NUS", "users", "profile");
 &nbsp;
   const q = <span class="cstat-no" title="statement not covered" >query(profileRef, where("show", "!=", 6));</span> //change to show me on recommendation later
   const querySnapshot = <span class="cstat-no" title="statement not covered" >await (getDocs(q));</span>
@@ -1040,8 +1043,8 @@ export async function <span class="fstat-no" title="function not covered" >gener
   }
 }
 &nbsp;
-export async function <span class="fstat-no" title="function not covered" >match(</span>) {
-  const profileData = <span class="cstat-no" title="statement not covered" >await getDoc(doc(db, "NUS/users", "profile", auth.currentUser.uid))</span>
+export async function match() {
+  const profileData = await getDoc(doc(db, "NUS/users", "profile", auth.currentUser.uid))
     .then(<span class="fstat-no" title="function not covered" >do</span>cSnap =&gt; <span class="cstat-no" title="statement not covered" >docSnap.data())</span>;
   const recommendList = <span class="cstat-no" title="statement not covered" >profileData.recommend;</span>
   let length = <span class="cstat-no" title="statement not covered" >recommendList.length;</span>
@@ -1055,8 +1058,8 @@ export async function <span class="fstat-no" title="function not covered" >match
 }
 &nbsp;
 /** */
-export async function <span class="fstat-no" title="function not covered" >showRecommendation(</span>) {
-<span class="cstat-no" title="statement not covered" >  await match();</span>
+export async function showRecommendation() {
+  await match();
   const profileData = <span class="cstat-no" title="statement not covered" >await getDoc(doc(db, "NUS/users", "profile", auth.currentUser.uid))</span>
     .then(<span class="fstat-no" title="function not covered" >do</span>cSnap =&gt; <span class="cstat-no" title="statement not covered" >docSnap.data())</span>;
   const recommendList = <span class="cstat-no" title="statement not covered" >profileData.recommend;</span>
@@ -1237,7 +1240,7 @@ export async function <span class="fstat-no" title="function not covered" >filte
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-07-23T21:51:14.175Z
+                at 2023-07-23T22:31:52.667Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
