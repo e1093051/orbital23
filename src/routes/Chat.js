@@ -89,7 +89,7 @@ export default function Chat() {
 
 
 
-  const renderChatItem = ({ item }) => {
+  const renderChatItem = ({ item, index }) => {
     if (!item || item.value.count === 0) {
       return;
     }
@@ -133,7 +133,8 @@ export default function Chat() {
 
       return (
         <View>
-          <TouchableOpacity onPress={() => { navigation.navigate("ChatPage", { name: item.key.name, id: item.id, friend: item.frinedId, lastMessageTimestamp: item.value.timestamp }) }}>
+          <TouchableOpacity onPress={() => { navigation.navigate("ChatPage", { name: item.key.name, id: item.id, friend: item.frinedId, lastMessageTimestamp: item.value.timestamp }) }}
+           testID={`chat-item-${item.frinedId}`} >
             <View style={{ borderBottomWidth: 1, width: Dimensions.get('window').width - 4, marginLeft: 1, paddingLeft: 8, paddingRight: 8, flexDirection: 'row', paddingVertical: 6, borderBottomColor: '#e5e5e5', justifyContent: 'space-between', paddingRight: 20 }}>
               <View style={{ flexDirection: 'row' }}>
                 <Image
@@ -177,6 +178,7 @@ export default function Chat() {
         data={chat}
         renderItem={renderChatItem}
         keyExtractor={(item, index) => index.toString()}
+        testID="chat-component" // Add testID for the FlatList
       />
     </View>
   );

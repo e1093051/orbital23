@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/32</span>
+                <span class='fraction'>0/23</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/32</span>
+                <span class='fraction'>0/23</span>
             </div>
         
             
@@ -204,19 +204,7 @@
 <a name='L139'></a><a href='#L139'>139</a>
 <a name='L140'></a><a href='#L140'>140</a>
 <a name='L141'></a><a href='#L141'>141</a>
-<a name='L142'></a><a href='#L142'>142</a>
-<a name='L143'></a><a href='#L143'>143</a>
-<a name='L144'></a><a href='#L144'>144</a>
-<a name='L145'></a><a href='#L145'>145</a>
-<a name='L146'></a><a href='#L146'>146</a>
-<a name='L147'></a><a href='#L147'>147</a>
-<a name='L148'></a><a href='#L148'>148</a>
-<a name='L149'></a><a href='#L149'>149</a>
-<a name='L150'></a><a href='#L150'>150</a>
-<a name='L151'></a><a href='#L151'>151</a>
-<a name='L152'></a><a href='#L152'>152</a>
-<a name='L153'></a><a href='#L153'>153</a>
-<a name='L154'></a><a href='#L154'>154</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L142'></a><a href='#L142'>142</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -272,18 +260,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -427,29 +403,17 @@ export default <span class="fstat-no" title="function not covered" >()</span> =&
 <span class="cstat-no" title="statement not covered" >    getData();</span>
   }, []);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (profileData) {</span>
-<span class="cstat-no" title="statement not covered" >      setName(profileData.name);</span>
-<span class="cstat-no" title="statement not covered" >      setBio(profileData.bio);</span>
-<span class="cstat-no" title="statement not covered" >      setMajor(profileData.major);</span>
-<span class="cstat-no" title="statement not covered" >      setCountryAndRegion(profileData.countryAndRegion);</span>
-<span class="cstat-no" title="statement not covered" >      setYear(profileData.year);</span>
-<span class="cstat-no" title="statement not covered" >      setCourse(profileData.course);</span>
-<span class="cstat-no" title="statement not covered" >      setHobby(profileData.hobby);</span>
-    }
-  }, [profileData]);
-&nbsp;
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-start', backgroundColor: 'white', paddingTop: 5 }}&gt;
-      &lt;TouchableOpacity onPress={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >navigation.navigate('EditName', {name})}</span>&gt;
+      &lt;TouchableOpacity onPress={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >navigation.navigate('EditName', {name: profileData.name})}</span>&gt;
         &lt;View style={{ width: Dimensions.get('window').width - 60, borderBottomWidth: 1, flexDirection: "row", borderBottomColor: '#DEDEDE' }}&gt;
           &lt;Text style={{ width: 80, marginBottom: 5, marginTop: 5 }}&gt;Name&lt;/Text&gt;
           {profileData &amp;&amp; &lt;Text style={{ color: '#808080', marginBottom: 5, marginTop: 5 }}&gt;{profileData.name}&lt;/Text&gt;}
         &lt;/View&gt;
       &lt;/TouchableOpacity&gt;
 &nbsp;
-      &lt;TouchableOpacity onPress={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >navigation.navigate('EditBio', {bio})}</span> &gt;
+      &lt;TouchableOpacity onPress={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >navigation.navigate('EditBio', {bio: profileData.bio})}</span> &gt;
         &lt;View style={{ width: Dimensions.get('window').width - 60, borderBottomWidth: 1, flexDirection: "row", borderBottomColor: '#DEDEDE' }}&gt;
           &lt;Text style={{ width: 80, marginBottom: 5, marginTop: 5 }}&gt;Bio&lt;/Text&gt;
           {auth.currentUser &amp;&amp; profileData &amp;&amp; (
@@ -460,35 +424,35 @@ export default <span class="fstat-no" title="function not covered" >()</span> =&
         &lt;/View&gt;
       &lt;/TouchableOpacity&gt;
 &nbsp;
-      &lt;TouchableOpacity onPress={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >navigation.navigate('EditMajor', {major})}</span> &gt;
+      &lt;TouchableOpacity onPress={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >navigation.navigate('EditMajor', {major: profileData.major, showMajor: profileData.showMajor})}</span> &gt;
         &lt;View style={{ width: Dimensions.get('window').width - 60, borderBottomWidth: 1, flexDirection: "row", borderBottomColor: '#DEDEDE' }}&gt;
           &lt;Text style={{ width: 80, marginBottom: 5, marginTop: 5 }}&gt;Major&lt;/Text&gt;
           {profileData &amp;&amp; &lt;Text style={{ color: '#808080', marginBottom: 5, marginTop: 5 }}&gt;{profileData.major}&lt;/Text&gt;}
         &lt;/View&gt;
       &lt;/TouchableOpacity&gt;
 &nbsp;
-      &lt;TouchableOpacity onPress={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >navigation.navigate('EditCourse', {course})}</span>&gt;
+      &lt;TouchableOpacity onPress={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >navigation.navigate('EditCourse', {course: profileData.course, showCourse: profileData.showCourse})}</span>&gt;
         &lt;View style={{ width: Dimensions.get('window').width - 60, flexDirection: "row", borderBottomWidth: 1, alignItems: 'center', justifyContent: 'flex-start', flexWrap: 'wrap', borderBottomColor: '#DEDEDE' }}&gt;
           &lt;Text style={{ width: 80, justifyContent: 'flex-start', verticalAlign: 'middle' }}&gt;Course&lt;/Text&gt;
           {profileData &amp;&amp; &lt;Text style={{ width: Dimensions.get('window').width - 180, color: '#808080', marginBottom: 5, marginTop: 5 }}&gt;{profileData.course.join(", ")}&lt;/Text&gt;}
         &lt;/View&gt;
       &lt;/TouchableOpacity&gt;
 &nbsp;
-      &lt;TouchableOpacity onPress={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >navigation.navigate('EditHobby', {hobby})}</span> &gt;
+      &lt;TouchableOpacity onPress={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >navigation.navigate('EditHobby', {hobby: profileData.hobby, showHobby: profileData.showHobby})}</span> &gt;
         &lt;View style={{ width: Dimensions.get('window').width - 60, flexDirection: "row", borderBottomWidth: 1, alignItems: 'center', justifyContent: 'flex-start', flexWrap: 'wrap', borderBottomColor: '#DEDEDE' }}&gt;
           &lt;Text style={{ width: 80, justifyContent: 'flex-start', verticalAlign: 'middle' }}&gt;Hobby&lt;/Text&gt;
           {profileData &amp;&amp; &lt;Text style={{ width: Dimensions.get('window').width - 180, color: '#808080', marginBottom: 5, marginTop: 5 }}&gt;{profileData.hobby.join(", ")}&lt;/Text&gt;}
         &lt;/View&gt;
       &lt;/TouchableOpacity&gt;
 &nbsp;
-      &lt;TouchableOpacity onPress={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >navigation.navigate('EditCountryAndRegion', {countryAndRegion})}</span>&gt;
+      &lt;TouchableOpacity onPress={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >navigation.navigate('EditCountryAndRegion', {countryAndRegion: profileData.countryAndRegion, showCountryAndRegion: profileData.showCountryAndRegion})}</span>&gt;
         &lt;View style={{ width: Dimensions.get('window').width - 60, borderBottomWidth: 1, flexDirection: "row", borderBottomColor: '#DEDEDE' }}&gt;
           &lt;Text style={{ width: 80, marginBottom: 5, marginTop: 5 }}&gt;Country/Region&lt;/Text&gt;
           {profileData &amp;&amp; &lt;Text style={{ color: '#808080', marginBottom: 5, marginTop: 5 }}&gt;{profileData.countryAndRegion}&lt;/Text&gt;}
         &lt;/View&gt;
       &lt;/TouchableOpacity&gt;
 &nbsp;
-      &lt;TouchableOpacity onPress={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >navigation.navigate('EditYear', {year})}</span>&gt;
+      &lt;TouchableOpacity onPress={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >navigation.navigate('EditYear', {year: profileData.year, showYear: profileData.showYear})}</span>&gt;
         &lt;View style={{ width: Dimensions.get('window').width - 60, borderBottomWidth: 1, flexDirection: "row", borderBottomColor: '#DEDEDE' }}&gt;
           &lt;Text style={{ width: 80, marginBottom: 5, marginTop: 5 }}&gt;Year&lt;/Text&gt;
           {profileData &amp;&amp; &lt;Text style={{ color: '#808080', marginBottom: 5, marginTop: 5 }}&gt;{profileData.year}&lt;/Text&gt;}
@@ -529,7 +493,7 @@ const styles = <span class="cstat-no" title="statement not covered" >StyleSheet.
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-07-23T20:38:13.783Z
+                at 2023-07-24T01:52:59.203Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
