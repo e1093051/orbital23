@@ -42,7 +42,7 @@ export default () => {
         { image },
         async() => {
           await updateDoc(doc(db, "NUS", "users", "profile",`${auth.currentUser.uid}`), {
-            photoURL: image,
+            photoURL: auth.currentUser.photoURL,
           });
           navigation.goBack()},
         (error) => Alert.alert('error', (error.message || 'Something went wrong, try again later'))
@@ -55,7 +55,7 @@ export default () => {
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: 'Images',
       allowsEditing: true,
       aspect: [1, 1],
       quality: 1,
