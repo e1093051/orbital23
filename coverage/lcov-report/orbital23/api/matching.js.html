@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0.98% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>2/204</span>
+                <span class='fraction'>0/201</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/105</span>
+                <span class='fraction'>0/109</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/36</span>
+                <span class='fraction'>0/34</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0.99% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>2/202</span>
+                <span class='fraction'>0/199</span>
             </div>
         
             
@@ -453,14 +453,7 @@
 <a name='L388'></a><a href='#L388'>388</a>
 <a name='L389'></a><a href='#L389'>389</a>
 <a name='L390'></a><a href='#L390'>390</a>
-<a name='L391'></a><a href='#L391'>391</a>
-<a name='L392'></a><a href='#L392'>392</a>
-<a name='L393'></a><a href='#L393'>393</a>
-<a name='L394'></a><a href='#L394'>394</a>
-<a name='L395'></a><a href='#L395'>395</a>
-<a name='L396'></a><a href='#L396'>396</a>
-<a name='L397'></a><a href='#L397'>397</a>
-<a name='L398'></a><a href='#L398'>398</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L391'></a><a href='#L391'>391</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -477,18 +470,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -499,7 +485,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -684,6 +669,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -865,34 +851,26 @@
 &nbsp;
 &nbsp;
 &nbsp;
-import { auth, firebase, storage, db } from './fireConfig'
+import { auth, db } from './fireConfig'
 import { Alert } from 'react-native';
-import React, { Component, useState, useRef } from 'react';
 &nbsp;
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, sendEmailVerification, signOut, sendPasswordResetEmail } from 'firebase/auth';
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage"
-import { addDoc, collection, setDoc, doc, updateDoc, getDoc, query, where, getDocs, arrayUnion, onSnapshot, arrayRemove } from "firebase/firestore";
+import { collection, setDoc, doc, updateDoc, getDoc, query, where, getDocs, arrayUnion, arrayRemove } from "firebase/firestore";
 import { LogBox } from 'react-native';
 &nbsp;
-LogBox.ignoreLogs([
+&nbsp;
+&nbsp;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >LogBox.ignoreLogs([</span>
   'Non-serializable values were found in the navigation state',
 ]);
 &nbsp;
-const getData = <span class="fstat-no" title="function not covered" >(u</span>id) =&gt; {
+&nbsp;
+const getData = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(u</span>id) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  getDoc(doc(db, "NUS/users", uid, "profile"))</span>
     .then(<span class="fstat-no" title="function not covered" >do</span>cSnap =&gt; <span class="cstat-no" title="statement not covered" >setProfileData(docSnap.data()))</span>;
 }
 &nbsp;
 &nbsp;
-export async function <span class="fstat-no" title="function not covered" >initializeMatch(</span>) {
-<span class="cstat-no" title="statement not covered" >  profileRef = collection(db, "NUS", "users", "profile");</span>
-  const querySnapshot = <span class="cstat-no" title="statement not covered" >await getDocs(collection(db, "NUS", "users", "profile"));</span>
-<span class="cstat-no" title="statement not covered" >  querySnapshot.forEach(<span class="fstat-no" title="function not covered" >as</span>ync (doc) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    await updateDoc(doc.ref, {</span>
-      match: true
-    });
-  });
-}
 &nbsp;
 &nbsp;
 &nbsp;
@@ -917,7 +895,7 @@ export async function <span class="fstat-no" title="function not covered" >updat
   })
 }
 &nbsp;
-async function <span class="fstat-no" title="function not covered" >score(</span>profileData1, profileData2) {
+export async function <span class="fstat-no" title="function not covered" >score(</span>profileData1, profileData2) {
   let point = <span class="cstat-no" title="statement not covered" >0;</span>
 <span class="cstat-no" title="statement not covered" >  if (profileData1.major == profileData2.major) {</span>
 <span class="cstat-no" title="statement not covered" >    point += 1;</span>
@@ -1092,12 +1070,13 @@ export async function <span class="fstat-no" title="function not covered" >showR
     const recommendationData = <span class="cstat-no" title="statement not covered" >await getDoc(doc(db, "NUS/users", "profile", recommendationId))</span>
       .then(<span class="fstat-no" title="function not covered" >do</span>cSnap =&gt; <span class="cstat-no" title="statement not covered" >docSnap.data())</span>;
     const reacted = <span class="cstat-no" title="statement not covered" >recommendationData.reacted || [];</span>
-<span class="cstat-no" title="statement not covered" >    if (!reacted.includes(auth.currentUser.uid)) {</span>
+    const friend = <span class="cstat-no" title="statement not covered" >recommendationData.friend || [];</span>
+<span class="cstat-no" title="statement not covered" >    if (!reacted.includes(auth.currentUser.uid) &amp;&amp; !friend.includes(auth.currentUser.uid)) {</span>
 <span class="cstat-no" title="statement not covered" >      return recommendationId;</span>
     } else {
 <span class="cstat-no" title="statement not covered" >      await skip(recommendationId, recommendList, pointList);</span>
 <span class="cstat-no" title="statement not covered" >      console.log("skip");</span>
-<span class="cstat-no" title="statement not covered" >      return showRecommendation();</span>
+<span class="cstat-no" title="statement not covered" >      return await showRecommendation();</span>
     }
   }
 <span class="cstat-no" title="statement not covered" >  if (recommendList.length === 0) {</span>
@@ -1261,7 +1240,7 @@ export async function <span class="fstat-no" title="function not covered" >filte
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-07-23T20:38:13.783Z
+                at 2023-07-24T01:52:59.203Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

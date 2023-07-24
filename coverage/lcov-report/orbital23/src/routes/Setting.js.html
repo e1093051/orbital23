@@ -222,7 +222,9 @@
 <a name='L157'></a><a href='#L157'>157</a>
 <a name='L158'></a><a href='#L158'>158</a>
 <a name='L159'></a><a href='#L159'>159</a>
-<a name='L160'></a><a href='#L160'>160</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L160'></a><a href='#L160'>160</a>
+<a name='L161'></a><a href='#L161'>161</a>
+<a name='L162'></a><a href='#L162'>162</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -291,16 +293,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -313,10 +305,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -356,7 +345,22 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -442,24 +446,25 @@ export default <span class="fstat-no" title="function not covered" >()</span> =&
   }, [profileData]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
-  &lt;View style={{ flex: 1, alignItems: 'flex-start', backgroundColor: 'white' }}&gt;
-     &lt;Text style={{ fontSize: 15,marginLeft: 10, marginTop: 10, marginBottom:10, color: "#939799"}}&gt;Account Settings&lt;/Text&gt;
+    &lt;View style = {{flex: 1, backgroundColor: 'white'}}&gt;
+  &lt;View style={{ flex: 1, alignItems: 'flex-start', backgroundColor: 'white', marginLeft: 15 }}&gt;
+     &lt;Text style={{ fontSize: 15,marginLeft: -5, marginTop: 10, marginBottom:10, color: "#939799"}}&gt;Account Settings&lt;/Text&gt;
 &nbsp;
      &lt;View style={{ width: Dimensions.get('window').width - 60, borderBottomWidth: 1, flexDirection: "row", borderBottomColor: '#DEDEDE' }}&gt;
-          &lt;Text style={{ width: 80, marginBottom: 5, marginTop: 5, marginLeft: 10}}&gt;Email&lt;/Text&gt;
+          &lt;Text style={{ width: 82, marginBottom: 5, marginTop: 5, marginLeft: 10}}&gt;Email&lt;/Text&gt;
           {&lt;Text style={{ color: '#808080', marginBottom: 5, marginTop: 5 }}&gt;{auth.currentUser.email}&lt;/Text&gt;}
      &lt;/View&gt;
 &nbsp;
      &lt;TouchableOpacity onPress={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >navigation.navigate('ChangePassword')}</span>&gt;
 &nbsp;
      &lt;View style={{ width: Dimensions.get('window').width - 60, borderBottomWidth: 1, flexDirection: "row", borderBottomColor: '#DEDEDE' }}&gt;
-          &lt;Text style={{ width: 80, marginBottom: 5, marginTop: 5, marginLeft:10 }}&gt;Password&lt;/Text&gt;
-          {&lt;Text style={{ color: '#2de0ff', marginBottom: 5, marginTop: 5 }}&gt;Click here to change your password&lt;/Text&gt;}
+          &lt;Text style={{ width: 82, marginBottom: 5, marginTop: 5, marginLeft:10, fontSize: 13.5 }}&gt;Password&lt;/Text&gt;
+          {&lt;Text style={{ color: '#2de0ff', marginBottom: 5, marginTop: 5, fontSize: 14}}&gt;Click here to change password&lt;/Text&gt;}
      &lt;/View&gt;
 &nbsp;
      &lt;/TouchableOpacity&gt;
 &nbsp;
-     &lt;Text style={{ fontSize: 15,marginLeft: 10, marginTop: 10,marginBottom:10, color: "#939799"}}&gt;Profile Privacy Settings&lt;/Text&gt;
+     &lt;Text style={{ fontSize: 15,marginLeft: -5, marginTop: 10,marginBottom:10, color: "#939799"}}&gt;Profile Privacy Settings&lt;/Text&gt;
 &nbsp;
     &lt;TouchableOpacity onPress={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >navigation.navigate('EditShowMajor', {showMajor})}</span>&gt;
 &nbsp;
@@ -529,6 +534,7 @@ export default <span class="fstat-no" title="function not covered" >()</span> =&
     &lt;/TouchableOpacity&gt;
 &nbsp;
   &lt;/View&gt;
+  &lt;/View&gt;
 &nbsp;
   );
 }
@@ -547,7 +553,7 @@ const styles = <span class="cstat-no" title="statement not covered" >StyleSheet.
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-07-23T20:38:13.783Z
+                at 2023-07-24T01:52:59.203Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
