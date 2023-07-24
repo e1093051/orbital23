@@ -300,14 +300,14 @@ export async function skip(recommend, recommendList, pointList) {
 }
 
 export async function acceptRequest(uid) {
-  await updateDoc(doc(db, "NUS", "users", "profile", uid), {
-    friend: arrayUnion(auth.currentUser.uid),
-  });
   await updateDoc(doc(db, "NUS", "users", "profile", auth.currentUser.uid), {
     friend: arrayUnion(uid),
     invite: arrayRemove(uid),
     avoid: arrayUnion(uid),
     reacted: arrayUnion(uid)
+  });
+  await updateDoc(doc(db, "NUS", "users", "profile", uid), {
+    friend: arrayUnion(auth.currentUser.uid),
   });
 }
 

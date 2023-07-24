@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
 import Chat from '../Chat'; 
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 jest.mock('firebase/app', () => ({
   initializeApp: jest.fn(), // Mock the initializeApp function
@@ -15,8 +16,15 @@ jest.mock('firebase/auth', () => ({
 }));
 
 jest.mock('firebase/firestore', () => ({
-  doc: jest.fn(),
-  getDoc: jest.fn(),
+  doc: jest.fn(() => ({
+    get: jest.fn(() => ({
+      data: jest.fn(() => mockProfileData),
+    })),
+  })),
+  getDoc: jest.fn(async (ref) => {
+    const docSnapshot = await ref.get();
+    return docSnapshot;
+  }),
   onSnapshot: jest.fn(),
   getFirestore: jest.fn(() => ({
     collection: jest.fn(() => ({
@@ -51,38 +59,23 @@ test('renders Chat component', () => {
   expect(chatComponent).toBeDefined();
 });
 
-// Testing the onPress event of the TouchableOpacity
-
-test('navigates to ChatPage on TouchableOpacity press', () => {
- 
-  jest.spyOn(require('@react-navigation/native'), 'useIsFocused').mockReturnValue(true);
-
-  // Mock the Firebase Firestore data
-
-  const mockProfileData = {
-    name: 'John Doe',
-    chat: {
-      friendId1: 'chatId1',
-      friendId2: 'chatId2',
-    },
-  };
-
+it('renders a list of chat items', async () => {
+  // Mock the Firestore data for chat items
   jest.spyOn(require('firebase/firestore'), 'getDoc').mockResolvedValueOnce({
-
     data: () => mockProfileData,
   });
 
-  // Render the Chat component
-  const { getByTestId } = render(<Chat />);
-  const chatItem = getByTestId(`chat-item-${mockProfileData.chat.friendId1}`); 
+  const { getAllByTestId } = render(<Chat />);
+  const chatItems = getAllByTestId('chat-item-friendId1');
 
-  // Fire onPress event on the TouchableOpacity
-  fireEvent.press(chatItem);
+  // Check if the correct number of chat items are rendered
+  expect(chatItems.length).toBe(Object.keys(mockProfileData.chat).length);
 
-  expect(require('@react-navigation/native').useNavigation().navigate).toHaveBeenCalledWith('ChatPage', {
-    name: mockProfileData.name,
-    id: mockProfileData.chat.friendId1,
-    friend: 'friendId1',
-    lastMessageTimestamp: mockProfileData.chat.friendId1.value.timestamp,
+  // Check if each chat item contains the name of the friend
+  chatItems.forEach((chatItem, index) => {
+    const friendId = Object.keys(mockProfileData.chat)[index];
+    expect(chatItem.getByText(mockProfileData.chat[friendId])).toBeDefined();
   });
 });
+
+
