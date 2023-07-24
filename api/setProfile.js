@@ -113,6 +113,10 @@ export const setBio = async ({ bio }, onSuccess, onError) => {
       avoid: [auth.currentUser.uid],  //the union of rejected, accepted, waiting, recommended and friend
     },
       { merge: true });
+      await setDoc(doc(db, "NUS", "users", "Forum",`${auth.currentUser.uid}`), {
+        likes: []
+      },
+        { merge: true });
     return onSuccess();
   } catch (error) {
     return onError(error);

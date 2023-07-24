@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Alert, Dimensions, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { useIsFocused } from '@react-navigation/native';
 
 
 import { launchCameraAsync, MediaTypeOptions } from 'expo-image-picker';
@@ -27,6 +28,7 @@ import {
 } from 'react-native';
 
 export default function Forum() {
+  const isFocus = useIsFocused();
 
   const [profileData, setProfileData] = useState(null);
   const [photoData, setPhotoData] = useState(null);
@@ -67,6 +69,7 @@ export default function Forum() {
     setWithin24Hrs(isWithin24Hours());
   }, [photoData])
 
+
   //第一次登入就設定好檔案
 
   const isWithin24Hours = () => {
@@ -77,6 +80,7 @@ export default function Forum() {
     if (photoData !== null) {
       const now = new Date();
       const timestampDate = photoData.lastPostTimestamp.toDate();
+      if (photoData !== null) {}
       console.log(now);
       console.log(timestampDate)
       const timeDiffInMs = now.getTime() - timestampDate.getTime();
@@ -151,6 +155,12 @@ export default function Forum() {
   useEffect(() => {
     fetchFriendsPosts();
   }, [photoData, render]);
+
+  useEffect(() => {
+    if (isFocus) {
+      fetchFriendsPosts();
+    }
+  }, [isFocus])
 
 
   const handleLike = async(uid) => {
