@@ -7016,11 +7016,6 @@ jest-native@^3.0.0:
   resolved "https://registry.npmjs.org/jest-native/-/jest-native-3.0.0.tgz"
   integrity sha512-bvqfL1rnVzPorGUne0LWQMyiFFf5yitHYqQMmCPPq350AwwASzhOcxuuYZ4VkWPTHAK/o/JuRTJFt0TbMJ+F+Q==
 
-jest-node-exports-resolver@^1.1.6:
-  version "1.1.6"
-  resolved "https://registry.npmjs.org/jest-node-exports-resolver/-/jest-node-exports-resolver-1.1.6.tgz"
-  integrity sha512-NU412Qcb6WSRetCyEGMCC7IWHzO12LhSKaF1s9cyfM+EOYs4YN2gcNUT8hgu22X0oPFYNwLSPevgstBgLbD9ig==
-
 jest-pnp-resolver@^1.2.2:
   version "1.2.3"
   resolved "https://registry.npmjs.org/jest-pnp-resolver/-/jest-pnp-resolver-1.2.3.tgz"
@@ -9599,17 +9594,10 @@ react-native-virtualized-view@^1.0.0:
   resolved "https://registry.npmjs.org/react-native-virtualized-view/-/react-native-virtualized-view-1.0.0.tgz"
   integrity sha512-7YyFMMkNzJ787/giGkKcm0JEx0IcLEE/XHREGz2I4K1RISQGFjEDe6iWsapOnHSR/e1vhebZJ8VmqhSpg5YPzg==
 
-<<<<<<< HEAD
-react-native@*, "react-native@^0.0.0-0 || 0.60 - 0.72 || 1000.0.0", react-native@^0.71.8, react-native@>=0.57, react-native@>=0.59:
+react-native@*, "react-native@^0.0.0-0 || 0.60 - 0.72 || 1000.0.0", react-native@^0.71.8, react-native@>=0.42.0, react-native@>=0.48.4, react-native@>=0.57, react-native@>=0.59:
   version "0.71.12"
   resolved "https://registry.npmjs.org/react-native/-/react-native-0.71.12.tgz"
   integrity sha512-1zDOTdalLepcVB8ZRIZpWlIGyyJISzAF4MIYSDdW7VDJtIRC7ybXsj/kSARF1zpGSg+LgAV8NMCZzGg598M7Iw==
-=======
-react-native@*, "react-native@^0.0.0-0 || 0.60 - 0.71 || 1000.0.0", react-native@^0.71.8, react-native@>=0.42.0, react-native@>=0.48.4, react-native@>=0.57, react-native@>=0.59:
-  version "0.71.8"
-  resolved "https://registry.npmjs.org/react-native/-/react-native-0.71.8.tgz"
-  integrity sha512-ftMAuhpgTkbHU9brrqsEyxcNrpYvXKeATY+if22Nfhhg1zW+6wn95w9otwTnA3xHkljPCbng8mUhmmERjGEl7g==
->>>>>>> bf31598a7271d507c6e172b963d936e88612c915
   dependencies:
     "@jest/create-cache-key-function" "^29.2.1"
     "@react-native-community/cli" "10.2.4"

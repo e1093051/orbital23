@@ -11,11 +11,9 @@
   },
   "jest": {
     "preset": "jest-expo",
-
     "transform": {
       "^.+\\.[t|j]sx?$": "babel-jest"
     },
-    
     "transformIgnorePatterns": [
       "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg|@react-navigation/native)"
     ],
@@ -32,7 +30,6 @@
       "__DEV__": true
     }
   },
-  
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",

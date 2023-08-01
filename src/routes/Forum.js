@@ -5,6 +5,7 @@ import { Alert, Dimensions, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useIsFocused } from '@react-navigation/native';
+import * as ImagePicker from 'expo-image-picker';
 
 
 import { launchCameraAsync, MediaTypeOptions } from 'expo-image-picker';
@@ -41,6 +42,7 @@ export default function Forum() {
   const [showFriendsPosts, setShowFriendsPosts] = useState(false);
   const [within24Hrs, setWithin24Hrs] = useState(true);
   const [render, setRender] = useState(false);
+  const [permission, requestPermission] = ImagePicker.useCameraPermissions();
 
   const navigation = useNavigation();
 
@@ -91,12 +93,20 @@ export default function Forum() {
   };
 
   const takePhoto = async () => {
-    let result = await launchCameraAsync({
-      mediaTypes: MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
+    const permissionResult = await ImagePicker.getCameraPermissionsAsync();
+
+    if (permissionResult.granted !== true) {
+      await ImagePicker.requestCameraPermissionsAsync();
+      const permissionResult2 = await ImagePicker.getCameraPermissionsAsync();
+      if (permissionResult2.granted !== true) {
+        alert("please change the setting of expo go app to allow its access to camera");
+        return;
+      }
+    }
+
+    
+
+    const result = await ImagePicker.launchCameraAsync();
 
     if (!result.canceled) {
       setImage(result.assets[0].uri);
