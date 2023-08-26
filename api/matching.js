@@ -123,7 +123,7 @@ export async function generateMatchingPool() {
   const recommendList = profileData.recommend;
   const pointList = profileData.point;
   
-  profileRef = collection(db, "NUS", "users", "profile");
+  const profileRef = collection(db, "NUS", "users", "profile");
 
   const q = query(profileRef, where("show", "!=", 6)); //change to show me on recommendation later
   const querySnapshot = await (getDocs(q));
