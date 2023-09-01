@@ -2,16 +2,16 @@ Hello everyone! We are NUSocialize. Aspiring to make the process of making frien
 
 To create an account on NUSocialize and try it out, 
 
-Install expo functions, Node.js and Git on your laptop
-Clone our GitHub Repository on your terminal 
-Run the command: “npx expo start”
+Install expo functions, Node.js and Git on your laptop.
+Clone our GitHub Repository on your terminal. 
+Run the command: “npx expo start”.
 If you have the app “Expo Go” installed, 
-Scan the QR code provided below
+Scan the QR code provided below.
 If you are a new user, 	
 Sign-up. Enter your name, email and password to create a new account.
 If you already have an account,
 Log-in. Just enter your NUS email and password.
-Or else, run the app on the preferred device
+Or else, run the app on the preferred device.
 
 GitHub Repo Link: git@github.com:e1093051/orbital23.git
 
